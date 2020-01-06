@@ -20,7 +20,7 @@ deer:AuthorityConformationEnrichmentOperatorShape_operation
   sh:path deer:operation ;
   sh:minCount 1 ;
   sh:node deer:AuthorityConformationEnrichmentOperatorShape_operationNode;
- .
+.
 
 deer:AuthorityConformationEnrichmentOperatorShape_operationNode
   a sh:NodeShape ;
