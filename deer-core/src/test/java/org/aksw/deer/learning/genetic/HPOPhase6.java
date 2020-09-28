@@ -69,6 +69,7 @@
 //        ""), null, "NT");
 //// (a -> )(b -> AC ->) -> MERGE -> NER -> PC -> DEREF
 //    Model target = ModelFactory.createDefaultModel().read(new StringReader(
+//      "<http://dbpedia.org/resource/Island_of_the_Dead_(2000_film)> <http://dbpedia.org/ontology/director> <http://dbpedia.org/resource/Tim_Southam> .\n" +
 //      "<http://dbpedia.org/resource/Peter_Koper> <http://ns.aksw.org/fox/ontology#relatedTo> <http://dbpedia.org/resource/Baltimore> .\n" +
 //        "<http://dbpedia.org/resource/Peter_Koper> <http://my.dataset.edu/birthPlace> <http://example.org/Quakenbrück> .\n" +
 //        "<http://dbpedia.org/resource/Peter_Koper> <http://ns.aksw.org/fox/ontology#relatedTo> <http://dbpedia.org/resource/Koper> .\n" +
@@ -136,7 +137,11 @@
 //
 //  @Test
 //  public void constructorTest() {
-//    runPerformanceExperiment(1.0,0.5,0.25);
+//    int i = 0;
+//    while (++i < 10) {
+//      System.out.println(i + "------ " + i + " ------" + i);
+//      runPerformanceExperiment(1.0, 0.5, 0.25);
+//    }
 //  }
 //
 //  private void runPerformanceExperiment(double oF, double mP, double mR) {
