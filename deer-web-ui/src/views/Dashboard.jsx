@@ -19,7 +19,7 @@
 import React, { Fragment } from "react";
 // react plugin used to create charts
 import { LGraph, LGraphCanvas, LiteGraph } from "litegraph.js";
-import _, { result } from "lodash";
+import _ from "lodash";
 import "litegraph.js/css/litegraph.css";
 import "./Dashboard.css";
 
@@ -57,8 +57,6 @@ import {
   Dropdown,
   DropdownItem,
   Badge,
-  Alert,
-  ModalFooter,
   Table,
 } from "reactstrap";
 //import { Dropdown } from "semantic-ui-react";
@@ -290,7 +288,7 @@ class Dashboard extends React.Component {
     }
 
     const parser = new N3.Parser();
-    fetch(BASE_URI + "/shapes")
+    fetch(URI + "/shapes")
       .then(function (response) {
         return response.text();
       })
@@ -802,10 +800,10 @@ class Dashboard extends React.Component {
     });
   };
 
-  //TODO: Download the results
+  //Download the results
   downloadResults = (index) => {
     fetch(
-      BASE_URI +
+      URI +
         "/result/" +
         this.state.requestID +
         "/" +
@@ -827,7 +825,7 @@ class Dashboard extends React.Component {
 
     var formData = new FormData();
     formData.append("config", file);
-    fetch(BASE_URI + "/submit", {
+    fetch(URI + "/submit", {
       method: "POST",
       body: formData,
     })
@@ -848,7 +846,7 @@ class Dashboard extends React.Component {
   };
 
   getStatusForRequest = () => {
-    fetch(BASE_URI + "/status/" + this.state.requestID)
+    fetch(URI + "/status/" + this.state.requestID)
       .then(function (response) {
         return response.json();
       })
@@ -865,7 +863,7 @@ class Dashboard extends React.Component {
   };
 
   getResults = () => {
-    fetch(BASE_URI + "/results/" + this.state.requestID)
+    fetch(URI + "/results/" + this.state.requestID)
       .then(function (response) {
         return response.json();
       })
@@ -878,7 +876,7 @@ class Dashboard extends React.Component {
   };
 
   showLogs = () => {
-    fetch(BASE_URI + "/logs/" + this.state.requestID).then(function (response) {
+    fetch(URI + "/logs/" + this.state.requestID).then(function (response) {
       let a = document.getElementById("downloadLink");
       a.href = response.url;
       a.click();
@@ -939,6 +937,8 @@ class Dashboard extends React.Component {
       requestCompleteModal: !this.state.requestCompleteModal,
     });
   };
+
+  uploadFiles = () => {};
 
   render() {
     const options = _.map(this.state.prefixOptions, (opt, index) => ({
@@ -1004,7 +1004,7 @@ class Dashboard extends React.Component {
           </ModalBody>
         </Modal>
         <Row>
-          <Col lg="12" md="12" sm="12">
+          <Col lg="8" md="8" sm="8">
             <Card className="card-stats">
               <div className="numbers">
                 <CardTitle tag="p">Prefixes</CardTitle>
@@ -1078,6 +1078,28 @@ class Dashboard extends React.Component {
                   ))}
                 </div>
               </CardFooter>
+            </Card>
+          </Col>
+          <Col lg="4" md="4" sm="4">
+            <Card className="card-stats">
+              <div className="numbers">
+                <CardTitle tag="p">Upload Files</CardTitle>
+                <p />
+              </div>
+              <CardBody>
+                <div class="custom-file">
+                  <input
+                    type="file"
+                    class="custom-file-input"
+                    id="customFile"
+                  ></input>
+                  <label class="custom-file-label" for="customFile">
+                    Choose file
+                  </label>
+                </div>
+              </CardBody>
+              <hr />
+              <CardFooter></CardFooter>
             </Card>
           </Col>
         </Row>

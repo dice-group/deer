@@ -43,3 +43,18 @@
 h1 {
   font-size: 14px;
 }
+
+.buttonPosition {
+  float: right;
+}
+
+.card {
+  border-radius: 6px;
+  background-color: #fdfdfd;
+}
+.content {
+  background-color: #ececec;
+  margin-top: 82px !important;
+  position: relative;
+  top: 2rem;
+}

@@ -24,10 +24,7 @@ import {
   NavbarToggler,
   NavbarBrand,
   Container,
-  InputGroup,
-  InputGroupText,
-  InputGroupAddon,
-  Input,
+  Button,
 } from "reactstrap";
 
 import DemoNavbar from "./DemoNavbar.css";
@@ -132,17 +129,17 @@ class Header extends React.Component {
               <span className="logo-title">DEER Web UI</span>
             </NavbarBrand>
           </div>
-          <NavbarToggler onClick={this.toggle}>
+          {/* <NavbarToggler onClick={this.toggle}>
             <span className="navbar-toggler-bar navbar-kebab" />
             <span className="navbar-toggler-bar navbar-kebab" />
             <span className="navbar-toggler-bar navbar-kebab" />
-          </NavbarToggler>
-          <Collapse
+          </NavbarToggler> */}
+          {/* <Collapse
             isOpen={this.state.isOpen}
             navbar
             className="justify-content-end"
-          >
-            {/* <form>
+          > */}
+          {/* <form>
               <InputGroup className="no-border">
                 <Input placeholder="Search..." />
                 <InputGroupAddon addonType="append">
@@ -152,7 +149,7 @@ class Header extends React.Component {
                 </InputGroupAddon>
               </InputGroup>
             </form> */}
-          </Collapse>
+          {/* </Collapse> */}
         </Container>
       </Navbar>
     );
