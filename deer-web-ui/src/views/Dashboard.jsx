@@ -23,9 +23,9 @@ import _ from "lodash";
 import "litegraph.js/css/litegraph.css";
 import "./Dashboard.css";
 
-import FileModelReader from "../components/Reader/FileModelReader";
+import FileModelReader from "../components/Readers/FileModelReader";
 import FileModelWriter from "../components/Writers/FileModelWriter";
-import SparqlModelReader from "../components/Reader/SparqlModelReader";
+import SparqlModelReader from "../components/Readers/SparqlModelReader";
 import FilterEnrichmentOperator from "../components/Operators/FilterEnrichmentOperator";
 import LinkingEnrichmentOperator from "../components/Operators/LinkingEnrichmentOperator";
 import DereferencingEnrichmentOperator from "../components/Operators/DereferencingEnrichmentOperator";
