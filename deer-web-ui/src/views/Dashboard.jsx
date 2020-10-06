@@ -877,7 +877,7 @@ class Dashboard extends React.Component {
 
   showLogs = () => {
     fetch(URI + "/logs/" + this.state.requestID).then(function (response) {
-      let a = document.getElementById("downloadLink");
+      let a = document.getElementById("downloadlink");
       a.href = response.url;
       a.click();
     });
@@ -1004,7 +1004,7 @@ class Dashboard extends React.Component {
           </ModalBody>
         </Modal>
         <Row>
-          <Col lg="8" md="8" sm="8">
+          <Col lg="9" md="9" sm="9">
             <Card className="card-stats">
               <div className="numbers">
                 <CardTitle tag="p">Prefixes</CardTitle>
@@ -1080,23 +1080,42 @@ class Dashboard extends React.Component {
               </CardFooter>
             </Card>
           </Col>
-          <Col lg="4" md="4" sm="4">
+          <Col lg="3" md="3" sm="3">
             <Card className="card-stats">
               <div className="numbers">
                 <CardTitle tag="p">Upload Files</CardTitle>
                 <p />
               </div>
               <CardBody>
-                <div class="custom-file">
+                {/* <div class="form-group">
                   <input
                     type="file"
-                    class="custom-file-input"
-                    id="customFile"
+                    class="form-control-file"
+                    id="exampleFormControlFile1"
                   ></input>
-                  <label class="custom-file-label" for="customFile">
-                    Choose file
-                  </label>
-                </div>
+                </div> */}
+                <Row>
+                  <Col md="9">
+                    {" "}
+                    <input
+                      id="input-b2"
+                      name="input-b2"
+                      type="file"
+                      class="file"
+                      data-show-preview="false"
+                    ></input>
+                  </Col>
+                  <Col md="3">
+                    {" "}
+                    <Button
+                      className="btn-round uploadBtn"
+                      color="primary"
+                      onClick={this.uploadFiles}
+                    >
+                      Upload
+                    </Button>
+                  </Col>
+                </Row>
               </CardBody>
               <hr />
               <CardFooter></CardFooter>

@@ -58,3 +58,14 @@ h1 {
   position: relative;
   top: 2rem;
 }
+
+.numbers {
+  padding-left: 15px;
+  padding-top: 10px;
+}
+
+.uploadBtn {
+  position: relative;
+  bottom: 16px;
+  right: 45px;
+}
