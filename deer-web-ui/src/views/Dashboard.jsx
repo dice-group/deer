@@ -24,19 +24,19 @@ import "litegraph.js/css/litegraph.css";
 import "./Dashboard.css";
 
 import FileModelReader from "../components/Reader/FileModelReader";
-import FileModelWriter from "../components/Writer/FileModelWriter";
+import FileModelWriter from "../components/Writers/FileModelWriter";
 import SparqlModelReader from "../components/Reader/SparqlModelReader";
-import FilterEnrichmentOperator from "../components/Operator/FilterEnrichmentOperator";
-import LinkingEnrichmentOperator from "../components/Operator/LinkingEnrichmentOperator";
-import DereferencingEnrichmentOperator from "../components/Operator/DereferencingEnrichmentOperator";
-import NEREnrichmentOperator from "../components/Operator/NEREnrichmentOperator";
-import CloneEnrichmentOperator from "../components/Operator/CloneEnrichmentOperator";
-import MergeEnrichmentOperator from "../components/Operator/MergeEnrichmentOperator";
-import GeoFusionEnrichmentOperator from "../components/Operator/GeoFusionEnrichmentOperator";
-import SparqlUpdateEnrichmentOperator from "../components/Operator/SparqlUpdateEnrichmentOperator";
-import GeoDistanceEnrichmentOperator from "../components/Operator/GeoDistanceEnrichmentOperator";
-import AuthorityConformationEnrichmentOperator from "../components/Operator/AuthorityConformationEnrichmentOperator";
-import PredicateConformationEnrichmentOperator from "../components/Operator/PredicateConformationEnrichmentOperator";
+import FilterEnrichmentOperator from "../components/Operators/FilterEnrichmentOperator";
+import LinkingEnrichmentOperator from "../components/Operators/LinkingEnrichmentOperator";
+import DereferencingEnrichmentOperator from "../components/Operators/DereferencingEnrichmentOperator";
+import NEREnrichmentOperator from "../components/Operators/NEREnrichmentOperator";
+import CloneEnrichmentOperator from "../components/Operators/CloneEnrichmentOperator";
+import MergeEnrichmentOperator from "../components/Operators/MergeEnrichmentOperator";
+import GeoFusionEnrichmentOperator from "../components/Operators/GeoFusionEnrichmentOperator";
+import SparqlUpdateEnrichmentOperator from "../components/Operators/SparqlUpdateEnrichmentOperator";
+import GeoDistanceEnrichmentOperator from "../components/Operators/GeoDistanceEnrichmentOperator";
+import AuthorityConformationEnrichmentOperator from "../components/Operators/AuthorityConformationEnrichmentOperator";
+import PredicateConformationEnrichmentOperator from "../components/Operators/PredicateConformationEnrichmentOperator";
 
 // reactstrap components
 import {

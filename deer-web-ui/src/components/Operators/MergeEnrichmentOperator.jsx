@@ -16,7 +16,6 @@ class MergeEnrichmentOperator extends React.Component {
     };
 
     var that = this;
-    var show = true;
 
     this.node_1 = this.addWidget(
       "text",
