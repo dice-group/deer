@@ -31,56 +31,20 @@ class AuthorityConformationEnrichmentOperator extends React.Component {
     var that = this;
     var show = true;
 
-    this.name = this.addWidget(
-      "text",
-      "Operator Name",
-      this.properties.name,
-      function (v) {
-        if (!v) {
-          return;
-        }
-        that.setProperty("name", v);
-        if (document.getElementById("name")) {
-          document.getElementById("name").value = v;
-        }
-      }
-    );
-
-    this.sourceSubjectAuthority = this.addWidget(
-      "text",
-      "deer:sourceSubjectAuthority",
-      this.properties.name,
-      function (v) {
-        if (!v) {
-          return;
-        }
-        that.setProperty("sourceSubjectAuthority", v);
-        if (document.getElementById("sourceSubjectAuthority")) {
-          document.getElementById("sourceSubjectAuthority").value = v;
-        }
-      }
-    );
-
-    this.targetSubjectAuthority = this.addWidget(
-      "text",
-      "deer:targetSubjectAuthority",
-      this.properties.name,
-      function (v) {
-        if (!v) {
-          return;
-        }
-        that.setProperty("targetSubjectAuthority", v);
-        if (document.getElementById("targetSubjectAuthority")) {
-          document.getElementById("targetSubjectAuthority").value = v;
-        }
-      }
-    );
 
     this.addOutput("output", "text");
-
+    this.widgets_up = true;
+    this.size = [320, 90];
     this.title = "Authority Conformation Enrichment Operator";
-    this.color = "#816204";
-    this.bgcolor = "#bb8b2c";
+    this.color = "#664d00";
+    this.bgcolor = "#8c6a00";
+    this.onDrawForeground = function(ctx, graphcanvas)
+    {
+      if(this.flags.collapsed)
+        return;
+      ctx.font = "14px Arial";
+      ctx.fillText("Description of the node ...", 10, 40); 
+    }
   }
 
   submitForm = () => {

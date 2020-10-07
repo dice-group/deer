@@ -31,57 +31,19 @@ class FileModelWriter extends React.Component {
 
     var that = this;
 
-    this.name_widget = this.addWidget(
-      "text",
-      "Writer name",
-      this.properties.name,
-      function (v) {
-        if (!v) {
-          return;
-        }
-        that.setProperty("name", v);
-        if (document.getElementById("name")) {
-          document.getElementById("name").value = v;
-        }
-      }
-    );
-
-    this.name_widget = this.addWidget(
-      "text",
-      "deer:outputFile",
-      this.properties.name,
-      function (v) {
-        if (!v) {
-          return;
-        }
-        that.setProperty("outputFile", v);
-        if (document.getElementById("outputFile")) {
-          document.getElementById("outputFile").value = v;
-        }
-      }
-    );
-
-    this.name_widget = this.addWidget(
-      "text",
-      "deer:outputFormat",
-      this.properties.name,
-      function (v) {
-        if (!v) {
-          return;
-        }
-        that.setProperty("outputFormat", v);
-        if (document.getElementById("outputFormat")) {
-          document.getElementById("outputFormat").value = v;
-        }
-      }
-    );
-
     this.widgets_up = true;
     this.size = [180, 90];
 
     this.title = "File Model Writer";
     this.color = "#223322";
     this.bgcolor = "#335533";
+    this.onDrawForeground = function(ctx, graphcanvas)
+    {
+      if(this.flags.collapsed)
+        return;
+      ctx.font = "14px Arial";
+      ctx.fillText("Description of the node ...", 10, 40); 
+    }
   }
 
   onExecute() {

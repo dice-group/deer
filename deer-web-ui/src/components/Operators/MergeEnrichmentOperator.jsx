@@ -17,34 +17,18 @@ class MergeEnrichmentOperator extends React.Component {
 
     var that = this;
 
-    this.node_1 = this.addWidget(
-      "text",
-      "deer:node_1",
-      this.properties.name,
-      function (v) {
-        if (!v) {
-          return;
-        }
-        that.setProperty("node_1", v);
-      }
-    );
-    this.node_2 = this.addWidget(
-      "text",
-      "deer:node_2",
-      this.properties.name,
-      function (v) {
-        if (!v) {
-          return;
-        }
-        that.setProperty("node_2", v);
-      }
-    );
-
     this.addOutput("output", "text");
-
+    this.size = [250, 90];
     this.title = "Merge Enrichment Operator";
-    this.color = "#816204";
-    this.bgcolor = "#bb8b2c";
+    this.color = "#664d00";
+    this.bgcolor = "#8c6a00";
+    this.onDrawForeground = function(ctx, graphcanvas)
+    {
+      if(this.flags.collapsed)
+        return;
+      ctx.font = "14px Arial";
+      ctx.fillText("Description of the node ...", 10, 40); 
+    }
   }
 }
 

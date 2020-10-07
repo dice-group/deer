@@ -37,56 +37,18 @@ class PredicateConformationEnrichmentOperator extends React.Component {
     var that = this;
     var show = true;
 
-    this.name = this.addWidget(
-      "text",
-      "Operator Name",
-      this.properties.name,
-      function (v) {
-        if (!v) {
-          return;
-        }
-        that.setProperty("name", v);
-        if (document.getElementById("name")) {
-          document.getElementById("name").value = v;
-        }
-      }
-    );
-
-    this.sourcePredicate = this.addWidget(
-      "text",
-      "deer:sourcePredicate",
-      this.properties.name,
-      function (v) {
-        if (!v) {
-          return;
-        }
-        that.setProperty("sourcePredicate", v);
-        if (document.getElementById("sourcePredicate")) {
-          document.getElementById("sourcePredicate").value = v;
-        }
-      }
-    );
-
-    this.targetPredicate = this.addWidget(
-      "text",
-      "deer:targetPredicate",
-      this.properties.name,
-      function (v) {
-        if (!v) {
-          return;
-        }
-        that.setProperty("targetPredicate", v);
-        if (document.getElementById("targetPredicate")) {
-          document.getElementById("targetPredicate").value = v;
-        }
-      }
-    );
-
     this.addOutput("output", "text");
-
+    this.size = [320, 90];
     this.title = "Predicate Conformation Enrichment Operator";
-    this.color = "#816204";
-    this.bgcolor = "#bb8b2c";
+    this.color = "#664d00";
+    this.bgcolor = "#8c6a00";
+    this.onDrawForeground = function(ctx, graphcanvas)
+    {
+      if(this.flags.collapsed)
+        return;
+      ctx.font = "14px Arial";
+      ctx.fillText("Description of the node ...", 10, 40); 
+    }
   }
 
   submitForm = () => {
