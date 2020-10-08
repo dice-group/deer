@@ -21,6 +21,7 @@ class FileModelReader extends React.Component {
 
   constructor(props) {
     super(props);
+    this.addOutput("output", "text");
 
     this.properties = {
       name: "",
@@ -40,54 +41,8 @@ class FileModelReader extends React.Component {
 
     var that = this;
 
-    this.name_widget = this.addWidget(
-      "text",
-      "Reader name",
-      this.properties.name,
-      function (v) {
-        if (!v) {
-          that.setProperty("name", this.state.name);
-          return;
-        }
-        that.setProperty("name", v);
-        if (document.getElementById("readerName")) {
-          document.getElementById("readerName").value = v;
-        }
-      }
-    );
-    this.fromUriWidget = this.addWidget(
-      "text",
-      "deer:fromUri",
-      this.properties.fromUri,
-      function (v) {
-        if (!v) {
-          return;
-        }
-        that.setProperty("fromUri", v);
-        if (document.getElementById("fromUri")) {
-          document.getElementById("fromUri").value = v;
-        }
-      }
-    );
-
-    this.fromPathWidget = this.addWidget(
-      "text",
-      "deer:fromPath",
-      this.properties.fromPath,
-      function (v) {
-        if (!v) {
-          return;
-        }
-        that.setProperty("fromPath", v);
-        if (document.getElementById("fromPath")) {
-          document.getElementById("fromPath").value = v;
-        }
-      }
-    );
-
     this.widgets_up = true;
     this.size = [180, 90];
-    this.addOutput("output", "text");
     this.title = "File Model Reader";
     this.color = "#223322";
     this.bgcolor = "#335533";
@@ -98,6 +53,14 @@ class FileModelReader extends React.Component {
         readerCount: this.state.readerCount + 1,
       });
     };
+
+    this.onDrawForeground = function(ctx, graphcanvas)
+    {
+      if(this.flags.collapsed)
+        return;
+      ctx.font = "14px Arial";
+      ctx.fillText("Description of the node ...", 10, 40); 
+    }
   }
 
   handleChange = (event) => {

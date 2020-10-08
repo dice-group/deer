@@ -38,59 +38,18 @@ class DereferencingEnrichmentOperator extends React.Component {
     var that = this;
     var show = true;
 
-    this.name = this.addWidget(
-      "text",
-      "Operator name",
-      this.properties.name,
-      function (v) {
-        if (!v) {
-          return;
-        }
-        that.setProperty("name", v);
-      }
-    );
-
-    this.lookUpPrefix = this.addWidget(
-      "text",
-      "deer:lookUpPrefix",
-      this.properties.name,
-      function (v) {
-        if (!v) {
-          return;
-        }
-        that.setProperty("lookUpPrefix", v);
-      }
-    );
-
-    this.dereferencingProperty = this.addWidget(
-      "text",
-      "deer:dereferencingProperty",
-      this.properties.name,
-      function (v) {
-        if (!v) {
-          return;
-        }
-        that.setProperty("dereferencingProperty", v);
-      }
-    );
-
-    this.importProperty = this.addWidget(
-      "text",
-      "deer:importProperty",
-      this.properties.name,
-      function (v) {
-        if (!v) {
-          return;
-        }
-        that.setProperty("importProperty", v);
-      }
-    );
-
     this.addOutput("output", "text");
-
+    this.size = [180, 90];
     this.title = "Dereferencing Enrichment Operator";
-    this.color = "#816204";
-    this.bgcolor = "#bb8b2c";
+    this.color = "#664d00";
+    this.bgcolor = "#8c6a00";
+    this.onDrawForeground = function(ctx, graphcanvas)
+    {
+      if(this.flags.collapsed)
+        return;
+      ctx.font = "14px Arial";
+      ctx.fillText("Description of the node ...", 10, 40); 
+    }
   }
 
   render() {

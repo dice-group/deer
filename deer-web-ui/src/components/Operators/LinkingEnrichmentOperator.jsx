@@ -35,7 +35,7 @@ class LinkingEnrichmentOperator extends React.Component {
       showSelectors: true,
       selectedOption: null,
     };
-
+    this.addOutput("output1", "text");
     this.addInput("input1", "text");
     this.addInput("input2", "text");
 
@@ -50,128 +50,20 @@ class LinkingEnrichmentOperator extends React.Component {
 
     var that = this;
 
-    this.name_widget = this.addWidget(
-      "text",
-      "Name",
-      this.properties.name,
-      function (v) {
-        if (!v) {
-          return;
-        }
-        that.setProperty("name", v);
-        if (document.getElementById("name")) {
-          document.getElementById("name").value = v;
-        }
-      }
-    );
-
-    this.specFile = this.addWidget(
-      "text",
-      "deer:specFile",
-      this.properties.name,
-      function (v) {
-        if (!v) {
-          return;
-        }
-        that.setProperty("specFile", v);
-        if (document.getElementById("specFile")) {
-          document.getElementById("specFile").value = v;
-        }
-      }
-    );
-
-    this.linksPart = this.addWidget(
-      "combo",
-      "deer:linksPart",
-      "Select",
-      function (v) {
-        if (!v) {
-          return;
-        }
-        that.setProperty("linksPart", v);
-        if (document.getElementById("linksPart")) {
-          document.getElementById("linksPart").value = v;
-        }
-      },
-      { values: ["source", "target"] }
-    );
-
-    // this.onPropertyChanged = function(name, value) {
-    //   console.log(this.widgets[1]);
-    //   // if (this.widgets[1].value === "Selectors") {
-    //   if (this.widgets[1].value === "Selectors") {
-    //     console.log(this.widgets[2]);
-    //     this.widgets[2].disabled = true;
-    //   }
-    //   // }
-    // };
-
-    this.selectMode = this.addWidget(
-      "combo",
-      "deer:selectMode",
-      "Select",
-      function (v) {
-        if (!v) {
-          return;
-        }
-        that.setProperty("selectMode", v);
-        if (document.getElementById("selectMode")) {
-          document.getElementById("selectMode").value = v;
-        }
-      },
-      { values: ["all", "best1toN", "best1to1", "best"] }
-    );
-
-    this.linkSpecification = this.addWidget(
-      "text",
-      "deer:linkSpecification",
-      this.properties.name,
-      function (v) {
-        if (!v) {
-          return;
-        }
-        that.setProperty("linkSpecification", v);
-        if (document.getElementById("linkSpecification")) {
-          document.getElementById("linkSpecification").value = v;
-        }
-      }
-    );
-
-    this.linkingPredicate = this.addWidget(
-      "text",
-      "deer:linkingPredicate",
-      this.properties.name,
-      function (v) {
-        if (!v) {
-          return;
-        }
-        that.setProperty("linkingPredicate", v);
-        if (document.getElementById("linkingPredicate")) {
-          document.getElementById("linkingPredicate").value = v;
-        }
-      }
-    );
-
-    this.threshold = this.addWidget(
-      "text",
-      "deer:threshold",
-      this.properties.name,
-      function (v) {
-        if (!v) {
-          return;
-        }
-        that.setProperty("threshold", v);
-        if (document.getElementById("threshold")) {
-          document.getElementById("threshold").value = v;
-        }
-      }
-    );
-
-    this.addOutput("output1", "text");
-
+    this.widgets_up = true;
+    this.size = [240, 90];
+    
     this.title = "Linking Enrichment Operator";
-    this.color = "#816204";
-    this.bgcolor = "#bb8b2c";
+    this.color = "#664d00";
+    this.bgcolor = "#8c6a00";
+    this.onDrawForeground = function(ctx, graphcanvas)
+    {
+      if(this.flags.collapsed)
+        return;
+      ctx.font = "14px Arial";
+      // ctx.fillStyle = "#000";
+      ctx.fillText("Description of the node ...", 10, 60); 
+    }
   }
 
   toggle = () => {

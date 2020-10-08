@@ -17,6 +17,7 @@ import {
 class SparqlModelReader extends React.Component {
   constructor(props) {
     super(props);
+    this.addOutput("output", "text");
     this.properties = {
       name: "",
       fromEndpoint: "",
@@ -49,82 +50,18 @@ class SparqlModelReader extends React.Component {
         this.state.endpoints.push(...Object.keys(obj));
       });
 
-    this.name_widget = this.addWidget(
-      "text",
-      "Reader name",
-      this.properties.name,
-      function (v) {
-        if (!v) {
-          return;
-        }
-        that.setProperty("name", v);
-        if (document.getElementById("name")) {
-          document.getElementById("name").value = v;
-        }
-      }
-    );
-    // this.addWidget(
-    //   "combo",
-    //   "deer:fromEndpoint",
-    //   "Select",
-    //   function (v) {
-    //     if (!v) {
-    //       return;
-    //     }
-    //     that.setProperty("endpoint", v);
-    //   },
-    //   { values: this.state.endpoints }
-    // );
-    this.fromEndpoint = this.addWidget(
-      "text",
-      "deer:fromEndpoint",
-      this.properties.name,
-      function (v) {
-        if (!v) {
-          return;
-        }
-        that.setProperty("fromEndpoint", v);
-        if (document.getElementById("fromEndpoint")) {
-          document.getElementById("fromEndpoint").value = v;
-        }
-      }
-    );
-
-    this.sparqlDescribeOf = this.addWidget(
-      "text",
-      "deer:useSparqlDescribeOf",
-      this.properties.name,
-      function (v) {
-        if (!v) {
-          return;
-        }
-        that.setProperty("sparqlDescribeOf", v);
-        if (document.getElementById("sparqlDescribeOf")) {
-          document.getElementById("sparqlDescribeOf").value = v;
-        }
-      }
-    );
-    this.useSparqlConstruct = this.addWidget(
-      "text",
-      "deer:useSparqlConstruct",
-      this.properties.name,
-      function (v) {
-        if (!v) {
-          return;
-        }
-        that.setProperty("useSparqlConstruct", v);
-        if (document.getElementById("useSparqlConstruct")) {
-          document.getElementById("useSparqlConstruct").value = v;
-        }
-      }
-    );
-
     this.widgets_up = true;
     this.size = [180, 90];
-    this.addOutput("output", "text");
     this.title = "SparQL Model Reader";
     this.color = "#223322";
     this.bgcolor = "#335533";
+    this.onDrawForeground = function(ctx, graphcanvas)
+    {
+      if(this.flags.collapsed)
+        return;
+      ctx.font = "14px Arial";
+      ctx.fillText("Description of the node ...", 10, 40); 
+    }
   }
 
   handleChange = (event) => {

@@ -61,37 +61,7 @@ class FilterEnrichmentOperator extends React.Component {
     var that = this;
     var show = true;
 
-    this.name_widget_1 = this.addWidget(
-      "text",
-      "Name",
-      this.properties.name,
-      function (v) {
-        if (!v) {
-          return;
-        }
-        that.setProperty("name", v);
-        if (document.getElementById("name")) {
-          document.getElementById("name").value = v;
-        }
-      }
-    );
-
-    this.combo_widget = this.addWidget(
-      "combo",
-      "",
-      "Select",
-      function (v) {
-        if (!v) {
-          return;
-        }
-        that.setProperty("showSelector", v);
-        if (document.getElementById("showSelector")) {
-          document.getElementById("showSelector").value = v;
-        }
-      },
-      { values: ["Selectors", "Construct Query"] }
-    );
-
+    
     // this.onPropertyChanged = function(name, value) {
     //   console.log(this.widgets[1]);
     //   // if (this.widgets[1].value === "Selectors") {
@@ -102,57 +72,18 @@ class FilterEnrichmentOperator extends React.Component {
     //   // }
     // };
 
-    this.selector_combo_widget = this.addWidget(
-      "combo",
-      "",
-      "Select",
-      function (v) {
-        if (!v) {
-          return;
-        }
-        that.setProperty("selector", v);
-        if (document.getElementById("selector")) {
-          document.getElementById("selector").value = v;
-        }
-      },
-      { values: ["subject", "predicate", "object"] }
-    );
-
-    this.name_widget = this.addWidget(
-      "text",
-      "Add resource",
-      this.properties.name,
-      function (v) {
-        if (!v) {
-          return;
-        }
-        that.setProperty("resource", v);
-        if (document.getElementById("resource")) {
-          document.getElementById("resource").value = v;
-        }
-      }
-    );
-
-    this.name_widget = this.addWidget(
-      "text",
-      "Add resource",
-      this.properties.name,
-      function (v) {
-        if (!v) {
-          return;
-        }
-        that.setProperty("sparqlConstructQuery", v);
-        if (document.getElementById("sparqlConstructQuery")) {
-          document.getElementById("sparqlConstructQuery").value = v;
-        }
-      }
-    );
-
     this.addOutput("output", "text");
-
+    this.size = [200, 90];
     this.title = "Filter Enrichment Operator";
-    this.color = "#816204";
-    this.bgcolor = "#bb8b2c";
+    this.color = "#664d00";
+    this.bgcolor = "#8c6a00";
+    this.onDrawForeground = function(ctx, graphcanvas)
+    {
+      if(this.flags.collapsed)
+        return;
+      ctx.font = "14px Arial";
+      ctx.fillText("Description of the node ...", 10, 40); 
+    }
   }
 
   toggle = () => {

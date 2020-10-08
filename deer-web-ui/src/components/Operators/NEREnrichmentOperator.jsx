@@ -41,87 +41,18 @@ class NEREnrichmentOperator extends React.Component {
 
     var that = this;
 
-    this.literalProperty = this.addWidget(
-      "text",
-      "Name",
-      this.properties.name,
-      function (v) {
-        if (!v) {
-          return;
-        }
-        that.setProperty("name", v);
-        if (document.getElementById("name")) {
-          document.getElementById("name").value = v;
-        }
-      }
-    );
-
-    this.literalProperty = this.addWidget(
-      "text",
-      "deer:literalProperty",
-      this.properties.name,
-      function (v) {
-        if (!v) {
-          return;
-        }
-        that.setProperty("literalProperty", v);
-        if (document.getElementById("literalProperty")) {
-          document.getElementById("literalProperty").value = v;
-        }
-      }
-    );
-
-    this.importProperty = this.addWidget(
-      "text",
-      "deer:importProperty",
-      this.properties.name,
-      function (v) {
-        if (!v) {
-          return;
-        }
-        that.setProperty("importProperty", v);
-        if (document.getElementById("importProperty")) {
-          document.getElementById("naimportPropertyme").value = v;
-        }
-      }
-    );
-
-    this.neType = this.addWidget(
-      "combo",
-      "",
-      "location",
-      function (v) {
-        if (!v) {
-          return;
-        }
-        that.setProperty("neType", v);
-        if (document.getElementById("neType")) {
-          document.getElementById("neType").value = v;
-        }
-      },
-      { values: ["location", "person", "organization", "all"] }
-    );
-
-    this.askEndpoint = this.addWidget(
-      "text",
-      "deer:askEndpoint",
-      this.properties.name,
-      function (v) {
-        if (!v) {
-          return;
-        }
-        that.setProperty("foxUrl", v);
-        if (document.getElementById("foxUrl")) {
-          document.getElementById("foxUrl").value = v;
-        }
-      }
-    );
-
     this.addOutput("output", "text");
-
+    this.size = [250, 90];
     this.title = "NER Enrichment Operator";
-    this.color = "#816204";
-    this.bgcolor = "#bb8b2c";
+    this.color = "#664d00";
+    this.bgcolor = "#8c6a00";
+    this.onDrawForeground = function(ctx, graphcanvas)
+    {
+      if(this.flags.collapsed)
+        return;
+      ctx.font = "14px Arial";
+      ctx.fillText("Description of the node ...", 10, 40); 
+    }
   }
 
   handleSelectChange = (selectedOption) => {

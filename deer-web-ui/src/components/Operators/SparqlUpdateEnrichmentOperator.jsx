@@ -33,41 +33,18 @@ class SparqlUpdateEnrichmentOperator extends React.Component {
 
     var that = this;
 
-    this.sparqlUpdateQuery = this.addWidget(
-      "text",
-      "Name",
-      this.properties.name,
-      function (v) {
-        if (!v) {
-          return;
-        }
-        that.setProperty("name", v);
-        if (document.getElementById("name")) {
-          document.getElementById("name").value = v;
-        }
-      }
-    );
-
-    this.sparqlUpdateQuery = this.addWidget(
-      "text",
-      "deer:sparqlUpdateQuery",
-      this.properties.sparqlUpdateQuery,
-      function (v) {
-        if (!v) {
-          return;
-        }
-        that.setProperty("sparqlUpdateQuery", v);
-        if (document.getElementById("sparqlUpdateQuery")) {
-          document.getElementById("sparqlUpdateQuery").value = v;
-        }
-      }
-    );
-
     this.addOutput("output", "text");
-
+    this.size = [260, 90];
     this.title = "Sparql Update Enrichment Operator";
-    this.color = "#816204";
-    this.bgcolor = "#bb8b2c";
+    this.color = "#664d00";
+    this.bgcolor = "#8c6a00";
+    this.onDrawForeground = function(ctx, graphcanvas)
+    {
+      if(this.flags.collapsed)
+        return;
+      ctx.font = "14px Arial";
+      ctx.fillText("Description of the node ...", 10, 40); 
+    }
   }
 
   handleChange = (event) => {
