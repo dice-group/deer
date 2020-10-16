@@ -24,6 +24,7 @@ class FileModelWriter extends React.Component {
 
     this.addInput("input", "text");
     this.properties = {
+      linkName: "https://google.com",
       name: "",
       outputFile: "number",
       outputFormat: 0,
@@ -31,8 +32,21 @@ class FileModelWriter extends React.Component {
 
     var that = this;
 
-    this.widgets_up = true;
-    this.size = [180, 90];
+    this.linkWidget = this.addWidget(
+      "button",
+      "click the link",
+      this.properties.linkName,
+      function (v) {
+        if (!v) {
+          return;
+        }
+        window.open( 
+              that.properties.linkName, "_blank"); 
+      }
+    );
+    this.widgets_start_y = 70;
+    this.widgets_up = false;
+    this.size = [180, 100];
 
     this.title = "File Model Writer";
     this.color = "#223322";
@@ -42,8 +56,25 @@ class FileModelWriter extends React.Component {
       if(this.flags.collapsed)
         return;
       ctx.font = "14px Arial";
-      ctx.fillText("Description of the node ...", 10, 40); 
+      let str0 = "Description of the node ...Continue description of the node ...";
+      let str1 = this.splitStringForCanvas(str0);
+      var lines = str1.split('\n');
+      for (var j = 0; j<lines.length; j++)
+        ctx.fillText(lines[j], 10, 40 + (j*14) );
     }
+    
+  }
+
+  // create folder for utils and move this function there
+  splitStringForCanvas(str){
+    let newStr = "";
+    let charsInStr = 27;
+    let myReg = new RegExp(".{1,"+charsInStr+"}", "g");
+    let strArr = str.match(myReg);
+    for(let i=0; i<strArr.length; i++){
+      newStr += strArr[i].trim() + "\n";
+    }
+    return newStr;
   }
 
   onExecute() {
