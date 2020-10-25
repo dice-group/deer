@@ -72,6 +72,7 @@ class Dashboard extends React.Component {
     super(props);
     this.state = {
       graph: new LGraph(),
+      graphCanvas: null,
       outputLinks: [],
       prefixOptions: [],
       config: ``,
@@ -257,8 +258,30 @@ class Dashboard extends React.Component {
     });
   };
 
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.resizeWindowFunc);
+  };
+
+  resizeWindowFunc = () => {
+    let canvas = document.getElementById("mycanvas");
+    let parent = document.getElementById("parentCanvas");
+    canvas.width = parent.offsetWidth;
+    canvas.height = parent.offsetHeight;
+
+    if (this.state.graphCanvas != null) {
+      this.state.graphCanvas.resize();
+    }
+
+  };
+
   componentDidMount() {
+    this.resizeWindowFunc();
+    window.addEventListener("resize", this.resizeWindowFunc);
+
     var graphCanvas = new LGraphCanvas("#mycanvas", this.state.graph);
+    this.setState({
+        graphCanvas: graphCanvas,
+    });
     this.state.graph.start();
 
     //double click on a node will render a form on the UI
@@ -1008,14 +1031,13 @@ class Dashboard extends React.Component {
             <Card className="card-stats">
               <div className="numbers">
                 <CardTitle tag="p">Prefixes</CardTitle>
-                <p />
               </div>
               <CardBody>
                 <Row>
                   <Col md="12" xs="12">
                     <Form>
                       <Row>
-                        <Col className="pr-1" md="4">
+                        <Col md="4">
                           <Fragment>
                             <FormGroup className="dropdown">
                               <label>Label</label>
@@ -1044,7 +1066,7 @@ class Dashboard extends React.Component {
                             </FormGroup>
                           </Fragment>
                         </Col>
-                        <Col className="pl-1" md="4">
+                        <Col md="4">
                           <FormGroup>
                             <label>Namespace</label>
                             <Input
@@ -1055,7 +1077,7 @@ class Dashboard extends React.Component {
                             />
                           </FormGroup>
                         </Col>
-                        <div className="pl-1" md="4">
+                        <Col md="4">
                           <Button
                             disabled={this.state.isDisabled}
                             className="btn-round prefixBtn"
@@ -1064,7 +1086,7 @@ class Dashboard extends React.Component {
                           >
                             Add prefix
                           </Button>
-                        </div>
+                        </Col>
                       </Row>
                     </Form>
                   </Col>
@@ -1084,7 +1106,6 @@ class Dashboard extends React.Component {
             <Card className="card-stats">
               <div className="numbers">
                 <CardTitle tag="p">Upload Files</CardTitle>
-                <p />
               </div>
               <CardBody>
                 {/* <div class="form-group">
@@ -1095,13 +1116,13 @@ class Dashboard extends React.Component {
                   ></input>
                 </div> */}
                 <Row>
-                  <Col md="9">
+                  <Col md="8">
                     {" "}
                     <input
                       id="input-b2"
                       name="input-b2"
                       type="file"
-                      class="file"
+                      className="file inputFile"
                       data-show-preview="false"
                     ></input>
                   </Col>
@@ -1124,12 +1145,14 @@ class Dashboard extends React.Component {
         </Row>
         <Row>
           <Col md="9">
-            <Card>
-              <CardHeader>
-                <CardTitle tag="h5">Graph</CardTitle>
-              </CardHeader>
+            <Card>     
+              <div className="numbers">
+                <CardTitle tag="p">Graph</CardTitle>
+              </div> 
               <CardBody>
-                <canvas id="mycanvas" height="600" width="1000"></canvas>{" "}
+                <div id="parentCanvas">
+                  <canvas id="mycanvas" height="600" width="1000"></canvas>{" "}
+                </div>
               </CardBody>
               <CardFooter>
                 <hr />

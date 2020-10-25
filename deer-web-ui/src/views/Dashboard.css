@@ -1,6 +1,6 @@
 .prefixBtn {
   top: 1rem;
-  position: absolute;
+  position: relative;
 }
 
 .custom-select {
@@ -66,6 +66,8 @@ h1 {
 
 .uploadBtn {
   position: relative;
-  bottom: 16px;
-  right: 45px;
+}
+
+.inputFile {
+  margin-top: 18px;
 }
