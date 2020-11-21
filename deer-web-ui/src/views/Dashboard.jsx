@@ -23,20 +23,7 @@ import _ from "lodash";
 import "litegraph.js/css/litegraph.css";
 import "./Dashboard.css";
 
-import FileModelReader from "../components/Readers/FileModelReader";
-import FileModelWriter from "../components/Writers/FileModelWriter";
-import SparqlModelReader from "../components/Readers/SparqlModelReader";
-import FilterEnrichmentOperator from "../components/Operators/FilterEnrichmentOperator";
-import LinkingEnrichmentOperator from "../components/Operators/LinkingEnrichmentOperator";
-import DereferencingEnrichmentOperator from "../components/Operators/DereferencingEnrichmentOperator";
-import NEREnrichmentOperator from "../components/Operators/NEREnrichmentOperator";
-import CloneEnrichmentOperator from "../components/Operators/CloneEnrichmentOperator";
-import MergeEnrichmentOperator from "../components/Operators/MergeEnrichmentOperator";
-import GeoFusionEnrichmentOperator from "../components/Operators/GeoFusionEnrichmentOperator";
-import SparqlUpdateEnrichmentOperator from "../components/Operators/SparqlUpdateEnrichmentOperator";
-import GeoDistanceEnrichmentOperator from "../components/Operators/GeoDistanceEnrichmentOperator";
-import AuthorityConformationEnrichmentOperator from "../components/Operators/AuthorityConformationEnrichmentOperator";
-import PredicateConformationEnrichmentOperator from "../components/Operators/PredicateConformationEnrichmentOperator";
+import FactoryNode from "../components/FactoryNode";
 
 // reactstrap components
 import {
@@ -109,140 +96,7 @@ class Dashboard extends React.Component {
         rdfs: "http://www.w3.org/2000/01/rdf-schema#",
         xsd: "http://www.w3.org/2001/XMLSchema#",
       },
-      componentArray: [
-        {
-          src: FileModelReader,
-          title: "File Model Reader",
-          name: "FileModelReader",
-          url: "Reader/FileModelReader",
-          form: <FileModelReader parentCallback={this.callbackFunction} />,
-        },
-        {
-          src: FileModelWriter,
-          title: "File Model Writer",
-          name: "FileModelWriter",
-          url: "Writer/FileModelWriter",
-          form: <FileModelWriter parentCallback={this.callbackFunction} />,
-        },
-        {
-          src: FilterEnrichmentOperator,
-          title: "Filter Enrichment Operator",
-          name: "FilterEnrichmentOperator",
-          url: "Operator/FilterEnrichmentOperator",
-          form: (
-            <FilterEnrichmentOperator parentCallback={this.callbackFunction} />
-          ),
-        },
-        {
-          src: LinkingEnrichmentOperator,
-          title: "Linking Enrichment Operator",
-          name: "LinkingEnrichmentOperator",
-          url: "Operator/LinkingEnrichmentOperator",
-          form: (
-            <LinkingEnrichmentOperator parentCallback={this.callbackFunction} />
-          ),
-        },
-        {
-          src: NEREnrichmentOperator,
-          title: "NER Enrichment Operator",
-          name: "NEREnrichmentOperator",
-          url: "Operator/NEREnrichmentOperator",
-          form: (
-            <NEREnrichmentOperator parentCallback={this.callbackFunction} />
-          ),
-        },
-        {
-          src: DereferencingEnrichmentOperator,
-          title: "Dereferencing Enrichment Operator",
-          name: "DereferencingEnrichmentOperator",
-          url: "Operator/DereferencingEnrichmentOperator",
-          form: (
-            <DereferencingEnrichmentOperator
-              parentCallback={this.callbackFunction}
-            />
-          ),
-        },
-        {
-          src: GeoFusionEnrichmentOperator,
-          title: "GeoFusion Enrichment Operator",
-          name: "GeoFusionEnrichmentOperator",
-          url: "Operator/GeoFusionEnrichmentOperator",
-          form: (
-            <GeoFusionEnrichmentOperator
-              parentCallback={this.callbackFunction}
-            />
-          ),
-        },
-        {
-          src: AuthorityConformationEnrichmentOperator,
-          title: "Authority Conformation Enrichment Operator",
-          name: "AuthorityConformationEnrichmentOperator",
-          url: "Operator/AuthorityConformationEnrichmentOperator",
-          form: (
-            <AuthorityConformationEnrichmentOperator
-              parentCallback={this.callbackFunction}
-            />
-          ),
-        },
-        {
-          src: PredicateConformationEnrichmentOperator,
-          title: "Predicate Conformation Enrichment Operator",
-          name: "PredicateConformationEnrichmentOperator",
-          url: "Operator/PredicateConformationEnrichmentOperator",
-          form: (
-            <PredicateConformationEnrichmentOperator
-              parentCallback={this.callbackFunction}
-            />
-          ),
-        },
-        {
-          src: GeoDistanceEnrichmentOperator,
-          title: "GeoDistance Enrichment Operator",
-          name: "GeoDistanceEnrichmentOperator",
-          url: "Operator/GeoDistanceEnrichmentOperator",
-          form: (
-            <GeoDistanceEnrichmentOperator
-              parentCallback={this.callbackFunction}
-            />
-          ),
-        },
-        {
-          src: SparqlUpdateEnrichmentOperator,
-          title: "Sparql Update Enrichment Operator",
-          name: "SparqlUpdateEnrichmentOperator",
-          url: "Operator/SparqlUpdateEnrichmentOperator",
-          form: (
-            <SparqlUpdateEnrichmentOperator
-              parentCallback={this.callbackFunction}
-            />
-          ),
-        },
-        {
-          src: MergeEnrichmentOperator,
-          title: "Merge Enrichment Operator",
-          name: "MergeEnrichmentOperator",
-          url: "Operator/MergeEnrichmentOperator",
-          form: (
-            <MergeEnrichmentOperator parentCallback={this.callbackFunction} />
-          ),
-        },
-        {
-          src: CloneEnrichmentOperator,
-          title: "Clone Enrichment Operator",
-          name: "CloneEnrichmentOperator",
-          url: "Operator/CloneEnrichmentOperator",
-          form: (
-            <CloneEnrichmentOperator parentCallback={this.callbackFunction} />
-          ),
-        },
-        {
-          src: SparqlModelReader,
-          title: "SparQL Model Reader",
-          name: "SparqlModelReader",
-          url: "Reader/SparqlModelReader",
-          form: <SparqlModelReader parentCallback={this.callbackFunction} />,
-        },
-      ],
+      nodesArray: new Set(),
     };
   }
 
@@ -323,16 +177,84 @@ class Dashboard extends React.Component {
           }
           //  console.log("No node returned.");
         });
+        
       });
   }
 
+  initializeNode = (node) => {
+
+    // class nodeClass extends FactoryNode{
+    //   static title = node;
+    //   constructor(props) {
+    //     super(props);
+    //     this.addOutput("output", "text");
+    //   }
+    // };
+    // nodeClass.title = node;
+    
+    // add to graph
+    if(node.includes("Operator")){
+      class nodeClass extends FactoryNode{
+        constructor(props) {
+          super(props);
+          this.addInput("input", "text");
+          this.addOutput("output", "text");
+        }
+      };
+      nodeClass.title = node;
+      nodeClass.size = [320, 100];
+      nodeClass.color = "#664d00";
+      nodeClass.bgcolor = "#8c6a00";
+      LiteGraph.registerNodeType("Operator/"+node, nodeClass);
+    } else 
+    if(node.includes("Reader")){
+      class nodeClass extends FactoryNode{
+        constructor(props) {
+          super(props);
+          this.addOutput("output", "text");
+        }
+      };
+      nodeClass.title = node;
+      nodeClass.size = [180, 100];
+      nodeClass.color = "#223322";
+      nodeClass.bgcolor = "#335533";
+      LiteGraph.registerNodeType("Reader/"+node, nodeClass);
+    } else {
+      class nodeClass extends FactoryNode{
+        constructor(props) {
+          super(props);
+          this.addInput("input", "text");
+        }
+      };
+      nodeClass.title = node;
+      nodeClass.size = [180, 100];
+      nodeClass.color = "#223322";
+      nodeClass.bgcolor = "#335533";
+      LiteGraph.registerNodeType("Writer/"+node, nodeClass);
+    }
+  }
+
   showNode = (quadOb) => {
-    this.state.componentArray.map((comp, key) => {
-      if (quadOb.includes(comp.name)) {
-        comp.src.title = comp.title;
-        LiteGraph.registerNodeType(comp.url, comp.src);
-      }
+    // save possible node names in array
+    let node = quadOb.split("http://w3id.org/deer/")[1];
+    let nodes = this.state.nodesArray;
+    if(node){
+      nodes.add(node);
+      this.initializeNode(node);
+    }
+
+    this.setState({
+      nodesArray: nodes,
     });
+    
+
+    // this.state.componentArray.map((comp, key) => {
+    //   if (quadOb.includes(comp.name)) {
+    //     // console.log(quadOb);
+    //     comp.src.title = comp.title;
+    //     LiteGraph.registerNodeType(comp.url, comp.src);
+    //   }
+    // });
   };
 
   toggleDropdown = () => {
@@ -1208,13 +1130,15 @@ class Dashboard extends React.Component {
             <ModalHeader toggle={this.toggle}>Display Config</ModalHeader>
             <ModalBody></ModalBody>
           </Modal> */}
-          <Col md="3">
+
+          {/*<Col md="3">
             {this.state.componentArray.map((comp, key) => {
               if (this.state.node.title === comp.title) {
                 return comp.form;
               }
             })}
-          </Col>
+          </Col>*/}
+
         </Row>
         {/* <Row>
             <Col md="4">
