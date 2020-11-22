@@ -18,11 +18,8 @@
 */
 import React, { Fragment } from "react";
 // react plugin used to create charts
-import { LGraph, LGraphCanvas, LiteGraph } from "litegraph.js";
 import _ from "lodash";
-import "litegraph.js/css/litegraph.css";
 import "./Dashboard.css";
-
 import FactoryNode from "../components/FactoryNode";
 
 // reactstrap components
@@ -46,7 +43,6 @@ import {
   Badge,
   Table,
 } from "reactstrap";
-//import { Dropdown } from "semantic-ui-react";
 
 const N3 = require("n3");
 const { DataFactory } = N3;
@@ -54,11 +50,13 @@ const { namedNode, literal, defaultGraph } = DataFactory;
 const URI = "http://localhost:8080";
 const BASE_URI = window.location.hostname + ":" + window.location.port;
 
+const litegraph = window.LiteGraph;
+
 class Dashboard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      graph: new LGraph(),
+      graph: new litegraph.LGraph(),
       graphCanvas: null,
       outputLinks: [],
       prefixOptions: [],
@@ -132,18 +130,12 @@ class Dashboard extends React.Component {
     this.resizeWindowFunc();
     window.addEventListener("resize", this.resizeWindowFunc);
 
-    var graphCanvas = new LGraphCanvas("#mycanvas", this.state.graph);
+    var graphCanvas = new litegraph.LGraphCanvas("#mycanvas", this.state.graph);
     this.setState({
         graphCanvas: graphCanvas,
     });
     this.state.graph.start();
-
-    //double click on a node will render a form on the UI
-    graphCanvas.onShowNodePanel = (node) => {
-      this.setState({
-        node: node,
-      });
-    };
+   
     graphCanvas.show_info = false;
 
     //returns the prefixes
@@ -182,7 +174,6 @@ class Dashboard extends React.Component {
   }
 
   initializeNode = (node) => {
-
     // class nodeClass extends FactoryNode{
     //   static title = node;
     //   constructor(props) {
@@ -205,7 +196,8 @@ class Dashboard extends React.Component {
       nodeClass.size = [320, 100];
       nodeClass.color = "#664d00";
       nodeClass.bgcolor = "#8c6a00";
-      LiteGraph.registerNodeType("Operator/"+node, nodeClass);
+      litegraph.registerNodeType("Operator/"+node, nodeClass);
+      
     } else 
     if(node.includes("Reader")){
       class nodeClass extends FactoryNode{
@@ -218,7 +210,7 @@ class Dashboard extends React.Component {
       nodeClass.size = [180, 100];
       nodeClass.color = "#223322";
       nodeClass.bgcolor = "#335533";
-      LiteGraph.registerNodeType("Reader/"+node, nodeClass);
+      litegraph.registerNodeType("Reader/"+node, nodeClass);
     } else {
       class nodeClass extends FactoryNode{
         constructor(props) {
@@ -230,7 +222,7 @@ class Dashboard extends React.Component {
       nodeClass.size = [180, 100];
       nodeClass.color = "#223322";
       nodeClass.bgcolor = "#335533";
-      LiteGraph.registerNodeType("Writer/"+node, nodeClass);
+      litegraph.registerNodeType("Writer/"+node, nodeClass);
     }
   }
 
@@ -1199,7 +1191,7 @@ class Dashboard extends React.Component {
   }
 }
 
-LiteGraph.registered_node_types = {};
-LiteGraph.searchbox_extras = {};
+litegraph.registered_node_types = {};
+litegraph.searchbox_extras = {};
 
 export default Dashboard;

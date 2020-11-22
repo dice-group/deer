@@ -1,6 +1,4 @@
 import React, { Fragment } from "react";
-import "litegraph.js/css/litegraph.css";
-
 // reactstrap components
 import {
   Row,
