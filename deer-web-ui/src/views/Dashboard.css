@@ -71,3 +71,8 @@ h1 {
 .inputFile {
   margin-top: 18px;
 }
+
+.litegraph .dialog.settings{
+  left: 102%;
+  top: 0px;
+}

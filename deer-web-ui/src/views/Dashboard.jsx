@@ -1064,7 +1064,7 @@ class Dashboard extends React.Component {
                 <CardTitle tag="p">Graph</CardTitle>
               </div> 
               <CardBody>
-                <div id="parentCanvas">
+                <div id="parentCanvas" className="litegraph litegraph-editor">
                   <canvas id="mycanvas" height="600" width="1000"></canvas>{" "}
                 </div>
               </CardBody>
