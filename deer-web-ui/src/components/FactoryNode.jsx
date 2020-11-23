@@ -19,34 +19,32 @@ class FactoryNode extends React.Component {
     super(props);
 
     // this.addInput("input", "text");
-    this.properties = {
-      linkName: "https://google.com",
-      name: "",
-      outputFile: "number",
-      outputFormat: 0,
-    };
+    // this.properties = {
+    //   linkName: "https://google.com",
+    //   name: "",
+    //   outputFile: "number",
+    //   outputFormat: 0,
+    // };
+    
+    this.linkName = "https://google.com";
 
     var that = this;
 
     this.linkWidget = this.addWidget(
       "button",
       "click the link",
-      this.properties.linkName,
+      this.linkName,
       function (v) {
         if (!v) {
           return;
         }
         window.open( 
-              that.properties.linkName, "_blank"); 
+              that.linkName, "_blank"); 
       }
     );
     this.widgets_start_y = 70;
     this.widgets_up = false;
-    this.size = [180, 100];
 
-    this.title = this.props.title;//"File Model Writer";
-    this.color = this.props.color;//"#223322";
-    this.bgcolor = this.props.bgcolor;//"#335533";
     this.onDrawForeground = function(ctx, graphcanvas)
     {
       if(this.flags.collapsed)

@@ -185,11 +185,28 @@ class Dashboard extends React.Component {
     
     // add to graph
     if(node.includes("Operator")){
+
+      let properties;
+      if(node === 'LinkingEnrichmentOperator'){
+        properties = {
+          name: "some text",
+          outputFile: "number",
+          outputFormat: 0,
+          };
+      } else {
+        properties = {
+          name: "some text",
+          lookUpPrefix: "some text" ,
+          dereferencingProperty: "some text",
+          importProperty: "some text",
+        };
+      }
       class nodeClass extends FactoryNode{
         constructor(props) {
           super(props);
           this.addInput("input", "text");
           this.addOutput("output", "text");
+          this.properties = properties;
         }
       };
       nodeClass.title = node;
