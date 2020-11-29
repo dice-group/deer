@@ -95,6 +95,7 @@ class Dashboard extends React.Component {
         xsd: "http://www.w3.org/2001/XMLSchema#",
       },
       nodesArray: new Set(),
+      quads: []
     };
   }
 
@@ -163,9 +164,15 @@ class Dashboard extends React.Component {
       })
       .then((content) => {
         parser.parse(content, (error, quad, prefixes) => {
-          if (quad && quad.predicate.id.includes("targetClass")) {
-            this.showNode(quad.object.id);
-          } else {
+          // if (quad && quad.predicate.id.includes("targetClass")) {
+          //   this.showNode(quad.object.id);
+          // } else {
+          // }
+          if(quad){
+            this.showNode(quad);
+          }
+          else{
+
           }
           //  console.log("No node returned.");
         });
@@ -184,22 +191,29 @@ class Dashboard extends React.Component {
     // nodeClass.title = node;
     
     // add to graph
-    if(node.includes("Operator")){
-
+    if(node.includes("Operator") ){
       let properties;
+      this.state.quads.map((quadProp, key) => {
+       if(quadProp.object.id.includes(node)){
+         console.log(node);
+         console.log(quadProp);
+       }
+      })
+
       if(node === 'LinkingEnrichmentOperator'){
-        properties = {
-          name: "some text",
-          outputFile: "number",
-          outputFormat: 0,
-          };
-      } else {
         properties = {
           name: "some text",
           lookUpPrefix: "some text" ,
           dereferencingProperty: "some text",
           importProperty: "some text",
         };
+       
+      } else {
+        properties = {
+          name: "some text",
+          outputFile: "number",
+          outputFormat: 0,
+          };
       }
       class nodeClass extends FactoryNode{
         constructor(props) {
@@ -229,6 +243,10 @@ class Dashboard extends React.Component {
       nodeClass.bgcolor = "#335533";
       litegraph.registerNodeType("Reader/"+node, nodeClass);
     } else {
+
+      // if(this.state.quadOb.predicate.id.includes("property")){
+      //   console.log(this.state.quadOb);
+      // }
       class nodeClass extends FactoryNode{
         constructor(props) {
           super(props);
@@ -245,18 +263,27 @@ class Dashboard extends React.Component {
 
   showNode = (quadOb) => {
     // save possible node names in array
-    let node = quadOb.split("http://w3id.org/deer/")[1];
-    let nodes = this.state.nodesArray;
-    if(node){
-      nodes.add(node);
-      this.initializeNode(node);
+    if(quadOb.predicate.id.includes("targetClass")){
+      let node = quadOb.object.id.split("http://w3id.org/deer/")[1];
+      let nodes = this.state.nodesArray;
+      if(node){
+        nodes.add(node);
+        this.initializeNode(node);
+      }
+
+      this.setState({
+        nodesArray: nodes,
+      });
+      
     }
-
-    this.setState({
-      nodesArray: nodes,
-    });
-    
-
+    if(quadOb.predicate.id.includes("property")){
+        let quads = this.state.quads;
+        quads.push(quadOb);
+        this.setState({
+          quads: quads
+        })
+    }
+  
     // this.state.componentArray.map((comp, key) => {
     //   if (quadOb.includes(comp.name)) {
     //     // console.log(quadOb);
@@ -290,7 +317,6 @@ class Dashboard extends React.Component {
   };
 
   getInputLink = (node) => {
-    console.log(node);
     if (node.type === "Operator/LinkingEnrichmentOperator") {
       var inputLinkInGraph1 = this.state.graph.links[node.inputs[0].link];
       var inputLinkInGraph2 = this.state.graph.links[node.inputs[1].link];
