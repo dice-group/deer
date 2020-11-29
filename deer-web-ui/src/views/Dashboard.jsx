@@ -181,36 +181,27 @@ class Dashboard extends React.Component {
   }
 
   initializeNode = (node) => {
-    // class nodeClass extends FactoryNode{
-    //   static title = node;
-    //   constructor(props) {
-    //     super(props);
-    //     this.addOutput("output", "text");
-    //   }
-    // };
-    // nodeClass.title = node;
-    
+
+    let properties = {};
+    console.log(node);
+    let filteredProps = this.state.quads.filter(quadProp => quadProp.object.id.includes(node)).map(filteredProp => {
+      console.log(filteredProp);
+      let betweenDashesArray = filteredProp.object.id.split('_');
+      let property = "";
+      if(betweenDashesArray.length > 2){
+        property = betweenDashesArray[betweenDashesArray.length-1];
+      } else {
+        property = betweenDashesArray[1];
+      }
+      return property;
+    })
+
+    filteredProps.forEach(pr => {
+      properties[pr] = "some text";
+    });
+  
     // add to graph
     if(node.includes("Operator") ){
-      let properties;
-      this.state.quads.filter(quadProp => quadProp.object.id.includes(node)).map(filteredProp => {
-        console.log(filteredProp);
-      })
-      if(node === 'LinkingEnrichmentOperator'){
-        properties = {
-          name: "some text",
-          lookUpPrefix: "some text" ,
-          dereferencingProperty: "some text",
-          importProperty: "some text",
-        };
-       
-      } else {
-        properties = {
-          name: "some text",
-          outputFile: "number",
-          outputFormat: 0,
-          };
-      }
       class nodeClass extends FactoryNode{
         constructor(props) {
           super(props);
@@ -231,6 +222,7 @@ class Dashboard extends React.Component {
         constructor(props) {
           super(props);
           this.addOutput("output", "text");
+          this.properties = properties;
         }
       };
       nodeClass.title = node;
@@ -247,6 +239,7 @@ class Dashboard extends React.Component {
         constructor(props) {
           super(props);
           this.addInput("input", "text");
+          this.properties = properties;
         }
       };
       nodeClass.title = node;
