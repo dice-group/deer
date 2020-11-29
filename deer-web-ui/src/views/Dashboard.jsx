@@ -193,13 +193,9 @@ class Dashboard extends React.Component {
     // add to graph
     if(node.includes("Operator") ){
       let properties;
-      this.state.quads.map((quadProp, key) => {
-       if(quadProp.object.id.includes(node)){
-         console.log(node);
-         console.log(quadProp);
-       }
+      this.state.quads.filter(quadProp => quadProp.object.id.includes(node)).map(filteredProp => {
+        console.log(filteredProp);
       })
-
       if(node === 'LinkingEnrichmentOperator'){
         properties = {
           name: "some text",
