@@ -95,7 +95,9 @@ class Dashboard extends React.Component {
         xsd: "http://www.w3.org/2001/XMLSchema#",
       },
       nodesArray: new Set(),
-      quads: []
+      quads: [],
+      tempXoneNodeParams: [],
+      fullContent: null,
     };
   }
 
@@ -163,11 +165,13 @@ class Dashboard extends React.Component {
         return response.text();
       })
       .then((content) => {
+        const p= new N3.Parser();
+        let fullContent = p.parse(content);
+        this.setState({
+          fullContent: fullContent,
+        });
+
         parser.parse(content, (error, quad, prefixes) => {
-          // if (quad && quad.predicate.id.includes("targetClass")) {
-          //   this.showNode(quad.object.id);
-          // } else {
-          // }
           if(quad){
             this.showNode(quad);
           }
@@ -180,20 +184,71 @@ class Dashboard extends React.Component {
       });
   }
 
-  initializeNode = (node) => {
+  getPropertyFirst = (quadsWithXone) => {
+    quadsWithXone.forEach(i => {
+        let quadI = this.state.fullContent.filter(quad => quad.subject.id.includes(i.object.id));
+        if(quadI[0] && !quadI[0].object.id.includes("_:n")){
+          let tempXoneNodeParams = this.state.tempXoneNodeParams;
+          tempXoneNodeParams.push(quadI[0].object.id);
+          this.setState({
+            tempXoneNodeParams: tempXoneNodeParams,
+          });
+        }
+        if(!i.object.id.includes('nil') && i.predicate.id.includes('rest')){
+          this.getPropertyFirst(quadI);
+        }
+    });
+  }
+
+  getPropertiesForNode = (node) => {
+    let arr = [];
+
+    this.setState({
+      tempXoneNodeParams: [],
+    });
+
+    let propsWithPropPredicate = this.state.fullContent.filter(quad => quad.subject.id.includes(node) && quad.predicate.id.includes("property")).map(i => i.object.id);
+    let propsWithXonePredicate = this.state.fullContent.filter(quad => quad.subject.id.includes(node) && quad.predicate.id.includes("xone")); 
+    
+    let propsFromXone = [];
+    propsWithXonePredicate.forEach(pr => {
+      let quadsWithXone = this.state.fullContent.filter(quad => quad.subject.id.includes(pr.object.id));
+      this.getPropertyFirst(quadsWithXone);
+      propsFromXone = this.state.tempXoneNodeParams;
+    });
+
+    let allNodeProps = {'basicProps': propsWithPropPredicate, 'xone': propsFromXone};
+    return allNodeProps;
+  }
+
+  getPropertyName = (prop) => {
+    let betweenDashesArray = prop.split('_');
+    let property = "";
+    if(betweenDashesArray.length > 2){
+      property = betweenDashesArray[betweenDashesArray.length-1];
+    } else {
+      property = betweenDashesArray[1];
+    }
+    return property;
+  }
+
+  initializeNode = (node) => {   
+    let propsArrForNode = this.getPropertiesForNode(node);
+    console.log(node, propsArrForNode);
 
     let properties = {};
-    console.log(node);
-    let filteredProps = this.state.quads.filter(quadProp => quadProp.object.id.includes(node)).map(filteredProp => {
-      console.log(filteredProp);
-      let betweenDashesArray = filteredProp.object.id.split('_');
-      let property = "";
-      if(betweenDashesArray.length > 2){
-        property = betweenDashesArray[betweenDashesArray.length-1];
-      } else {
-        property = betweenDashesArray[1];
-      }
-      return property;
+
+    let filteredProps = propsArrForNode.basicProps.map(filteredProp => {
+      return this.getPropertyName(filteredProp);
+    })
+
+    filteredProps.forEach(pr => {
+      properties[pr] = "some text";
+    });
+
+    // todo: now all fields from xone are added, show only one to the user (add radiobutton)
+    filteredProps = propsArrForNode.xone.map(filteredProp => {
+      return this.getPropertyName(filteredProp);
     })
 
     filteredProps.forEach(pr => {
@@ -231,10 +286,6 @@ class Dashboard extends React.Component {
       nodeClass.bgcolor = "#335533";
       litegraph.registerNodeType("Reader/"+node, nodeClass);
     } else {
-
-      // if(this.state.quadOb.predicate.id.includes("property")){
-      //   console.log(this.state.quadOb);
-      // }
       class nodeClass extends FactoryNode{
         constructor(props) {
           super(props);
@@ -264,13 +315,6 @@ class Dashboard extends React.Component {
         nodesArray: nodes,
       });
       
-    }
-    if(quadOb.predicate.id.includes("property")){
-        let quads = this.state.quads;
-        quads.push(quadOb);
-        this.setState({
-          quads: quads
-        })
     }
   
     // this.state.componentArray.map((comp, key) => {
