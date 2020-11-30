@@ -1,7 +1,7 @@
 ########
 ## BUILD
 # build first using maven
-FROM maven:3.6.2-jdk-12 as builder
+FROM maven:3.6.2-jdk-11 as builder
 # set workdir
 WORKDIR /deer
 # copy files
@@ -18,7 +18,7 @@ cp -p ./target/deer-cli-${PROJECT_VERSION}.jar /deer/deer.jar
 ##########
 ## RELEASE
 # then run in a lighter jdk base
-FROM openjdk:12.0.2-jdk
+FROM openjdk:11-jdk
 # set workdir
 WORKDIR /deer
 # copy jar from build step
