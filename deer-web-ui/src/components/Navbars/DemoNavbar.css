@@ -1,0 +1,13 @@
+.logo-height {
+  height: 4.5rem;
+}
+
+.logo-title {
+  position: relative;
+  left: 1rem;
+  top: 21px;
+  font-size: 28px;
+}
+.navbar-transparent {
+  background-color: #eeefef !important;
+}
