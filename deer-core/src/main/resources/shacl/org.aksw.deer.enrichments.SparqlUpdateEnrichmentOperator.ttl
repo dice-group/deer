@@ -11,6 +11,10 @@ deer:SparqlUpdateEnrichmentOperatorShape
 	sh:targetClass deer:SparqlUpdateEnrichmentOperator ;
 	sh:property deer:SparqlUpdateEnrichmentOperatorShape_updateQuery ;
 	sh:message "SparqlUpdateEnrichmentOperator must declare exactly one deer:sparqlUpdateQuery" ;
+  fcage:minInPorts 1 ;
+  fcage:maxInPorts 1 ;
+  fcage:minOutPorts 1 ;
+  fcage:maxOutPorts 1 ;
 .
 
 deer:SparqlUpdateEnrichmentOperatorShape_updateQuery

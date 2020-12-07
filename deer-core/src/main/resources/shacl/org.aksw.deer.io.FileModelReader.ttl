@@ -12,6 +12,10 @@ deer:FileModelReaderShape
 	sh:xone (
 	[ sh:property deer:FileModelReaderShape_fromUri ]
 	[ sh:property deer:FileModelReaderShape_fromPath ] ) ;
+	fcage:minInPorts 0 ;
+  fcage:maxInPorts 0 ;
+  fcage:minOutPorts 1 ;
+  fcage:maxOutPorts 1 ;
 .
 
 deer:FileModelReaderShape_fromUri

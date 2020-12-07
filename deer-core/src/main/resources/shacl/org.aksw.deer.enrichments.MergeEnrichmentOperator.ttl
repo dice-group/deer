@@ -1,0 +1,17 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix sh: <http://www.w3.org/ns/shacl#>.
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix deer: <http://w3id.org/deer/> .
+
+# Node MergeEnrichmentOperator
+
+deer:MergeEnrichmentOperatorShape
+	a sh:NodeShape ;
+	sh:targetClass deer:MergeEnrichmentOperator ;
+  fcage:minInPorts 2 ;
+  fcage:maxInPorts 10 ;
+  fcage:minOutPorts 1 ;
+  fcage:maxOutPorts 1 ;
+.
+

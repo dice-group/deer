@@ -14,6 +14,10 @@ deer:PredicateConformationEnrichmentOperatorShape
 	sh:ignoredProperties ( rdf:type fcage:hasInput ) ;
 	sh:property deer:PredicateConformationEnrichmentOperatorShape_operation ;
 	sh:message "PredicateConformationEnrichmentOperator must declare at least one operation." ;
+  fcage:minInPorts 1 ;
+  fcage:maxInPorts 1  ;
+  fcage:minOutPorts 1 ;
+  fcage:maxOutPorts 1 ;
 .
 
 deer:PredicateConformationEnrichmentOperatorShape_operation
