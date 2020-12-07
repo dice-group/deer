@@ -14,13 +14,17 @@ deer:AuthorityConformationEnrichmentOperatorShape
 	sh:ignoredProperties ( rdf:type fcage:hasInput ) ;
 	sh:property deer:AuthorityConformationEnrichmentOperatorShape_operation ;
 	sh:message "AuthorityConformationEnrichmentOperator must declare at least one operation" ;
+	fcage:minInPorts 1 ;
+	fcage:maxInPorts 1 ;
+	fcage:minOutPorts 1 ;
+	fcage:maxOutPorts 1 ;
 .
 
 deer:AuthorityConformationEnrichmentOperatorShape_operation
   sh:path deer:operation ;
   sh:minCount 1 ;
   sh:node deer:AuthorityConformationEnrichmentOperatorShape_operationNode;
- .
+.
 
 deer:AuthorityConformationEnrichmentOperatorShape_operationNode
   a sh:NodeShape ;

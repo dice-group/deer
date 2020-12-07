@@ -18,6 +18,10 @@ deer:NEREnrichmentOperatorShape
               deer:NEREnrichmentOperatorShape_parallelism ,
               deer:NEREnrichmentOperatorShape_neType ;
 	sh:message "NEREnrichmentOperator must declare exactly one deer:literalProperty ..." ;
+	fcage:minInPorts 1 ;
+	fcage:maxInPorts 1 ;
+	fcage:minOutPorts 1 ;
+	fcage:maxOutPorts 1 ;
 .
 
 deer:NEREnrichmentOperatorShape_literalProperty

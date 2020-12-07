@@ -15,6 +15,22 @@ deer:SparqlModelReaderShape
     [ sh:property deer:SparqlModelReaderShape_useSparqlDescribeOf ; ]
 	) ;
 	sh:message "SparqlModelReader must declare exactly one of {deer:useSparqlConstruct, deer:useSparqlDescribeOf}" ;
+	fcage:minInPorts 0 ;
+  fcage:maxInPorts 0 ;
+  fcage:minOutPorts 1 ;
+  fcage:maxOutPorts 1 ;
+.
+
+deer:FileModelReaderShape_fromUri
+  sh:path deer:fromUri ;
+  sh:minCount 1 ;
+  sh:maxCount 1 ;
+  sh:nodeKind sh:IRI ;
+.
+
+deer:FileModelReaderShape_fromPath
+  sh:path deer:fromPath ;
+  sh:minCount 1 ;
 .
 
 deer:SparqlModelReaderShape_fromEndpoint

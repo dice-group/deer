@@ -11,6 +11,10 @@ deer:FileModelWriterShape
 	sh:targetClass deer:FileModelWriter ;
 	sh:property deer:FileModelWriterShape_outputFile ,
 	            deer:FileModelWriterShape_outputFormat ;
+	fcage:minInPorts 1 ;
+  fcage:maxInPorts 1 ;
+  fcage:minOutPorts 0 ;
+  fcage:maxOutPorts 0 ;
 .
 
 deer:FileModelWriterShape_outputFile

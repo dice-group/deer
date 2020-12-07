@@ -15,6 +15,10 @@ deer:FilterEnrichmentOperatorShape
 	  [ sh:property deer:FilterEnrichmentOperatorShape_selector ; ]
 	) ;
 	sh:message "FilterEnrichmentOperator must declare either exactly one deer:sparqlConstructQuery or at least one deer:selector" ;
+  fcage:minInPorts 1 ;
+  fcage:maxInPorts 1 ;
+  fcage:minOutPorts 1 ;
+  fcage:maxOutPorts 1 ;
 .
 
 deer:FilterEnrichmentOperatorShape_sparqlConstructQuery
