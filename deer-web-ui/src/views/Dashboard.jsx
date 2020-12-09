@@ -48,7 +48,7 @@ const N3 = require("n3");
 const { DataFactory } = N3;
 const { namedNode, literal, defaultGraph } = DataFactory;
 const URI = window.location.href;
-// "http://localhost:8080";
+// const URI = "http://localhost:8080";
 const BASE_URI = window.location.hostname + ":" + window.location.port;
 
 const litegraph = window.LiteGraph;

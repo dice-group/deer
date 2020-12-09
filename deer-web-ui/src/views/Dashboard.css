@@ -76,3 +76,7 @@ h1 {
   left: 102%;
   top: 0px;
 }
+
+.litegraph .dialog .property_value {
+  text-align: left;
+}
