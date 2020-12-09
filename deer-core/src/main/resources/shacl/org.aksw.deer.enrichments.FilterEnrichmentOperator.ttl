@@ -4,6 +4,7 @@
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
 @prefix deer: <http://w3id.org/deer/> .
 @prefix dash: <http://datashapes.org/dash#> .
+@prefix fcage: <http://w3id.org/fcage/> .
 
 # Node FilterEnrichmentOperator
 
