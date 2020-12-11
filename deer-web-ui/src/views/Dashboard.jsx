@@ -47,8 +47,8 @@ import {
 const N3 = require("n3");
 const { DataFactory } = N3;
 const { namedNode, literal, defaultGraph } = DataFactory;
-const URI = window.location.href;
-// const URI = "http://localhost:8080";
+//const URI = window.location.href;
+const URI = "http://localhost:8080";
 const BASE_URI = window.location.hostname + ":" + window.location.port;
 
 const litegraph = window.LiteGraph;
@@ -174,6 +174,7 @@ class Dashboard extends React.Component {
 
         parser.parse(content, (error, quad, prefixes) => {
           if(quad){
+            //console.log(quad);
             this.showNode(quad);
           }
           else{
@@ -233,11 +234,24 @@ class Dashboard extends React.Component {
     return property;
   }
 
+  getInputPorts = (node) => {
+    let inputPorts = this.state.fullContent.filter(quad => quad.subject.id.includes(node) && quad.predicate.id.includes("maxInPorts")).map(i => i.object.id);
+    console.log(node, inputPorts);
+  }
+
+  getOutputPorts = (node) => {
+    let outputPorts = this.state.fullContent.filter(quad => quad.subject.id.includes(node) && quad.predicate.id.includes("maxOutPorts")).map(i => i.object.id);
+    console.log(node, outputPorts);
+  }
   initializeNode = (node) => {   
     let propsArrForNode = this.getPropertiesForNode(node);
-    console.log(node, propsArrForNode);
+    let inputPorts = this.getInputPorts(node);
+    let outputPorts = this.getOutputPorts(node);
+   // console.log(node, propsArrForNode);
 
-    let properties = {};
+    let properties = {
+      name: "some text"
+    };
 
     let filteredProps = propsArrForNode.basicProps.map(filteredProp => {
       return this.getPropertyName(filteredProp);
@@ -317,14 +331,6 @@ class Dashboard extends React.Component {
       });
       
     }
-  
-    // this.state.componentArray.map((comp, key) => {
-    //   if (quadOb.includes(comp.name)) {
-    //     // console.log(quadOb);
-    //     comp.src.title = comp.title;
-    //     LiteGraph.registerNodeType(comp.url, comp.src);
-    //   }
-    // });
   };
 
   toggleDropdown = () => {
@@ -423,26 +429,26 @@ class Dashboard extends React.Component {
       //   );
       // }
       //if it has an input link, check and add a quad
-      if (node.inputs) {
-        if (node.type === "Operator/LinkingEnrichmentOperator") {
-          var inputs = this.getInputLink(node);
-          writer.addQuad(
-            namedNode("urn:example:demo/" + node.properties.name),
-            namedNode("http://w3id.org/fcage/" + "hasInput"),
-            writer.list([
-              namedNode("urn:example:demo/" + inputs.first),
-              namedNode("urn:example:demo/" + inputs.second),
-            ])
-          );
-        } else {
-          var originInputNode = this.getInputLink(node);
-          writer.addQuad(
-            namedNode("urn:example:demo/" + node.properties.name),
-            namedNode("http://w3id.org/fcage/" + "hasInput"),
-            namedNode("urn:example:demo/" + originInputNode.properties.name)
-          );
-        }
-      }
+      // if (node.inputs) {
+      //   if (node.type === "Operator/LinkingEnrichmentOperator") {
+      //     var inputs = this.getInputLink(node);
+      //     writer.addQuad(
+      //       namedNode("urn:example:demo/" + node.properties.name),
+      //       namedNode("http://w3id.org/fcage/" + "hasInput"),
+      //       writer.list([
+      //         namedNode("urn:example:demo/" + inputs.first),
+      //         namedNode("urn:example:demo/" + inputs.second),
+      //       ])
+      //     );
+      //   } else {
+      //     var originInputNode = this.getInputLink(node);
+      //     writer.addQuad(
+      //       namedNode("urn:example:demo/" + node.properties.name),
+      //       namedNode("http://w3id.org/fcage/" + "hasInput"),
+      //       namedNode("urn:example:demo/" + originInputNode.properties.name)
+      //     );
+      //   }
+      // }
 
       //File Model Reader
       if (node.type === "Reader/FileModelReader") {
