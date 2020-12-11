@@ -236,18 +236,19 @@ class Dashboard extends React.Component {
 
   getInputPorts = (node) => {
     let inputPorts = this.state.fullContent.filter(quad => quad.subject.id.includes(node) && quad.predicate.id.includes("maxInPorts")).map(i => i.object.id);
-    console.log(node, inputPorts);
+    return inputPorts;
   }
 
   getOutputPorts = (node) => {
     let outputPorts = this.state.fullContent.filter(quad => quad.subject.id.includes(node) && quad.predicate.id.includes("maxOutPorts")).map(i => i.object.id);
-    console.log(node, outputPorts);
+    return outputPorts;
   }
   initializeNode = (node) => {   
     let propsArrForNode = this.getPropertiesForNode(node);
-    let inputPorts = this.getInputPorts(node);
-    let outputPorts = this.getOutputPorts(node);
-   // console.log(node, propsArrForNode);
+    let inputPorts = this.getInputPorts(node)[0];
+    let outputPorts = this.getOutputPorts(node)[0];
+    let inputs = inputPorts.match(/\d+/)[0];
+    let outputs = outputPorts.match(/\d+/)[0];
 
     let properties = {
       name: "some text"
@@ -275,8 +276,13 @@ class Dashboard extends React.Component {
       class nodeClass extends FactoryNode{
         constructor(props) {
           super(props);
-          this.addInput("input", "text");
-          this.addOutput("output", "text");
+          for(var i = 0; i < inputs; i++){
+            this.addInput("input", "text");
+          }
+          for(var j = 0; j < outputs; j++){
+            this.addOutput("output", "text");
+          }
+          
           this.properties = properties;
         }
       };
@@ -339,45 +345,47 @@ class Dashboard extends React.Component {
     });
   };
 
-  getOutputLinks = (node) => {
-    for (let link in node.outputs) {
-      if (node.outputs[link].links) {
-        for (let nodeLink in node.outputs[link].links) {
-          var link_id = node.outputs[link].links[nodeLink];
-          var linkInGraph = this.state.graph.links[link_id];
-          if (linkInGraph) {
-            var target_node = this.state.graph.getNodeById(
-              linkInGraph.target_id
-            );
-            return target_node;
-          }
-        }
-      }
-    }
-  };
+  // getOutputLinks = (node) => {
+  //   for (let link in node.outputs) {
+  //     if (node.outputs[link].links) {
+  //       for (let nodeLink in node.outputs[link].links) {
+  //         var link_id = node.outputs[link].links[nodeLink];
+  //         var linkInGraph = this.state.graph.links[link_id];
+  //         if (linkInGraph) {
+  //           var target_node = this.state.graph.getNodeById(
+  //             linkInGraph.target_id
+  //           );
+  //           return target_node;
+  //         }
+  //       }
+  //     }
+  //   }
+  // };
 
   getInputLink = (node) => {
-    if (node.type === "Operator/LinkingEnrichmentOperator") {
-      var inputLinkInGraph1 = this.state.graph.links[node.inputs[0].link];
-      var inputLinkInGraph2 = this.state.graph.links[node.inputs[1].link];
-      if (inputLinkInGraph1) {
-        var inputOriginNode1 = this.state.graph.getNodeById(
-          inputLinkInGraph1.origin_id
-        ).properties.name;
-      }
-      if (inputLinkInGraph2) {
-        var inputOriginNode2 = this.state.graph.getNodeById(
-          inputLinkInGraph2.origin_id
-        ).properties.name;
-      }
-      console.log(inputOriginNode1);
+    // if (node.type === "Operator/LinkingEnrichmentOperator") {
+    //   var inputLinkInGraph1 = this.state.graph.links[node.inputs[0].link];
+    //   var inputLinkInGraph2 = this.state.graph.links[node.inputs[1].link];
+    //   if (inputLinkInGraph1) {
+    //     var inputOriginNode1 = this.state.graph.getNodeById(
+    //       inputLinkInGraph1.origin_id
+    //     ).properties.name;
+    //   }
+    //   if (inputLinkInGraph2) {
+    //     var inputOriginNode2 = this.state.graph.getNodeById(
+    //       inputLinkInGraph2.origin_id
+    //     ).properties.name;
+    //   }
+    //   console.log(inputOriginNode1);
 
-      return {
-        first: inputOriginNode1,
-        second: inputOriginNode2,
-      };
-    } else {
+    //   return {
+    //     first: inputOriginNode1,
+    //     second: inputOriginNode2,
+    //   };
+    // } else {
+
       for (let link in node.inputs) {
+        console.log(link);
         if (node.inputs[link].link) {
           console.log(node.inputs[link].link);
           var inputLinkId = node.inputs[link].link;
@@ -390,7 +398,7 @@ class Dashboard extends React.Component {
           }
         }
       }
-    }
+    // }
   };
 
   saveConfig = () => {
@@ -429,26 +437,27 @@ class Dashboard extends React.Component {
       //   );
       // }
       //if it has an input link, check and add a quad
-      // if (node.inputs) {
-      //   if (node.type === "Operator/LinkingEnrichmentOperator") {
-      //     var inputs = this.getInputLink(node);
-      //     writer.addQuad(
-      //       namedNode("urn:example:demo/" + node.properties.name),
-      //       namedNode("http://w3id.org/fcage/" + "hasInput"),
-      //       writer.list([
-      //         namedNode("urn:example:demo/" + inputs.first),
-      //         namedNode("urn:example:demo/" + inputs.second),
-      //       ])
-      //     );
-      //   } else {
-      //     var originInputNode = this.getInputLink(node);
-      //     writer.addQuad(
-      //       namedNode("urn:example:demo/" + node.properties.name),
-      //       namedNode("http://w3id.org/fcage/" + "hasInput"),
-      //       namedNode("urn:example:demo/" + originInputNode.properties.name)
-      //     );
-      //   }
-      // }
+      if (node.inputs) {
+        // if (node.type === "Operator/LinkingEnrichmentOperator") {
+        //   var inputs = this.getInputLink(node);
+        //   writer.addQuad(
+        //     namedNode("urn:example:demo/" + node.properties.name),
+        //     namedNode("http://w3id.org/fcage/" + "hasInput"),
+        //     writer.list([
+        //       namedNode("urn:example:demo/" + inputs.first),
+        //       namedNode("urn:example:demo/" + inputs.second),
+        //     ])
+        //   );
+        // } else 
+        // {
+          var originInputNode = this.getInputLink(node);
+          writer.addQuad(
+            namedNode("urn:example:demo/" + node.properties.name),
+            namedNode("http://w3id.org/fcage/" + "hasInput"),
+            namedNode("urn:example:demo/" + originInputNode.properties.name)
+          );
+        // }
+      }
 
       //File Model Reader
       if (node.type === "Reader/FileModelReader") {
