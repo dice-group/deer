@@ -71,84 +71,9 @@ class FactoryNode extends React.Component {
     return newStr;
   }
 
-  onExecute() {
-    let a = this.getInputData(0);
-    if (a === undefined) {
-      a = 0;
-    }
-    //console.log(a);
-    this.setOutputData(0, ++a);
-  }
-
-  handleChange = (event) => {
-    let value = event.target.value;
-    this.setState({
-      [event.target.name]: value,
-    });
-  };
-
-  submitForm = () => {
-    var properties = {
-      node: FactoryNode,
-      name: this.state["name"],
-      outputFile: this.state["outputFile"],
-      outputFormat: this.state["outputFormat"],
-    };
-
-    this.props.parentCallback(properties);
-  };
-
   render() {
     return (
-      <Card className="card-stats">
-        <div className="numbers">
-          <CardTitle tag="p">Node details</CardTitle>
-          <p />
-        </div>
-        <CardBody>
-          <Form>
-            <FormGroup>
-              <Label>Name</Label>
-              <Input
-                type="text"
-                //placeholder="Node name"
-                onChange={this.handleChange}
-                name="name"
-                id="name"
-              />
-            </FormGroup>
-            <FormGroup>
-              <Label>Output File</Label>
-              <Input
-                type="text"
-                //placeholder="deer:outputFile"
-                onChange={this.handleChange}
-                name="outputFile"
-                id="outputFile"
-              />
-            </FormGroup>
-            <FormGroup>
-              <Label>Output Format</Label>
-              <Input
-                type="text"
-                //placeholder="deer:outputFormat"
-                onChange={this.handleChange}
-                name="outputFormat"
-                id="outputFormat"
-              />
-            </FormGroup>
-          </Form>
-        </CardBody>
-        <CardFooter>
-          <Button
-            className="btn-round"
-            color="primary"
-            onClick={this.submitForm}
-          >
-            Save
-          </Button>
-        </CardFooter>
-      </Card>
+      <div></div>
     );
   }
 }

@@ -283,7 +283,7 @@ class Dashboard extends React.Component {
             this.addOutput("output", "text");
           }
           
-          this.properties = properties;
+          this.properties = Object.create(properties); ;
         }
       };
       nodeClass.title = node;
@@ -294,11 +294,13 @@ class Dashboard extends React.Component {
       
     } else 
     if(node.includes("Reader")){
+      // console.log(typeof properties);
+      // console.log(Object.create(properties));
       class nodeClass extends FactoryNode{
         constructor(props) {
           super(props);
           this.addOutput("output", "text");
-          this.properties = properties;
+          this.properties = Object.create(properties); 
         }
       };
       nodeClass.title = node;
@@ -311,7 +313,7 @@ class Dashboard extends React.Component {
         constructor(props) {
           super(props);
           this.addInput("input", "text");
-          this.properties = properties;
+          this.properties = Object.create(properties); 
         }
       };
       nodeClass.title = node;
