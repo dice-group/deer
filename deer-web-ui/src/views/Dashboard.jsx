@@ -464,20 +464,23 @@ class Dashboard extends React.Component {
          }
           console.log(this.state.inputPorts);
           //adding the quad for each inputLinks here
-          this.state.inputPorts.map((inputPort, key) => {
-            writer.addQuad(
-            namedNode("urn:example:demo/" + node.properties.name),
-            namedNode("http://w3id.org/fcage/" + "hasInput"),
-            writer.blank([{
+          let blankNodes = this.state.inputPorts.map((inputPort, key) => {
+            return writer.blank([{
               predicate: namedNode("http://w3id.org/fcage/" + "fromNode"),
               object:    namedNode("urn:example:demo/" + inputPort.properties.name),
             },{
               predicate: namedNode("http://w3id.org/fcage/" + "fromPort"),
               object:    literal(key),
             }])
-           
-          );
           })
+
+          
+          writer.addQuad(
+            namedNode("urn:example:demo/" + node.properties.name),
+            namedNode("http://w3id.org/fcage/" + "hasInput"),
+            writer.list(blankNodes)        
+          );
+          
 
           this.setState({
             inputPorts: [],
