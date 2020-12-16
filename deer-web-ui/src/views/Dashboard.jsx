@@ -99,6 +99,8 @@ class Dashboard extends React.Component {
       quads: [],
       tempXoneNodeParams: [],
       fullContent: null,
+      inputPorts: [],
+      inputLinkId: ''
     };
   }
 
@@ -385,21 +387,32 @@ class Dashboard extends React.Component {
     //     second: inputOriginNode2,
     //   };
     // } else {
+      for (var i=0; i < node.inputs.length; i++) {
+         console.log("i = "+i);
 
-      for (let link in node.inputs) {
-        console.log(link);
-        if (node.inputs[link].link) {
-          console.log(node.inputs[link].link);
-          var inputLinkId = node.inputs[link].link;
-          var inputLinkInGraph = this.state.graph.links[inputLinkId];
+        // console.log(node.inputs[i]);
+        // console.log(node.inputs[i].link);
+        // if (node.inputs[i].link) {
+           var inputLinkId = node.inputs[i].link;
+           console.log(inputLinkId);
+           var inputLinkInGraph = this.state.graph.links[inputLinkId];
           if (inputLinkInGraph) {
             var inputOriginNode = this.state.graph.getNodeById(
               inputLinkInGraph.origin_id
             );
-            return inputOriginNode;
+            let inputPortsList = this.state.inputPorts;
+              inputPortsList.push(inputOriginNode);
+              this.setState({
+                inputPorts: inputPortsList
+              })
+           
           }
-        }
+      // }
+       // return [inputOriginNode, inputLinkId];
       }
+      
+      //return this.state.inputPorts;
+
     // }
   };
 
@@ -421,7 +434,6 @@ class Dashboard extends React.Component {
     );
 
     var parser = new N3.Parser({ format: "N3", blankNodePrefix: "" });
-    console.log(this.state.formProperties);
     data.nodes.map((node, key) => {
       writer.addQuad(
         namedNode("urn:example:demo/" + node.properties.name),
@@ -429,35 +441,60 @@ class Dashboard extends React.Component {
         namedNode("http://w3id.org/deer/" + node.type.split("/")[1]) //object
       );
 
-      // if (this.getOutputLinks(node)) {
-      //   //if it has output links, check and add a quad
-      //   var readerTargetNode = this.getOutputLinks(node);
-      //   writer.addQuad(
-      //     namedNode("urn:example:demo/" + node.properties.name),
-      //     namedNode("http://w3id.org/fcage/" + "hasOutput"),
-      //     namedNode("urn:example:demo/" + readerTargetNode.properties.name)
-      //   );
-      // }
-      //if it has an input link, check and add a quad
+      //if it has an input link, check for them and add to an array
       if (node.inputs) {
-        // if (node.type === "Operator/LinkingEnrichmentOperator") {
-        //   var inputs = this.getInputLink(node);
-        //   writer.addQuad(
-        //     namedNode("urn:example:demo/" + node.properties.name),
-        //     namedNode("http://w3id.org/fcage/" + "hasInput"),
-        //     writer.list([
-        //       namedNode("urn:example:demo/" + inputs.first),
-        //       namedNode("urn:example:demo/" + inputs.second),
-        //     ])
-        //   );
-        // } else 
-        // {
-          var originInputNode = this.getInputLink(node);
-          writer.addQuad(
+          for (var i=0; i < node.inputs.length; i++) {
+            if (node.inputs[i].link) {
+              var inputLinkId = node.inputs[i].link;
+              console.log(inputLinkId);
+              var inputLinkInGraph = this.state.graph.links[inputLinkId];
+             if (inputLinkInGraph) {
+               var inputOriginNode = this.state.graph.getNodeById(
+                 inputLinkInGraph.origin_id
+               );
+               let inputPortsList = this.state.inputPorts;
+                 inputPortsList.push(inputOriginNode);
+                 this.setState({
+                   inputPorts: inputPortsList,
+                   inputLinkId: inputLinkId
+                 })
+              
+             }
+         }
+         }
+          console.log(this.state.inputPorts);
+          //adding the quad for each inputLinks here
+          this.state.inputPorts.map((inputPort, key) => {
+            writer.addQuad(
             namedNode("urn:example:demo/" + node.properties.name),
             namedNode("http://w3id.org/fcage/" + "hasInput"),
-            namedNode("urn:example:demo/" + originInputNode.properties.name)
+            writer.blank([{
+              predicate: namedNode("http://w3id.org/fcage/" + "fromNode"),
+              object:    namedNode("urn:example:demo/" + inputPort.properties.name),
+            },{
+              predicate: namedNode("http://w3id.org/fcage/" + "fromPort"),
+              object:    literal(key),
+            }])
+           
           );
+          })
+
+          this.setState({
+            inputPorts: [],
+            inputLinkId: ''
+          })
+          // writer.addQuad(
+          //   namedNode("urn:example:demo/" + node.properties.name),
+          //   namedNode("http://w3id.org/fcage/" + "hasInput"),
+          //   writer.blank([{
+          //     predicate: namedNode("urn:example:demo/" + "fromNode"),
+          //     object:    namedNode("http://w3id.org/fcage/" + originInputNode.properties.name),
+          //   },{
+          //     predicate: namedNode("http://w3id.org/fcage/" + "fromPort"),
+          //     object:    literal(this.getInputLink(node)[1]),
+          //   }])
+           
+          // ); 
         // }
       }
 
