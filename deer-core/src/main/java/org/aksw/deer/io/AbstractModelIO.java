@@ -18,6 +18,18 @@ import java.util.function.Supplier;
  */
 public abstract class AbstractModelIO extends AbstractParameterizedExecutionNode<Model> implements ParameterizedDeerExecutionNode {
 
+  protected String description = "Description coming soon";
+  protected String documentationURL = "https://dice-group.github.io/deer/configuring_deer/readers.html";
+
+  public String getDescription() {
+    return description;
+  }
+
+  @Override
+  public String getDocumentationURL() {
+    return documentationURL;
+  }
+
   private static Supplier<String> workingDirectorySupplier = () -> "";
 
 

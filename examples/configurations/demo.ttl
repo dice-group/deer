@@ -36,7 +36,7 @@
 
 :node_filter
   a deer:FilterEnrichmentOperator ;
-  fcage:hasInput ( :node_geofusion) ;
+  fcage:hasInput ( :node_geofusion ) ;
   deer:selector [ deer:predicate geo:lat ] ,
             [ deer:predicate geo:long ] ,
             [ deer:predicate rdfs:label ] ,

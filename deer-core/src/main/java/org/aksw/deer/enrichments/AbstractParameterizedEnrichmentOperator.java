@@ -10,6 +10,18 @@ import org.apache.jena.rdf.model.Resource;
  */
 public abstract class AbstractParameterizedEnrichmentOperator extends AbstractParameterizedExecutionNode<Model> implements ParameterizedEnrichmentOperator {
 
+  protected String description = "Description coming soon";
+  protected String documentationURL = "https://dice-group.github.io/deer/configuring_deer/enrichment_operators.html";
+
+  public String getDescription() {
+    return description;
+  }
+
+  @Override
+  public String getDocumentationURL() {
+    return documentationURL;
+  }
+
   @Override
   public DegreeBounds getDegreeBounds() {
     return new DegreeBounds(1,1,1,1);
