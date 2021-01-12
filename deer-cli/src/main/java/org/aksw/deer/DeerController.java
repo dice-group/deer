@@ -83,8 +83,13 @@ public class DeerController {
   private static final FaradayCageContext executionContext = Deer.getExecutionContext(pluginManager);
 
   private static <U extends Plugin> Model getClassHierarchy(Class<U> clazz, Resource type) {
-    List<Resource> list = new PluginFactory<>(clazz, DeerController.pluginManager, type)
-      .listAvailable();
+    PluginFactory<U> uPluginFactory = new PluginFactory<>(clazz, DeerController.pluginManager, type);
+    List<Resource> list = uPluginFactory.listAvailable();
+    for (Resource r : list) {
+      DeerExecutionNode instance = (DeerExecutionNode) uPluginFactory.create(r);
+      r.getModel().add(r, RDFS.comment, instance.getDescription());
+      r.getModel().add(r, RDFS.seeAlso, ResourceFactory.createResource(instance.getDocumentationURL()));
+    }
     Model res = (list.size() == 0) ? ModelFactory.createDefaultModel() : list.get(0).getModel();
     res.add(type, RDFS.subClassOf, FCAGE.ExecutionNode);
     return res;
