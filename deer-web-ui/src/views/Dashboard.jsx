@@ -245,12 +245,19 @@ class Dashboard extends React.Component {
     let outputPorts = this.state.fullContent.filter(quad => quad.subject.id.includes(node) && quad.predicate.id.includes("maxOutPorts")).map(i => i.object.id);
     return outputPorts;
   }
+
+  getMessage = (node) => {
+    let message = this.state.fullContent.filter(quad => quad.subject.id.includes(node) && quad.predicate.id.includes("message")).map(i => i.object.id);
+    return message;
+  }
+
   initializeNode = (node) => {   
     let propsArrForNode = this.getPropertiesForNode(node);
     let inputPorts = this.getInputPorts(node)[0];
     let outputPorts = this.getOutputPorts(node)[0];
     let inputs = inputPorts.match(/\d+/)[0];
     let outputs = outputPorts.match(/\d+/)[0];
+    let message = this.getMessage(node);
 
     let properties = {
       name: "some text"
@@ -285,7 +292,8 @@ class Dashboard extends React.Component {
             this.addOutput("output", "text");
           }
           
-          this.properties = Object.create(properties); ;
+          this.properties = Object.create(properties);
+          this.message = message;
         }
       };
       nodeClass.title = node;
@@ -303,6 +311,7 @@ class Dashboard extends React.Component {
           super(props);
           this.addOutput("output", "text");
           this.properties = Object.create(properties); 
+          this.message = message;
         }
       };
       nodeClass.title = node;
@@ -315,7 +324,8 @@ class Dashboard extends React.Component {
         constructor(props) {
           super(props);
           this.addInput("input", "text");
-          this.properties = Object.create(properties); 
+          this.properties = Object.create(properties);
+          this.message = message;
         }
       };
       nodeClass.title = node;
