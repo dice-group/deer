@@ -13,5 +13,17 @@ public abstract class AbstractParameterizedDeerExecutionNodeDecorator extends Ab
   public AbstractParameterizedDeerExecutionNodeDecorator(ParameterizedDeerExecutionNode other) {
     super(other);
   }
+  
+  protected String description = "Description coming soon";
+  protected String documentationURL = "https://dice-group.github.io/deer/configuring_deer/readers.html";
+
+  public String getDescription() {
+    return description;
+  }
+
+  @Override
+  public String getDocumentationURL() {
+    return documentationURL;
+  }
 
 }

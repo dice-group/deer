@@ -32,6 +32,18 @@ public class TrainingData {
     public List<Model> apply(List<Model> data) {
       return staticReturn;
     }
+    
+    protected String description = "Description coming soon";
+    protected String documentationURL = "https://dice-group.github.io/deer/configuring_deer/readers.html";
+
+    public String getDescription() {
+      return description;
+    }
+
+    @Override
+    public String getDocumentationURL() {
+      return documentationURL;
+    }
 
   }
   private static class NoOpModelWriterDecorator extends AbstractParameterizedExecutionNodeDecorator<ParameterizedDeerExecutionNode, Model> implements ParameterizedDeerExecutionNode {
@@ -52,6 +64,18 @@ public class TrainingData {
 
     public void setCallback(Consumer<Model> callback) {
       this.callback = callback;
+    }
+    
+    protected String description = "Description coming soon";
+    protected String documentationURL = "https://dice-group.github.io/deer/configuring_deer/readers.html";
+
+    public String getDescription() {
+      return description;
+    }
+
+    @Override
+    public String getDocumentationURL() {
+      return documentationURL;
     }
 
 
