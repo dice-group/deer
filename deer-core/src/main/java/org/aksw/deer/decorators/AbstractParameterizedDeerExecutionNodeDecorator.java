@@ -8,7 +8,7 @@ import org.apache.jena.rdf.model.Model;
 /**
  *
  */
-public abstract class AbstractParameterizedDeerExecutionNodeDecorator extends AbstractParameterizedExecutionNodeDecorator<ParameterizedDeerExecutionNode, Model> implements DeerExecutionNode {
+public abstract class AbstractParameterizedDeerExecutionNodeDecorator extends AbstractParameterizedExecutionNodeDecorator<ParameterizedDeerExecutionNode, Model> implements ParameterizedDeerExecutionNode {
 
   public AbstractParameterizedDeerExecutionNodeDecorator(ParameterizedDeerExecutionNode other) {
     super(other);
@@ -25,5 +25,14 @@ public abstract class AbstractParameterizedDeerExecutionNodeDecorator extends Ab
   public String getDocumentationURL() {
     return documentationURL;
   }
+
+  public String getDocumentationURL() {
+    return getWrapped().getDocumentationURL();
+  }
+
+  public String getDescription() {
+    return getWrapped().getDescription();
+  }
+
 
 }

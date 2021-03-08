@@ -26,4 +26,12 @@ public abstract class AbstractDeerExecutionNodeDecorator extends AbstractExecuti
     return documentationURL;
   }
 
+  public String getDocumentationURL() {
+    return ((DeerExecutionNode)getWrapped()).getDocumentationURL();
+  }
+
+  public String getDescription() {
+    return ((DeerExecutionNode)getWrapped()).getDescription();
+  }
+
 }

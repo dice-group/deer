@@ -1,6 +1,7 @@
 package org.aksw.deer.learning.genetic;
 
 import org.aksw.deer.ParameterizedDeerExecutionNode;
+import org.aksw.deer.decorators.AbstractParameterizedDeerExecutionNodeDecorator;
 import org.aksw.deer.io.FileModelReader;
 import org.aksw.deer.io.FileModelWriter;
 import org.aksw.deer.learning.FitnessFunction;
@@ -19,7 +20,7 @@ import java.util.function.Consumer;
  */
 public class TrainingData {
 
-  private static class NoOpModelReaderDecorator extends AbstractParameterizedExecutionNodeDecorator<ParameterizedDeerExecutionNode, Model> implements ParameterizedDeerExecutionNode {
+  private static class NoOpModelReaderDecorator extends AbstractParameterizedDeerExecutionNodeDecorator {
 
 
     private List<Model> staticReturn;
@@ -46,7 +47,7 @@ public class TrainingData {
     }
 
   }
-  private static class NoOpModelWriterDecorator extends AbstractParameterizedExecutionNodeDecorator<ParameterizedDeerExecutionNode, Model> implements ParameterizedDeerExecutionNode {
+  private static class NoOpModelWriterDecorator extends AbstractParameterizedDeerExecutionNodeDecorator {
 
 
     private Consumer<Model> callback = m -> {};
