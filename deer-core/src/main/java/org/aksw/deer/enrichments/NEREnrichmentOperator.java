@@ -71,6 +71,12 @@ public class NEREnrichmentOperator extends AbstractParameterizedEnrichmentOperat
   private int parallelism;
   private NET neType;
 
+
+  @Override
+  public String getDescription() {
+    return "Apply NER to targeted string literals using FOX";
+  }
+
   @Override
   public ValidatableParameterMap createParameterMap() {
     return ValidatableParameterMap.builder()

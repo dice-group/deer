@@ -14,18 +14,6 @@ public abstract class AbstractParameterizedDeerExecutionNodeDecorator extends Ab
     super(other);
   }
   
-  protected String description = "Description coming soon";
-  protected String documentationURL = "https://dice-group.github.io/deer/configuring_deer/readers.html";
-
-  public String getDescription() {
-    return description;
-  }
-
-  @Override
-  public String getDocumentationURL() {
-    return documentationURL;
-  }
-
   public String getDocumentationURL() {
     return getWrapped().getDocumentationURL();
   }

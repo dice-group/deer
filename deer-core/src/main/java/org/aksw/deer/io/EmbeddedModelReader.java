@@ -25,6 +25,11 @@ public class EmbeddedModelReader extends AbstractModelReader {
   public static final Property IMPORT_PREFIXES = DEER.property("importPrefixes");
 
   @Override
+  public String getDescription() {
+    return "Use a subgraph of the configuration graph as input model";
+  }
+
+  @Override
   public ValidatableParameterMap createParameterMap() {
     return ValidatableParameterMap.builder()
       .declareProperty(EMBEDDED_MODEL)

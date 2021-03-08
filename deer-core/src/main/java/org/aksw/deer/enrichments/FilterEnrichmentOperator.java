@@ -31,6 +31,12 @@ public class FilterEnrichmentOperator extends AbstractParameterizedEnrichmentOpe
     super();
   }
 
+
+  @Override
+  public String getDescription() {
+    return "Filter triples using either SPAQRL CONSTRUCT queries or triple patterns.";
+  }
+
   @Override
   public ValidatableParameterMap createParameterMap() {
     return ValidatableParameterMap.builder()

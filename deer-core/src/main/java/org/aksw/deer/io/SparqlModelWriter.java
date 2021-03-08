@@ -49,6 +49,11 @@ public class SparqlModelWriter extends AbstractModelWriter {
   private RDFConnection connection;
 
   @Override
+  public String getDescription() {
+    return "Write input to triple store";
+  }
+
+  @Override
   public ValidatableParameterMap createParameterMap() {
     return ValidatableParameterMap.builder()
       .declareProperty(WRITE_TYPE)

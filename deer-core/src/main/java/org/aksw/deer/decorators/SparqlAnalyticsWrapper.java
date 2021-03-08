@@ -72,6 +72,16 @@ public class SparqlAnalyticsWrapper extends AbstractParameterizedDeerExecutionNo
     }
   }
 
+  @Override
+  public String getDocumentationURL() {
+    return "";
+  }
+
+  @Override
+  public String getDescription() {
+    return "";
+  }
+
   private class SparqlAnalyticsDecorator extends AbstractDeerExecutionNodeDecorator {
 
     public SparqlAnalyticsDecorator(ExecutionNode<Model> other) {

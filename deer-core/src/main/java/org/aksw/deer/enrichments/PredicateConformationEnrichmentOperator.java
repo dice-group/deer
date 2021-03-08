@@ -27,6 +27,11 @@ public class PredicateConformationEnrichmentOperator extends AbstractParameteriz
   public static final Property OPERATION = DEER.property("operation");
 
   @Override
+  public String getDescription() {
+    return "Rename predicates";
+  }
+
+  @Override
   public ValidatableParameterMap createParameterMap() {
     return ValidatableParameterMap.builder()
       .declareProperty(OPERATION)

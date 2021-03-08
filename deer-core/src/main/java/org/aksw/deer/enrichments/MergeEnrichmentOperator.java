@@ -11,6 +11,11 @@ import java.util.List;
 public class MergeEnrichmentOperator extends AbstractEnrichmentOperator implements ReverseLearnable {
 
   @Override
+  public String getDescription() {
+    return "Merge two or more graphs";
+  }
+
+  @Override
   protected List<Model> safeApply(List<Model> models) {
     Model merge = ModelFactory.createDefaultModel();
     for (Model model : models) {

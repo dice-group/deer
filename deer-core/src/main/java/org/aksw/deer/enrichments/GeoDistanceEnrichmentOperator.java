@@ -29,6 +29,11 @@ public class GeoDistanceEnrichmentOperator extends AbstractParameterizedEnrichme
   public static final Property DISTANCE_PREDICATE = DEER.property("distancePredicate");
 
   @Override
+  public String getDescription() {
+    return "Enrich geospatial resources with the orthodromic distance to related resources";
+  }
+
+  @Override
   public ValidatableParameterMap createParameterMap() {
     return ValidatableParameterMap.builder()
       .declareProperty(SELECT_PREDICATE)

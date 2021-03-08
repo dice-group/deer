@@ -27,6 +27,11 @@ public class FileModelReader extends AbstractModelReader {
   public static final Property FROM_URI = DEER.property("fromUri");
 
   @Override
+  public String getDescription() {
+    return "Read input from a file.";
+  }
+
+  @Override
   public ValidatableParameterMap createParameterMap() {
     return ValidatableParameterMap.builder()
       .declareProperty(FROM_PATH)

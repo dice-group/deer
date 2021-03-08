@@ -32,6 +32,11 @@ public class AuthorityConformationEnrichmentOperator extends AbstractParameteriz
   public static final Property OPERATION = DEER.property("operation");
 
   @Override
+  public String getDescription() {
+    return "Moves subject IRIs to another namespace";
+  }
+
+  @Override
   public ValidatableParameterMap createParameterMap() {
     return ValidatableParameterMap.builder()
       .declareProperty(OPERATION)

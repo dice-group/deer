@@ -13,18 +13,6 @@ public abstract class AbstractDeerExecutionNodeDecorator extends AbstractExecuti
   public AbstractDeerExecutionNodeDecorator(ExecutionNode<Model> other) {
     super(other);
   }
-  
-  protected String description = "Description coming soon";
-  protected String documentationURL = "https://dice-group.github.io/deer/configuring_deer/readers.html";
-
-  public String getDescription() {
-    return description;
-  }
-
-  @Override
-  public String getDocumentationURL() {
-    return documentationURL;
-  }
 
   public String getDocumentationURL() {
     return ((DeerExecutionNode)getWrapped()).getDocumentationURL();

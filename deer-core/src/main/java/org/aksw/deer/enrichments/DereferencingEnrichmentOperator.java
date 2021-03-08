@@ -128,6 +128,11 @@ public class DereferencingEnrichmentOperator extends AbstractParameterizedEnrich
   private static final ConcurrentMap<Resource, CompletableFuture<Model>> cache = new ConcurrentHashMap<>();
 
   @Override
+  public String getDescription() {
+    return "Query additional triples from SPARQL endpoints or via content negotiation";
+  }
+
+  @Override
   public ValidatableParameterMap createParameterMap() {
     return ValidatableParameterMap.builder()
       .declareProperty(OPERATION)

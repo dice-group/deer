@@ -86,9 +86,9 @@ public class DeerController {
     PluginFactory<U> uPluginFactory = new PluginFactory<>(clazz, DeerController.pluginManager, type);
     List<Resource> list = uPluginFactory.listAvailable();
     for (Resource r : list) {
-//      DeerExecutionNode instance = (DeerExecutionNode) uPluginFactory.create(r);
-      r.getModel().add(r, RDFS.comment, "Description coming soon"); //instance.getDescription()
-      r.getModel().add(r, RDFS.seeAlso, "https://dice-group.github.io/deer/configuring_deer/enrichment_operators.html"); //ResourceFactory.createResource(instance.getDocumentationURL());
+      DeerPlugin instance = (DeerPlugin) uPluginFactory.getImplementationOf(r);
+      r.getModel().add(r, RDFS.comment, instance.getDescription());
+      r.getModel().add(r, RDFS.seeAlso, ResourceFactory.createResource(instance.getDocumentationURL()));
     }
     Model res = (list.size() == 0) ? ModelFactory.createDefaultModel() : list.get(0).getModel();
     res.add(type, RDFS.subClassOf, FCAGE.ExecutionNode);

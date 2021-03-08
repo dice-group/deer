@@ -49,6 +49,12 @@ public class GeoFusionEnrichmentOperator extends AbstractParameterizedEnrichment
     takeA, takeB, takeAll, takeMostDetailed
   }
 
+
+  @Override
+  public String getDescription() {
+    return "Merge multiple geospatial resources describing the same real world entity and resolve geometry conflicts.";
+  }
+
   /**
    * Helper class storing a candidate geometry
    */

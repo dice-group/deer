@@ -35,6 +35,11 @@ public class SparqlModelReader extends AbstractModelReader {
 
 
   @Override
+  public String getDescription() {
+    return "Read output from SPARQL endpoint.";
+  }
+
+  @Override
   public ValidatableParameterMap createParameterMap() {
     return ValidatableParameterMap.builder()
       .declareProperty(FROM_ENDPOINT)

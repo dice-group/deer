@@ -63,6 +63,12 @@ public class LinkingEnrichmentOperator extends AbstractParameterizedEnrichmentOp
     BEST, BEST1TO1, BEST1TON, ALL;
   }
 
+
+  @Override
+  public String getDescription() {
+    return "Perform link discovery using LIMES";
+  }
+
   @Override
   public ValidatableParameterMap createParameterMap() {
     return ValidatableParameterMap.builder()

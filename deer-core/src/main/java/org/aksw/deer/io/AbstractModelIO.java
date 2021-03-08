@@ -18,7 +18,7 @@ import java.util.function.Supplier;
  */
 public abstract class AbstractModelIO extends AbstractParameterizedExecutionNode<Model> implements ParameterizedDeerExecutionNode {
 
-  protected String description = "Description coming soon";
+  protected String description = "Description not available";
   protected String documentationURL = "https://dice-group.github.io/deer/configuring_deer/readers.html";
 
   public String getDescription() {

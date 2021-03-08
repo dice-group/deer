@@ -27,6 +27,11 @@ public class FileModelWriter extends AbstractModelWriter {
   public static final Property OUTPUT_FORMAT = DEER.property("outputFormat");
 
   @Override
+  public String getDescription() {
+    return "Serialize input to a file.";
+  }
+
+  @Override
   public ValidatableParameterMap createParameterMap() {
     return ValidatableParameterMap.builder()
       .declareProperty(OUTPUT_FILE)

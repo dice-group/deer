@@ -26,6 +26,11 @@ public class SparqlUpdateEnrichmentOperator extends AbstractParameterizedEnrichm
   public static final Property UPDATE = DEER.property("sparqlUpdateQuery");
 
   @Override
+  public String getDescription() {
+    return "Apply a SPARQL UPDATE query to the input graph";
+  }
+
+  @Override
   public ValidatableParameterMap createParameterMap() {
     return ValidatableParameterMap.builder()
       .declareProperty(UPDATE)
