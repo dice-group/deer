@@ -45,6 +45,8 @@ public class NEREnrichmentOperator extends AbstractParameterizedEnrichmentOperat
 
   public static final Property NE_TYPE = DEER.property("neType");
 
+  public static final Property FOX_LANG = DEER.property("foxLang");
+
   public static final Property PARALLELISM = DEER.property("parallelism");
 
   private static final String DEFAULT_FOX_URL = "http://localhost:4444/fox";
@@ -70,6 +72,7 @@ public class NEREnrichmentOperator extends AbstractParameterizedEnrichmentOperat
   private URL foxUri;
   private int parallelism;
   private NET neType;
+  private FoxParameter.LANG foxLang;
 
 
   @Override
@@ -83,6 +86,7 @@ public class NEREnrichmentOperator extends AbstractParameterizedEnrichmentOperat
       .declareProperty(LITERAL_PROPERTY)
       .declareProperty(IMPORT_PROPERTY)
       .declareProperty(FOX_URL)
+      .declareProperty(FOX_LANG)
       .declareProperty(NE_TYPE)
       .declareValidationShape(getValidationModelFor(NEREnrichmentOperator.class))
       .declareValidationShape(getValidationModelFor(NEREnrichmentOperator.class))
@@ -112,6 +116,9 @@ public class NEREnrichmentOperator extends AbstractParameterizedEnrichmentOperat
     // optional parameter parallelism
     parallelism = parameters.getOptional(PARALLELISM)
       .map(RDFNode::asLiteral).map(Literal::getInt).orElse(DEFAULT_PARALLELISM);
+    // fox detection language
+    foxLang = parameters.getOptional(FOX_LANG)
+      .map(RDFNode::asLiteral).map(l -> l.getString().toUpperCase()).map(FoxParameter.LANG::valueOf).orElse(FoxParameter.LANG.EN);
   }
 
 //  /**
@@ -194,7 +201,7 @@ public class NEREnrichmentOperator extends AbstractParameterizedEnrichmentOperat
         .setApiURL(foxUri)
         .setTask(FoxParameter.TASK.NER)
         .setOutputFormat(FoxParameter.OUTPUT.TURTLE)
-        .setLang(FoxParameter.LANG.EN)
+        .setLang(foxLang)
         .setInput(input)
         //@todo: parameterize
         .setLightVersion(FoxParameter.FOXLIGHT.ENBalie)
