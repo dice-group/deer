@@ -16,6 +16,7 @@ deer:NEREnrichmentOperatorShape
               deer:NEREnrichmentOperatorShape_importProperty ,
               deer:NEREnrichmentOperatorShape_foxUrl ,
               deer:NEREnrichmentOperatorShape_parallelism ,
+              deer:NEREnrichmentOperatorShape_foxLang,
               deer:NEREnrichmentOperatorShape_neType ;
 	sh:message "NEREnrichmentOperator must declare exactly one deer:literalProperty ..." ;
 	fcage:minInPorts 1 ;
@@ -55,6 +56,13 @@ deer:NEREnrichmentOperatorShape_parallelism
 
 deer:NEREnrichmentOperatorShape_neType
   sh:path deer:neType ;
+  sh:minCount 0 ;
+  sh:maxCount 1 ;
+  sh:datatype xsd:string ;
+.
+
+deer:NEREnrichmentOperatorShape_foxLang
+  sh:path deer:foxLang ;
   sh:minCount 0 ;
   sh:maxCount 1 ;
   sh:datatype xsd:string ;
