@@ -6,7 +6,7 @@ import org.apache.jena.rdf.model.ResourceFactory;
 
 public class DEER {
 
-  public static final String NS = "http://w3id.org/deer/";
+  public static final String NS = "https://w3id.org/deer/";
 
   public static final String PREFIX = "deer";
 

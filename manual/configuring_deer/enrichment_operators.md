@@ -25,7 +25,7 @@ for filtering only the predicates  `geo:lat`, `geo:long`, `rdfs:label` and `owl:
 
 ```turtle
 @prefix : <urn:example:deer-manual/> .
-@prefix deer: <http://w3id.org/deer/> .
+@prefix deer: <https://w3id.org/deer/> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
@@ -89,7 +89,7 @@ file "limes_specs.xml" and the source dataset is the one to be enriched.
   
 ```turtle
 @prefix : <urn:example:deer-manual/> .
-@prefix deer: <http://w3id.org/deer/> .
+@prefix deer: <https://w3id.org/deer/> .
 
 :node_linking
   a deer:LinkingEnrichmentOperator ;
@@ -117,7 +117,7 @@ external dataset of DBpedia and export them using the `dcterms:description`.
 
 ```turtle
 @prefix : <urn:example:deer-manual/> .
-@prefix deer: <http://w3id.org/deer/> .
+@prefix deer: <https://w3id.org/deer/> .
 @prefix dbo: <http://dbpedia.org/property/> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
   
@@ -159,8 +159,8 @@ In the following example, the merge operator is used to combine the 2 input data
 
 ```turtle
 @prefix : <urn:example:deer-manual/> .
-@prefix fcage: <http://w3id.org/fcage/> .
-@prefix deer: <http://w3id.org/deer/> .
+@prefix fcage: <https://w3id.org/fcage/> .
+@prefix deer: <https://w3id.org/deer/> .
 
 :node_merged
   a deer:MergeEnrichmentOperator ;
@@ -185,8 +185,8 @@ In addtion to the common parameters, the geo-fusion operator have the following 
 
 ```turtle
 @prefix : <urn:example:deer-manual/> .
-@prefix fcage: <http://w3id.org/fcage/> .
-@prefix deer: <http://w3id.org/deer/> .
+@prefix fcage: <https://w3id.org/fcage/> .
+@prefix deer: <https://w3id.org/deer/> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
@@ -215,7 +215,7 @@ Such configuration will change a resource like `http://dbpedia.org/Berlin` to `h
 
 ```turtle
 @prefix : <urn:example:deer-manual/> .
-@prefix deer: <http://w3id.org/deer/> .
+@prefix deer: <https://w3id.org/deer/> .
 
 :node_a_conf
   a deer:AuthorityConformationEnrichmentOperator ;
@@ -244,7 +244,7 @@ For example, a triple as `dbp:Berlin rdf:label "Berlin"` will be changed to
 
 ```turtle
 @prefix : <urn:example:deer-manual/> .
-@prefix deer: <http://w3id.org/deer/> .
+@prefix deer: <https://w3id.org/deer/> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
 
@@ -270,7 +270,7 @@ with the distance to their western adjacent cities.
 
 ```turtle
 @prefix : <urn:example:deer-manual/> .
-@prefix deer: <http://w3id.org/deer/> .
+@prefix deer: <https://w3id.org/deer/> .
 @prefix dbp : <http://dbpedia.org/property/> .
 
 :node_geodistance
@@ -290,7 +290,7 @@ In the following example we use the operator to update all given names of "Bill"
 
 ```turtle
 @prefix : <urn:example:deer-manual/> .
-@prefix deer: <http://w3id.org/deer/> .
+@prefix deer: <https://w3id.org/deer/> .
 
 :node_update
   a deer:SparqlUpdateEnrichmentOperator;
