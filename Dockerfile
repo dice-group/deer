@@ -20,9 +20,11 @@ cp -p ./target/deer-cli-${PROJECT_VERSION}.jar /deer/deer.jar
 # then run in a lighter jdk base
 FROM openjdk:11-jdk
 # set workdir
-WORKDIR /deer
+WORKDIR /
+# plugin mount
+VOLUME /plugins
 # copy jar from build step
-COPY --from=builder /deer/deer.jar deer.jar
+COPY --from=builder /deer.jar deer.jar
 # set default java flags
 ENV JAVA_OPTS="-Xmx2G"
 # expose port
