@@ -24,7 +24,7 @@ WORKDIR /
 # plugin mount
 VOLUME /plugins
 # copy jar from build step
-COPY --from=builder /deer.jar deer.jar
+COPY --from=builder /deer/deer.jar deer.jar
 # set default java flags
 ENV JAVA_OPTS="-Xmx2G"
 # expose port
