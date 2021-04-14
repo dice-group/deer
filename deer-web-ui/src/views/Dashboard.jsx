@@ -87,8 +87,8 @@ class Dashboard extends React.Component {
         example: "urn:example:demo/",
         foaf: "http://xmlns.com/foaf/0.1/",
         dbpedia: "http://dbpedia.org/resource/",
-        deer: "http://w3id.org/deer/",
-        fcage: "http://w3id.org/fcage/",
+        deer: "https://w3id.org/deer/",
+        fcage: "https://w3id.org/fcage/",
         geo: "http://www.w3.org/2003/01/geo/wgs84_pos#",
         owl: "http://www.w3.org/2002/07/owl#",
         rdf: "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
@@ -339,7 +339,7 @@ class Dashboard extends React.Component {
   showNode = (quadOb) => {
     // save possible node names in array
     if(quadOb.predicate.id.includes("targetClass")){
-      let node = quadOb.object.id.split("http://w3id.org/deer/")[1];
+      let node = quadOb.object.id.split("https://w3id.org/deer/")[1];
       let nodes = this.state.nodesArray;
       if(node){
         nodes.add(node);
@@ -448,7 +448,7 @@ class Dashboard extends React.Component {
       writer.addQuad(
         namedNode("urn:example:demo/" + node.properties.name),
         namedNode("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"), //predicate
-        namedNode("http://w3id.org/deer/" + node.type.split("/")[1]) //object
+        namedNode("https://w3id.org/deer/" + node.type.split("/")[1]) //object
       );
 
       //if it has an input link, check for them and add to an array
@@ -476,10 +476,10 @@ class Dashboard extends React.Component {
           //adding the quad for each inputLinks here
           let blankNodes = this.state.inputPorts.map((inputPort, key) => {
             return writer.blank([{
-              predicate: namedNode("http://w3id.org/fcage/" + "fromNode"),
+              predicate: namedNode("https://w3id.org/fcage/" + "fromNode"),
               object:    namedNode("urn:example:demo/" + inputPort.properties.name),
             },{
-              predicate: namedNode("http://w3id.org/fcage/" + "fromPort"),
+              predicate: namedNode("https://w3id.org/fcage/" + "fromPort"),
               object:    literal(key),
             }])
           })
@@ -487,7 +487,7 @@ class Dashboard extends React.Component {
           
           writer.addQuad(
             namedNode("urn:example:demo/" + node.properties.name),
-            namedNode("http://w3id.org/fcage/" + "hasInput"),
+            namedNode("https://w3id.org/fcage/" + "hasInput"),
             writer.list(blankNodes)        
           );
           
@@ -498,12 +498,12 @@ class Dashboard extends React.Component {
           })
           // writer.addQuad(
           //   namedNode("urn:example:demo/" + node.properties.name),
-          //   namedNode("http://w3id.org/fcage/" + "hasInput"),
+          //   namedNode("https://w3id.org/fcage/" + "hasInput"),
           //   writer.blank([{
           //     predicate: namedNode("urn:example:demo/" + "fromNode"),
-          //     object:    namedNode("http://w3id.org/fcage/" + originInputNode.properties.name),
+          //     object:    namedNode("https://w3id.org/fcage/" + originInputNode.properties.name),
           //   },{
-          //     predicate: namedNode("http://w3id.org/fcage/" + "fromPort"),
+          //     predicate: namedNode("https://w3id.org/fcage/" + "fromPort"),
           //     object:    literal(this.getInputLink(node)[1]),
           //   }])
            
@@ -524,14 +524,14 @@ class Dashboard extends React.Component {
         if (node.properties.fromUri) {
           writer.addQuad(
             namedNode("urn:example:demo/" + node.properties.name),
-            namedNode("http://w3id.org/deer/" + "fromUri"),
+            namedNode("https://w3id.org/deer/" + "fromUri"),
             literal(node.properties.fromUri)
           );
         }
         if (node.properties.fromPath) {
           writer.addQuad(
             namedNode("urn:example:demo/" + node.properties.name),
-            namedNode("http://w3id.org/deer/" + "fromPath"),
+            namedNode("https://w3id.org/deer/" + "fromPath"),
             literal(node.properties.fromPath)
           );
         }
@@ -551,14 +551,14 @@ class Dashboard extends React.Component {
         if (node.properties.fromEndpoint) {
           writer.addQuad(
             namedNode("urn:example:demo/" + node.properties.name),
-            namedNode("http://w3id.org/deer/" + "fromEndpoint"),
+            namedNode("https://w3id.org/deer/" + "fromEndpoint"),
             namedNode(node.properties.fromEndpoint)
           );
         }
         if (node.properties.sparqlDescribeOf) {
           writer.addQuad(
             namedNode("urn:example:demo/" + node.properties.name),
-            namedNode("http://w3id.org/deer/" + "useSparqlDescribeOf"),
+            namedNode("https://w3id.org/deer/" + "useSparqlDescribeOf"),
             namedNode(node.properties.sparqlDescribeOf)
           );
         }
@@ -566,7 +566,7 @@ class Dashboard extends React.Component {
         if (node.properties.useSparqlConstruct) {
           writer.addQuad(
             namedNode("urn:example:demo/" + node.properties.name),
-            namedNode("http://w3id.org/deer/" + "useSparqlConstruct"),
+            namedNode("https://w3id.org/deer/" + "useSparqlConstruct"),
             literal(node.properties.useSparqlConstruct)
           );
         }
@@ -585,13 +585,13 @@ class Dashboard extends React.Component {
         if (node.properties.outputFile && node.properties.outputFormat) {
           writer.addQuad(
             namedNode("urn:example:demo/" + node.properties.name),
-            namedNode("http://w3id.org/deer/" + "outputFile"),
+            namedNode("https://w3id.org/deer/" + "outputFile"),
             literal(node.properties.outputFile)
           );
 
           writer.addQuad(
             namedNode("urn:example:demo/" + node.properties.name),
-            namedNode("http://w3id.org/deer/" + "outputFormat"),
+            namedNode("https://w3id.org/deer/" + "outputFormat"),
             literal(node.properties.outputFormat)
           );
         }
@@ -611,11 +611,11 @@ class Dashboard extends React.Component {
         if (node.properties.selector) {
           writer.addQuad(
             namedNode("urn:example:demo/" + node.properties.name),
-            namedNode("http://w3id.org/deer/" + "selector"), //predicate
+            namedNode("https://w3id.org/deer/" + "selector"), //predicate
             writer.blank([
               {
                 predicate: namedNode(
-                  "http://w3id.org/deer/" + node.properties.selector
+                  "https://w3id.org/deer/" + node.properties.selector
                 ),
                 object: namedNode(node.properties.resource),
               },
@@ -624,7 +624,7 @@ class Dashboard extends React.Component {
         } else if (node.properties.sparqlConstructQuery) {
           writer.addQuad(
             namedNode("urn:example:demo/" + node.properties.name),
-            namedNode("http://w3id.org/deer/" + "sparqlConstructQuery"),
+            namedNode("https://w3id.org/deer/" + "sparqlConstructQuery"),
             literal(node.properties.sparqlConstructQuery)
           );
         }
@@ -643,7 +643,7 @@ class Dashboard extends React.Component {
         }
         writer.addQuad(
           namedNode("urn:example:demo/" + node.properties.name),
-          namedNode("http://w3id.org/deer/operation"),
+          namedNode("https://w3id.org/deer/operation"),
           writer.blank([
             {
               predicate: namedNode("urn:example:demo/" + "lookUpPrefix"),
@@ -676,13 +676,13 @@ class Dashboard extends React.Component {
         }
         writer.addQuad(
           namedNode("urn:example:demo/" + node.properties.name),
-          namedNode("http://w3id.org/deer/fusionAction"),
+          namedNode("https://w3id.org/deer/fusionAction"),
           literal(node.properties.fusionAction)
         );
 
         writer.addQuad(
           namedNode("urn:example:demo/" + node.properties.name),
-          namedNode("http://w3id.org/deer/mergeOtherStatements"),
+          namedNode("https://w3id.org/deer/mergeOtherStatements"),
           literal(node.properties.mergeOtherStatements)
         );
       }
@@ -700,17 +700,17 @@ class Dashboard extends React.Component {
         }
         writer.addQuad(
           namedNode("urn:example:demo/" + node.properties.name),
-          namedNode("http://w3id.org/deer/operation"),
+          namedNode("https://w3id.org/deer/operation"),
           writer.blank([
             {
               predicate: namedNode(
-                "http://w3id.org/deer/sourceSubjectAuthority"
+                "https://w3id.org/deer/sourceSubjectAuthority"
               ),
               object: namedNode(node.properties.sourceSubjectAuthority),
             },
             {
               predicate: namedNode(
-                "http://w3id.org/deer/targetSubjectAuthority"
+                "https://w3id.org/deer/targetSubjectAuthority"
               ),
               object: namedNode(node.properties.targetSubjectAuthority),
             },
@@ -731,14 +731,14 @@ class Dashboard extends React.Component {
         }
         writer.addQuad(
           namedNode("urn:example:demo/" + node.properties.name),
-          namedNode("http://w3id.org/deer/operation"),
+          namedNode("https://w3id.org/deer/operation"),
           writer.blank([
             {
-              predicate: namedNode("http://w3id.org/deer/sourcePredicate"),
+              predicate: namedNode("https://w3id.org/deer/sourcePredicate"),
               object: literal(node.properties.sourcePredicate),
             },
             {
-              predicate: namedNode("http://w3id.org/deer/targetPredicate"),
+              predicate: namedNode("https://w3id.org/deer/targetPredicate"),
               object: literal(node.properties.targetPredicate),
             },
           ])
@@ -758,12 +758,12 @@ class Dashboard extends React.Component {
         }
         writer.addQuad(
           namedNode("urn:example:demo/" + node.properties.name),
-          namedNode("http://w3id.org/deer/" + "selectPredicate"),
+          namedNode("https://w3id.org/deer/" + "selectPredicate"),
           namedNode(node.properties.selectPredicate)
         );
         writer.addQuad(
           namedNode("urn:example:demo/" + node.properties.name),
-          namedNode("http://w3id.org/deer/" + "distancePredicate"),
+          namedNode("https://w3id.org/deer/" + "distancePredicate"),
           namedNode(node.properties.distancePredicate)
         );
       }
@@ -784,37 +784,37 @@ class Dashboard extends React.Component {
         }
         writer.addQuad(
           namedNode("urn:example:demo/" + node.properties.name),
-          namedNode("http://w3id.org/deer/" + "specFile"),
+          namedNode("https://w3id.org/deer/" + "specFile"),
           literal(node.properties.specFile)
         );
         writer.addQuad(
           namedNode("urn:example:demo/" + node.properties.name),
-          namedNode("http://w3id.org/deer/" + "linksPart"),
+          namedNode("https://w3id.org/deer/" + "linksPart"),
           literal(node.properties.linksPart)
         );
         writer.addQuad(
           namedNode("urn:example:demo/" + node.properties.name),
-          namedNode("http://w3id.org/deer/" + "selectMode"),
+          namedNode("https://w3id.org/deer/" + "selectMode"),
           literal(node.properties.selectMode)
         );
         if (node.properties.linkSpecification) {
           writer.addQuad(
             namedNode("urn:example:demo/" + node.properties.name),
-            namedNode("http://w3id.org/deer/" + "linkSpecification"),
+            namedNode("https://w3id.org/deer/" + "linkSpecification"),
             literal(node.properties.linkSpecification)
           );
         }
         if (node.properties.linkingPredicate) {
           writer.addQuad(
             namedNode("urn:example:demo/" + node.properties.name),
-            namedNode("http://w3id.org/deer/" + "linkingPredicate"),
+            namedNode("https://w3id.org/deer/" + "linkingPredicate"),
             literal(node.properties.linkingPredicate)
           );
         }
         if (node.properties.threshold) {
           writer.addQuad(
             namedNode("urn:example:demo/" + node.properties.name),
-            namedNode("http://w3id.org/deer/" + "threshold"),
+            namedNode("https://w3id.org/deer/" + "threshold"),
             literal(node.properties.threshold)
           );
         }
@@ -836,22 +836,22 @@ class Dashboard extends React.Component {
 
         writer.addQuad(
           namedNode("urn:example:demo/" + node.properties.name),
-          namedNode("http://w3id.org/deer/" + "literalProperty"),
+          namedNode("https://w3id.org/deer/" + "literalProperty"),
           namedNode(node.properties.literalProperty)
         );
         writer.addQuad(
           namedNode("urn:example:demo/" + node.properties.name),
-          namedNode("http://w3id.org/deer/" + "importProperty"),
+          namedNode("https://w3id.org/deer/" + "importProperty"),
           namedNode(node.properties.distancePredimportPropertyicate)
         );
         writer.addQuad(
           namedNode("urn:example:demo/" + node.properties.name),
-          namedNode("http://w3id.org/deer/" + "foxUrl"),
+          namedNode("https://w3id.org/deer/" + "foxUrl"),
           namedNode(node.properties.foxUrl)
         );
         writer.addQuad(
           namedNode("urn:example:demo/" + node.properties.name),
-          namedNode("http://w3id.org/deer/" + "neType"),
+          namedNode("https://w3id.org/deer/" + "neType"),
           literal(node.properties.neType)
         );
       }
@@ -869,7 +869,7 @@ class Dashboard extends React.Component {
 
         writer.addQuad(
           namedNode("urn:example:demo/" + node.properties.name),
-          namedNode("http://w3id.org/deer/" + "sparqlUpdateQuery"),
+          namedNode("https://w3id.org/deer/" + "sparqlUpdateQuery"),
           literal(node.properties.sparqlUpdateQuery)
         );
       }

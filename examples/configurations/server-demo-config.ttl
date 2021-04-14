@@ -1,6 +1,6 @@
 @prefix : <urn:example:server-demo/> .
-@prefix fcage: <http://w3id.org/fcage/> .
-@prefix deer: <http://w3id.org/deer/> .
+@prefix fcage: <https://w3id.org/fcage/> .
+@prefix deer: <https://w3id.org/deer/> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
 

@@ -12,7 +12,7 @@ import org.apache.jena.shared.uuid.UUID_V1;
  */
 public class DEERA {
 
-  public static final String NS = "http://w3id.org/deer/config-autogen/";
+  public static final String NS = "https://w3id.org/deer/config-autogen/";
 
   public static final String PREFIX = "deera";
 

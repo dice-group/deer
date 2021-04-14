@@ -3,13 +3,13 @@
 DEER is configured using the 
 [**FARADAY-CAGE** Configuration Vocabulary](https://dice-group.github.io/faraday-cage/conf.html).
 The predefined plugins that ship with *deer-core* as well as their parameters live in the
-`http://w3id.org/deer/` namespace with the canonical prefix `deer:`.
+`https://w3id.org/deer/` namespace with the canonical prefix `deer:`.
 
 Predefined plugins are denominated by their class name, e.g.
 
-* `<http://w3id.org/deer/FileModelReader>` or `deer:FileModelReader`
-* `<http://w3id.org/deer/FileModelWriter>` or `deer:FileModelWriter`
-* `<http://w3id.org/deer/FilterEnrichmentOperator>` or `deer:FilterEnrichmentOperator`
+* `<https://w3id.org/deer/FileModelReader>` or `deer:FileModelReader`
+* `<https://w3id.org/deer/FileModelWriter>` or `deer:FileModelWriter`
+* `<https://w3id.org/deer/FilterEnrichmentOperator>` or `deer:FilterEnrichmentOperator`
 
 The parameter vocabulary of our predefined plugins is described more precisely in the following
 sections of this manual.
@@ -21,8 +21,8 @@ The following example configuration demonstrates how the predefined vocabulary w
 
 ```turtle
 @prefix : <urn:example:demo/> .
-@prefix fcage: <http://w3id.org/fcage/> .
-@prefix deer: <http://w3id.org/deer/> .
+@prefix fcage: <https://w3id.org/fcage/> .
+@prefix deer: <https://w3id.org/deer/> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
