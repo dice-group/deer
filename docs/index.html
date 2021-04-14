@@ -31,6 +31,14 @@
       --cover-background-image: radial-gradient(ellipse at center center,  #283848, transparent);
     }
 
+    ::-webkit-scrollbar{height:12px;overflow:visible;width:12px}
+    ::-webkit-scrollbar-button{height:0;width:0}
+    ::-webkit-scrollbar-track{background-clip:padding-box; background-color: var(--mono-base);box-shadow:inset 1px 0 0 var(--sidebar-border-color)}
+    ::-webkit-scrollbar-track:hover{background-color:#282828}
+    ::-webkit-scrollbar-track:active{background-color:#282828}
+    ::-webkit-scrollbar-thumb{background-color:#283848;background-clip:padding-box;min-height:28px;padding:100px 0 0;}
+    ::-webkit-scrollbar-thumb:hover{background-color:#485a6f}
+    ::-webkit-scrollbar-thumb:active{background-color:#749a8f}
   </style>
 
 </head>
@@ -81,6 +89,5 @@
   <script src="//cdn.jsdelivr.net/npm/docsify-katex@latest/dist/docsify-katex.js"></script>
   <script src="https://unpkg.com/docsify-plugin-flexible-alerts"></script>
   <script src="//unpkg.com/docsify-glossary/dist/docsify-glossary.min.js"></script>
-
 </body>
 </html>
