@@ -34,5 +34,5 @@ jobs:
     - name: Publish to AKSW Maven
       run: mvn deploy
       env:
-        MAVEN_USERNAME: {{ secrets.MAVEN_USER }}
+        MAVEN_USERNAME: ${{ secrets.MAVEN_USER }}
         MAVEN_TOKEN: ${{ secrets.MAVEN_TOKEN }}
