@@ -1,7 +1,7 @@
 # DEER
-[![Build Status](https://travis-ci.org/dice-group/deer.svg?branch=master)](https://travis-ci.org/dice-group/deer)
+[![Build Status](https://github.com/dice-group/deer/actions/workflows/run-tests.yml/badge.svg?branch=master&event=push)](https://github.com/dice-group/deer/actions/workflows/run-tests.yml)
 [![GNU Affero General Public License v3.0](https://img.shields.io/badge/license-GNU_Affero_General_Public_License_v3.0-blue.svg)](./LICENSE)
-![Java 1.9+](https://img.shields.io/badge/java-1.9+-lightgray.svg)
+![Java 1.9+](https://img.shields.io/badge/java-11+-lightgray.svg)
 
 The RDF Dataset Enrichment Framework (DEER), is a modular, extensible software system for efficient
 computation of arbitrary operations on RDF datasets.  
