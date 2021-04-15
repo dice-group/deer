@@ -56,3 +56,22 @@ java -jar deer-cli/target/deer-cli-2.0.1.jar path_to_config.ttl
 For more detailed information about how to run or extend DEER, please read the
 [manual](https://dice-group.github.io/deer/) and consult the
 [Javadoc](https://dice-group.github.io/deer/javadoc/)
+
+## Developers
+
+### Release new version
+
+```bash
+mvn versions:set -DnewVersion="${new-version}"
+mvn versions:commit
+git add .
+git commit
+git tag -a "v${new-version}" -m "release ${new-version}"
+git push origin "v${new-version}"
+mvn versions:set -DnewVersion="${new-snapshot-version}"
+mvn versions:commit
+git add .
+git commit
+git push
+```
+
