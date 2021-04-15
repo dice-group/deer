@@ -63,4 +63,4 @@ jobs:
       with:
         file: .github/Dockerfile
         push: true
-        tags: [ 'dicegroup/deer:latest', 'dicegroup/deer:${{ steps.get_version.outputs.VERSION }}' ]
+        tags: dicegroup/deer:latest,dicegroup/deer:${{ steps.get_version.outputs.VERSION }}
