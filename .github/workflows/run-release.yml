@@ -62,5 +62,6 @@ jobs:
       uses: docker/build-push-action@v2
       with:
         file: .github/Dockerfile
+        context: .
         push: true
         tags: dicegroup/deer:latest,dicegroup/deer:${{ steps.get_version.outputs.VERSION }}
