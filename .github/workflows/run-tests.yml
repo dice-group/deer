@@ -20,23 +20,11 @@ jobs:
       with: 
         java-version: ${{ matrix.java }}
         distribution: ${{ matrix.distribution }}
-        server-id: 'maven.aksw.snapshots' # Value of the distributionManagement/repository/id field of the pom.xml
-        server-username: 'MAVEN_USERNAME' # env variable for username in deploy
-        server-password: 'MAVEN_TOKEN' # env variable for token in deploy
-    - name: Preserve Settings
-      run: cp ~/.m2/settings.xml ~/.m2_settings.xml
     - name: Cache Maven packages
       uses: actions/cache@v2
       with:
         path: ~/.m2
         key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
         restore-keys: ${{ runner.os }}-m2
-    - name: Preserve Settings 2
-      run: mv ~/.m2_settings.xml ~/.m2/settings.xml
     - name: Build with Maven
       run: mvn -B verify --file pom.xml
-    - name: Publish to AKSW Maven
-      run: mvn deploy
-      env:
-        MAVEN_USERNAME: ${{ secrets.MAVEN_USER }}
-        MAVEN_TOKEN: ${{ secrets.MAVEN_TOKEN }}

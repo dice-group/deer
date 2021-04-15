@@ -30,4 +30,4 @@ ENV JAVA_OPTS="-Xmx2G"
 # expose port
 EXPOSE 8080
 # assign start command
-CMD ["java", "-jar", "deer.jar", "-s"]
+CMD ["java", "-jar", "/deer.jar"]
