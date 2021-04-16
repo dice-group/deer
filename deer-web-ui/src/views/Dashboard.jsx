@@ -168,6 +168,7 @@ class Dashboard extends React.Component {
         return response.text();
       })
       .then((content) => {
+        // console.log(content);
         const p= new N3.Parser();
         let fullContent = p.parse(content);
         this.setState({
@@ -247,7 +248,12 @@ class Dashboard extends React.Component {
   }
 
   getMessage = (node) => {
-    let message = this.state.fullContent.filter(quad => quad.subject.id.includes(node) && quad.predicate.id.includes("message")).map(i => i.object.id);
+    let message = this.state.fullContent.filter(quad => quad.subject.id.includes(node) && quad.predicate.id.includes("comment")).map(i => i.object.id);
+    return message;
+  }
+
+  getUrlForTheNode = (node) => {
+    let message = this.state.fullContent.filter(quad => quad.subject.id.includes(node) && quad.predicate.id.includes("seeAlso")).map(i => i.object.id);
     return message;
   }
 
@@ -258,6 +264,7 @@ class Dashboard extends React.Component {
     let inputs = inputPorts.match(/\d+/)[0];
     let outputs = outputPorts.match(/\d+/)[0];
     let message = this.getMessage(node);
+    let url = this.getUrlForTheNode(node);
 
     let properties = {
       name: "some text"
@@ -294,6 +301,7 @@ class Dashboard extends React.Component {
           
           this.properties = Object.create(properties);
           this.message = message;
+          this.linkName = url;
         }
       };
       nodeClass.title = node;
@@ -312,6 +320,7 @@ class Dashboard extends React.Component {
           this.addOutput("output", "text");
           this.properties = Object.create(properties); 
           this.message = message;
+          this.linkName = url;
         }
       };
       nodeClass.title = node;
@@ -326,6 +335,7 @@ class Dashboard extends React.Component {
           this.addInput("input", "text");
           this.properties = Object.create(properties);
           this.message = message;
+          this.linkName = url;
         }
       };
       nodeClass.title = node;

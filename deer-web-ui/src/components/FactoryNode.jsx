@@ -26,13 +26,13 @@ class FactoryNode extends React.Component {
     //   outputFormat: 0,
     // };
     
-    this.linkName = "https://google.com";
+    // this.linkName = "https://google.com";
 
     var that = this;
 
     this.linkWidget = this.addWidget(
       "button",
-      "click the link",
+      "read more",
       this.linkName,
       function (v) {
         if (!v) {
@@ -49,7 +49,7 @@ class FactoryNode extends React.Component {
     {
       if(this.flags.collapsed)
         return;
-      let fontSize = 10;
+      let fontSize = 12;
       ctx.font = fontSize+"px Arial";
       // console.log(this.message);
       let str0 = null;
@@ -60,7 +60,7 @@ class FactoryNode extends React.Component {
       let str1 = this.splitStringForCanvas(str0);
       var lines = str1.split('\n');
       for (var j = 0; j<lines.length; j++)
-        ctx.fillText(lines[j], 10, 40 + (j*fontSize) );
+        ctx.fillText(lines[j], 10, 55 + (j*fontSize) );
     }
     
   }
@@ -68,9 +68,9 @@ class FactoryNode extends React.Component {
   // create folder for utils and move this function there
   splitStringForCanvas(str){
     let newStr = "";
-    let charsInStr = 30;
+    let charsInStr = 27;
     if(this.props.includes("Operator")){
-      charsInStr = 60;
+      charsInStr = 49;
     }
     let myReg = new RegExp(".{1,"+charsInStr+"}", "g");
     let strArr = str.match(myReg);
