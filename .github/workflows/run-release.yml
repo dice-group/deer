@@ -33,7 +33,7 @@ jobs:
         MAVEN_USERNAME: ${{ secrets.MAVEN_USER }}
         MAVEN_TOKEN: ${{ secrets.MAVEN_TOKEN }}
     - name: Prepare shaded JAR
-      run: mvn -B package shade:shade
+      run: mvn -B package shade:shade -Dmaven.test.skip=true
     - name: Get the version
       id: get_version
       run: echo ::set-output name=VERSION::$(echo $GITHUB_REF | cut -d / -f 3)

@@ -1,7 +1,12 @@
 # DEER
 [![Build Status](https://github.com/dice-group/deer/actions/workflows/run-tests.yml/badge.svg?branch=master&event=push)](https://github.com/dice-group/deer/actions/workflows/run-tests.yml)
 [![GNU Affero General Public License v3.0](https://img.shields.io/badge/license-GNU_Affero_General_Public_License_v3.0-blue.svg)](./LICENSE)
-![Java 1.9+](https://img.shields.io/badge/java-11+-lightgray.svg)
+![Java 11+](https://img.shields.io/badge/java-11+-lightgray.svg)
+
+<div style="text-align: center;">
+
+![LOGO](https://raw.githubusercontent.com/dice-group/deer/master/docs/_media/deer_logo.svg)
+</div>
 
 The RDF Dataset Enrichment Framework (DEER), is a modular, extensible software system for efficient
 computation of arbitrary operations on RDF datasets.  
@@ -14,27 +19,53 @@ models, in which the connections between two nodes represent intermediary datase
 
 To bundle DEER as a single jar file, do
 
-```
+```bash
 mvn clean package shade:shade -Dmaven.test.skip=true
 ```
 
 Then execute it using
 
+```bash
+java -jar deer-cli/target/deer-cli-${current-version}.jar path_to_config.ttl
 ```
-java -jar deer-cli/target/deer-cli-2.0.1.jar path_to_config.ttl
+
+## Using Docker
+
+The Docker image declares two volumes:
+- /plugins - this is where plugins are dynamically loaded from
+- /data - this is where configuration as well as input/output data will reside
+
+For running DEER server in Docker, we expose port 8080.
+The image accepts the same arguments as the deer-cli.jar, i.e. to run a configuration at `./my-configuration`:
+
+```bash
+docker run -it --rm \
+   -v $(pwd)/plugins:/plugins \
+   -v $(pwd):/data dicegroup/deer:latest \
+   /data/my-configuration.ttl
+```
+
+To run DEER server:
+
+```bash
+docker run -it --rm \
+   -v $(pwd)/plugins:/plugins \
+   -p 8080:8080 \
+   -s
 ```
 
 ## Maven
 
-```
+```xml
 <dependencies>
   <dependency>
     <groupId>org.aksw.deer</groupId>
     <artifactId>deer-core</artifactId>
-    <version>2.0.1</version>
+    <version>2.3.1</version>
   </dependency>
 </dependencies>
-
+```
+```xml
 <repositories>
  <repository>
       <id>maven.aksw.internal</id>
@@ -62,16 +93,5 @@ For more detailed information about how to run or extend DEER, please read the
 ### Release new version
 
 ```bash
-mvn versions:set -DnewVersion="${new-version}"
-mvn versions:commit
-git add .
-git commit
-git tag -a "v${new-version}" -m "release ${new-version}"
-git push origin "v${new-version}"
-mvn versions:set -DnewVersion="${new-snapshot-version}"
-mvn versions:commit
-git add .
-git commit
-git push
+./release ${new-version} ${new-snapshot-version}
 ```
-
