@@ -1,38 +1,24 @@
-## docsify
+## DEER
 
-> A magical documentation site generator.
+> The RDF Dataset Enrichment Framework
 
 ## What it is
 
-docsify generates your documentation website on the fly. Unlike GitBook, it does not generate static html files. Instead, it smartly loads and parses your Markdown files and displays them as a website. To start using it, all you need to do is create an `index.html` and [deploy it on GitHub Pages](deploy.md).
-
-See the [Quick start](quickstart.md) guide for more details.
+- RDF-native ETL tool implemented on top of [FARADAY-CAGE](https://dice-group.github.io/faraday-cage/)
+- Supports rich Knowledge Graph Enrichment, Manipulation and Augmentation
 
 ## Features
 
-- No statically built html files
-- Simple and lightweight
-- Smart full-text search plugin
-- Multiple themes
-- Useful plugin API
-- Emoji support
-- Compatible with IE11
-- Support server-side rendering ([example](https://github.com/docsifyjs/docsify-ssr-demo))
+- Declarative definition of RDF dataset enrichment is also in [RDF](https://www.w3.org/TR/rdf11-concepts/)
+- Built for professionals (cli, Web service) and lay users (Web frontend)
+- Embeddable in your own project
+- Extensible by design (plugin system with [PF4J](https://pf4j.org))
+- Validation, Documentation and Frontend Generation enabled through extensive use of [SHACL](https://www.w3.org/TR/shacl/)
 
-## Examples
+## Getting Started
 
-Check out the [Showcase](https://github.com/docsifyjs/awesome-docsify#showcase) to see docsify in use.
+- See [how to run DEER](quickstart)
+- Learn about the [basics concepts](concepts)
+- Dive into our [tutorials for plugin developers](tutorial)
 
-## Donate
-
-Please consider donating if you think docsify is helpful to you or that my work is valuable. I am happy if you can help me [buy a cup of coffee](https://github.com/QingWei-Li/donate). :heart:
-
-## Community
-
-Users and the development team are usually in the [Discord server](https://discord.gg/3NwKFyR).
-
-## Special Thanks
-
-_Vercel_ has given us a Pro account.
-
-<a href="https://vercel.com/?utm_source=docsifyjsdocs" target="_blank"><img src="https://cdn.jsdelivr.net/gh/docsifyjs/docsify/docs/_media/vercel_logo.svg" width="100px"></a>
+<small style="text-align: right; display: block"> Last updated: {docsify-updated} </small>

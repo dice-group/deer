@@ -13,4 +13,4 @@ If you believe a part of this documentation to be inaccurate or outdated, please
 
 
 [GitHub](https://github.com/dice-group/deer/)
-[Get Started](#docsify)
+[Get Started](#DEER)

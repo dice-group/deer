@@ -1,32 +1,22 @@
-# Quick Start
+# Quickstart
 
-Some example operator content here. :100:
+DEER is split into two maven submodules: **deer-core** and **deer-cli**.
+While deer-core is intended to be used programmatically from other Java applications,
+deer-cli provides a CLI to either run a single configuration or start the DEER server.
 
-$2^\Omega$
+You can get the runnable deer-cli.jar from the [GitHub releases page](https://github.com/dice-group/deer/releases).\
+Moreover, a Docker image of DEER is provided [on Dockerhub](https://hub.docker.com/r/dicegroup/deer) as `dicegroup/deer:latest` for fast access.
 
-$$\Phi_2$$
+## Building DEER
 
+If you want to build DEER, 
 
-> [!TIP]
-> This is helpful
+## DEER CLI
 
-> [!WARNING]
-> This is helpful
+## DEER Docker image
 
-```mermaid
-graph LR
-    A --- B
-    B-->C[fa:fa-ban forbidden]
-    B-->D(fa:fa-spinner se);
-```
+## Executing single configurations from the command line
 
-```java
-public class Test {
-    public static void main(String[] test) {
-        String foo = "bar";
-    }
-}
+## DEER RESTful Server API
 
-```
-
-<small style="text-align: right; display: block"> Last updated: {docsify-updated} </small>
+## DEER webUI (coming soon)

@@ -33,6 +33,8 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
+import org.apache.jena.riot.Lang;
+import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.vocabulary.RDFS;
 import org.json.JSONObject;
 import org.pf4j.DefaultPluginManager;
@@ -197,7 +199,7 @@ public class DeerController {
     try {
       Model configurationModel = ModelFactory.createDefaultModel();
       final long startTime = System.currentTimeMillis();
-      configurationModel.read(fileName);
+      RDFDataMgr.read(configurationModel, fileName, Lang.TTL);
       logger.info("Loading {} is done in {}ms.", fileName, (System.currentTimeMillis() - startTime));
       return executionContext.compile(configurationModel, runId);
     } catch (HttpException e) {
@@ -210,7 +212,7 @@ public class DeerController {
     try {
       Model configurationModel = ModelFactory.createDefaultModel();
       final long startTime = System.currentTimeMillis();
-      configurationModel.read(fileName);
+      RDFDataMgr.read(configurationModel, fileName, Lang.TTL);
       logger.info("Loading {} is done in {}ms.", fileName, (System.currentTimeMillis() - startTime));
       return executionContext.compile(configurationModel);
     } catch (HttpException e) {

@@ -20,6 +20,8 @@ package org.aksw.deer.io;
 import org.aksw.deer.vocabulary.DEER;
 import org.aksw.faraday_cage.engine.ValidatableParameterMap;
 import org.apache.jena.rdf.model.*;
+import org.apache.jena.riot.Lang;
+import org.apache.jena.riot.RDFDataMgr;
 import org.pf4j.Extension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -82,7 +84,8 @@ public class FileModelReader extends AbstractModelReader {
       }
     }
     final long startTime = System.currentTimeMillis();
-    Model result = ModelFactory.createDefaultModel().read(locator);
+    Model result = ModelFactory.createDefaultModel();
+    RDFDataMgr.read(result, locator, Lang.TTL);
     logger.info("Loading {} is done in {}ms.", locator,
       (System.currentTimeMillis() - startTime));
     return List.of(result);
