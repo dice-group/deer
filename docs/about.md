@@ -9,7 +9,7 @@ models, in which the connections between two nodes represent intermediary datase
 
 ## Architecture
 
-<img src="./stack.svg" style="float:right; margin:0em 0em 2em 2em"/>
+<div style="background-color:#fff !important; float:right; margin:0em 0em 2em 2em;"><img src="_media/stack.svg"/></div>
 
 DEERs former execution engine has been outsourced to **FARADAY-CAGE**, a framework that provides
 abstractions for nodes in a directed acyclic graph that represent computation steps on homogeneous
@@ -60,3 +60,4 @@ e.g. a file or a triplestore.
 * An **EnrichmentOperator** `(1,N,1,M)` is an intermediary node that takes one or more RDF datasets as input,
 executes arbitrary transformations on them and outputs the result as one or more RDF datasets.
 
+<small style="text-align: right; display: block"> Last updated: {docsify-updated} </small>
