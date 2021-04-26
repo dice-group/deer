@@ -17,8 +17,9 @@
 
 ## Getting Started
 
-- See [how to run DEER](quickstart)
-- Learn about the [basics concepts](concepts)
-- Dive into our [tutorials for plugin developers](tutorial)
+- [Get to know DEER](about)
+- See [how to install and run DEER](quickstart)
+<!-- - Learn about the [basics concepts](concepts) -->
+<!-- - Dive into our [tutorials for plugin developers](tutorial) -->
 
 <small style="text-align: right; display: block"> Last updated: {docsify-updated} </small>
