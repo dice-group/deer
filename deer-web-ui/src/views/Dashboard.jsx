@@ -565,11 +565,11 @@ class Dashboard extends React.Component {
             namedNode(node.properties.fromEndpoint)
           );
         }
-        if (node.properties.sparqlDescribeOf) {
+        if (node.properties.useSparqlDescribeOf) {
           writer.addQuad(
             namedNode("urn:example:demo/" + node.properties.name),
             namedNode("http://w3id.org/deer/" + "useSparqlDescribeOf"),
-            namedNode(node.properties.sparqlDescribeOf)
+            namedNode(node.properties.useSparqlDescribeOf)
           );
         }
 
