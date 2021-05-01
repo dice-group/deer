@@ -267,7 +267,7 @@ class Dashboard extends React.Component {
     let url = this.getUrlForTheNode(node);
 
     let properties = {
-      name: "some text"
+      name: ""
     };
 
     let filteredProps = propsArrForNode.basicProps.map(filteredProp => {
@@ -275,7 +275,7 @@ class Dashboard extends React.Component {
     })
 
     filteredProps.forEach(pr => {
-      properties[pr] = "some text";
+      properties[pr] = "";
     });
 
     // todo: now all fields from xone are added, show only one to the user (add radiobutton)
@@ -284,7 +284,7 @@ class Dashboard extends React.Component {
     })
 
     filteredProps.forEach(pr => {
-      properties[pr] = "some text";
+      properties[pr] = "";
     });
   
     // add to graph
@@ -521,368 +521,47 @@ class Dashboard extends React.Component {
         // }
       }
 
-      //File Model Reader
-      if (node.type === "Reader/FileModelReader") {
-        if (
-          this.state.formProperties &&
-          this.state.formProperties.node.type === "Reader/FileModelReader"
-        ) {
-          node.properties.name = this.state.properties.name;
-          node.properties.fromUri = this.state.formProperties.fromUri;
-          node.properties.fromPath = this.state.formProperties.fromPath;
-        }
-        if (node.properties.fromUri) {
-          writer.addQuad(
-            namedNode("urn:example:demo/" + node.properties.name),
-            namedNode("http://w3id.org/deer/" + "fromUri"),
-            literal(node.properties.fromUri)
-          );
-        }
-        if (node.properties.fromPath) {
-          writer.addQuad(
-            namedNode("urn:example:demo/" + node.properties.name),
-            namedNode("http://w3id.org/deer/" + "fromPath"),
-            literal(node.properties.fromPath)
-          );
-        }
-      }
+      console.log(node);
 
-      //Sparql Model Reader
-      if (node.type === "Reader/SparqlModelReader") {
-        if (
-          this.state.formProperties &&
-          this.state.formProperties.node.type === "Reader/SparqlModelReader"
-        ) {
-          node.properties.name = this.state.formProperties.name;
-          node.properties.fromEndpoint = this.state.formProperties.fromEndpoint;
-          node.properties.sparqlDescribeOf = this.state.formProperties.useSparqlDescribeOf;
-          node.properties.useSparqlConstruct = this.state.formProperties.useSparqlConstruct;
-        }
-        if (node.properties.fromEndpoint) {
-          writer.addQuad(
-            namedNode("urn:example:demo/" + node.properties.name),
-            namedNode("http://w3id.org/deer/" + "fromEndpoint"),
-            namedNode(node.properties.fromEndpoint)
-          );
-        }
-        if (node.properties.useSparqlDescribeOf) {
-          writer.addQuad(
-            namedNode("urn:example:demo/" + node.properties.name),
-            namedNode("http://w3id.org/deer/" + "useSparqlDescribeOf"),
-            namedNode(node.properties.useSparqlDescribeOf)
-          );
-        }
-
-        if (node.properties.useSparqlConstruct) {
-          writer.addQuad(
-            namedNode("urn:example:demo/" + node.properties.name),
-            namedNode("http://w3id.org/deer/" + "useSparqlConstruct"),
-            literal(node.properties.useSparqlConstruct)
-          );
-        }
-      }
-
-      //File Model Writer
-      if (node.type === "Writer/FileModelWriter") {
-        if (
-          this.state.formProperties &&
-          this.state.formProperties.node.type === "Writer/FileModelWriter"
-        ) {
-          node.properties.name = this.state.formProperties.name;
-          node.properties.outputFile = this.state.formProperties.outputFile;
-          node.properties.outputFormat = this.state.formProperties.outputFormat;
-        }
-        if (node.properties.outputFile && node.properties.outputFormat) {
-          writer.addQuad(
-            namedNode("urn:example:demo/" + node.properties.name),
-            namedNode("http://w3id.org/deer/" + "outputFile"),
-            literal(node.properties.outputFile)
-          );
-
-          writer.addQuad(
-            namedNode("urn:example:demo/" + node.properties.name),
-            namedNode("http://w3id.org/deer/" + "outputFormat"),
-            literal(node.properties.outputFormat)
-          );
-        }
-      }
-      //Filter Enrichment Operator
-      if (node.type === "Operator/FilterEnrichmentOperator") {
-        if (
-          this.state.formProperties &&
-          this.state.formProperties.node.type ===
-            "Operator/FilterEnrichmentOperator"
-        ) {
-          node.properties.name = this.state.formProperties.name;
-          node.properties.selector = this.state.formProperties.selector;
-          node.properties.resource = this.state.formProperties.resource;
-          node.properties.sparqlConstructQuery = this.state.formProperties.sparqlConstructQuery;
-        }
-        if (node.properties.selector) {
-          writer.addQuad(
-            namedNode("urn:example:demo/" + node.properties.name),
-            namedNode("http://w3id.org/deer/" + "selector"), //predicate
-            writer.blank([
-              {
-                predicate: namedNode(
-                  "http://w3id.org/deer/" + node.properties.selector
-                ),
-                object: namedNode(node.properties.resource),
-              },
-            ])
-          );
-        } else if (node.properties.sparqlConstructQuery) {
-          writer.addQuad(
-            namedNode("urn:example:demo/" + node.properties.name),
-            namedNode("http://w3id.org/deer/" + "sparqlConstructQuery"),
-            literal(node.properties.sparqlConstructQuery)
-          );
-        }
-      }
-      //Dereferencing enrichment Operator
-      if (node.type === "Operator/DereferencingEnrichmentOperator") {
-        if (
-          this.state.formProperties &&
-          this.state.formProperties.node.type ===
-            "Operator/DereferencingEnrichmentOperator"
-        ) {
-          node.properties.name = this.state.properties.name;
-          node.properties.lookUpPrefix = this.state.formProperties.lookUpPrefix;
-          node.properties.dereferencingProperty = this.state.formProperties.dereferencingProperty;
-          node.properties.importProperty = this.state.formProperties.importProperty;
-        }
+      let obj = node.properties;
+      // quads with blank nodes
+      if ("operation" in obj){
+        let blankNodes = this.addBlankNodes("operation", obj);
         writer.addQuad(
-          namedNode("urn:example:demo/" + node.properties.name),
+          namedNode("urn:example:demo/" + obj.name),
           namedNode("http://w3id.org/deer/operation"),
-          writer.blank([
-            {
-              predicate: namedNode("urn:example:demo/" + "lookUpPrefix"),
-              object: literal(node.properties.lookUpPrefix),
-            },
-            {
-              predicate: namedNode(
-                "urn:example:demo/" + "dereferencingProperty"
-              ),
-              object: literal(node.properties.dereferencingProperty),
-            },
-            {
-              predicate: namedNode("urn:example:demo/" + "importProperty"),
-              object: literal(node.properties.importProperty),
-            },
-          ])
+          writer.blank(blankNodes)
+        );
+      } else if ("selector" in obj){
+        let blankNodes = this.addBlankNodes("selector", obj);
+        writer.addQuad(
+          namedNode("urn:example:demo/" + obj.name),
+          namedNode("http://w3id.org/deer/selector"),
+          writer.blank(blankNodes)
         );
       }
-
-      //GeoFusion Enrichment Operator
-      if (node.type === "Operator/GeoFusionEnrichmentOperator") {
-        if (
-          this.state.formProperties &&
-          this.state.formProperties.node.type ===
-            "Operator/GeoFusionEnrichmentOperator"
-        ) {
-          node.properties.name = this.state.properties.name;
-          node.properties.fusionAction = this.state.formProperties.fusionAction;
-          node.properties.mergeOtherStatements = this.state.formProperties.mergeOtherStatements;
-        }
-        writer.addQuad(
-          namedNode("urn:example:demo/" + node.properties.name),
-          namedNode("http://w3id.org/deer/fusionAction"),
-          literal(node.properties.fusionAction)
-        );
-
-        writer.addQuad(
-          namedNode("urn:example:demo/" + node.properties.name),
-          namedNode("http://w3id.org/deer/mergeOtherStatements"),
-          literal(node.properties.mergeOtherStatements)
-        );
-      }
-
-      //Authority Conformation Enrichment Operator
-      if (node.type === "Operator/AuthorityConformationEnrichmentOperator") {
-        if (
-          this.state.formProperties &&
-          this.state.formProperties.node.type ===
-            "Operator/AuthorityConformationEnrichmentOperator"
-        ) {
-          node.properties.name = this.state.properties.name;
-          node.properties.sourceSubjectAuthority = this.state.formProperties.sourceSubjectAuthority;
-          node.properties.targetSubjectAuthority = this.state.formProperties.targetSubjectAuthority;
-        }
-        writer.addQuad(
-          namedNode("urn:example:demo/" + node.properties.name),
-          namedNode("http://w3id.org/deer/operation"),
-          writer.blank([
-            {
-              predicate: namedNode(
-                "http://w3id.org/deer/sourceSubjectAuthority"
-              ),
-              object: namedNode(node.properties.sourceSubjectAuthority),
-            },
-            {
-              predicate: namedNode(
-                "http://w3id.org/deer/targetSubjectAuthority"
-              ),
-              object: namedNode(node.properties.targetSubjectAuthority),
-            },
-          ])
-        );
-      }
-
-      //Predicate Conformation Enrichment Operator
-      if (node.type === "Operator/PredicateConformationEnrichmentOperator") {
-        if (
-          this.state.formProperties &&
-          this.state.formProperties.node.type ===
-            "Operator/PredicateConformationEnrichmentOperator"
-        ) {
-          node.properties.name = this.state.properties.name;
-          node.properties.sourcePredicate = this.state.formProperties.sourcePredicate;
-          node.properties.targetPredicate = this.state.formProperties.targetPredicate;
-        }
-        writer.addQuad(
-          namedNode("urn:example:demo/" + node.properties.name),
-          namedNode("http://w3id.org/deer/operation"),
-          writer.blank([
-            {
-              predicate: namedNode("http://w3id.org/deer/sourcePredicate"),
-              object: literal(node.properties.sourcePredicate),
-            },
-            {
-              predicate: namedNode("http://w3id.org/deer/targetPredicate"),
-              object: literal(node.properties.targetPredicate),
-            },
-          ])
-        );
-      }
-
-      //GeoDistance Enrichment Operator
-      if (node.type === "Operator/GeoDistanceEnrichmentOperator") {
-        if (
-          this.state.formProperties &&
-          this.state.formProperties.node.type ===
-            "Operator/GeoDistanceEnrichmentOperator"
-        ) {
-          node.properties.name = this.state.properties.name;
-          node.properties.selectPredicate = this.state.formProperties.selectPredicate;
-          node.properties.distancePredicate = this.state.formProperties.distancePredicate;
-        }
-        writer.addQuad(
-          namedNode("urn:example:demo/" + node.properties.name),
-          namedNode("http://w3id.org/deer/" + "selectPredicate"),
-          namedNode(node.properties.selectPredicate)
-        );
-        writer.addQuad(
-          namedNode("urn:example:demo/" + node.properties.name),
-          namedNode("http://w3id.org/deer/" + "distancePredicate"),
-          namedNode(node.properties.distancePredicate)
-        );
-      }
-
-      if (node.type === "Operator/LinkingEnrichmentOperator") {
-        if (
-          this.state.formProperties &&
-          this.state.formProperties.node.type ===
-            "Operator/LinkingEnrichmentOperator"
-        ) {
-          node.properties.name = this.state.formProperties.name;
-          node.properties.specFile = this.state.formProperties.specFile;
-          node.properties.linksPart = this.state.formProperties.linksPart;
-          node.properties.selectMode = this.state.formProperties.selectMode;
-          node.properties.linkSpecification = this.state.formProperties.linkSpecification;
-          node.properties.linkingPredicate = this.state.formProperties.linkingPredicate;
-          node.properties.threshold = this.state.formProperties.threshold;
-        }
-        writer.addQuad(
-          namedNode("urn:example:demo/" + node.properties.name),
-          namedNode("http://w3id.org/deer/" + "specFile"),
-          literal(node.properties.specFile)
-        );
-        writer.addQuad(
-          namedNode("urn:example:demo/" + node.properties.name),
-          namedNode("http://w3id.org/deer/" + "linksPart"),
-          literal(node.properties.linksPart)
-        );
-        writer.addQuad(
-          namedNode("urn:example:demo/" + node.properties.name),
-          namedNode("http://w3id.org/deer/" + "selectMode"),
-          literal(node.properties.selectMode)
-        );
-        if (node.properties.linkSpecification) {
-          writer.addQuad(
-            namedNode("urn:example:demo/" + node.properties.name),
-            namedNode("http://w3id.org/deer/" + "linkSpecification"),
-            literal(node.properties.linkSpecification)
-          );
-        }
-        if (node.properties.linkingPredicate) {
-          writer.addQuad(
-            namedNode("urn:example:demo/" + node.properties.name),
-            namedNode("http://w3id.org/deer/" + "linkingPredicate"),
-            literal(node.properties.linkingPredicate)
-          );
-        }
-        if (node.properties.threshold) {
-          writer.addQuad(
-            namedNode("urn:example:demo/" + node.properties.name),
-            namedNode("http://w3id.org/deer/" + "threshold"),
-            literal(node.properties.threshold)
-          );
+      else{ // simple quads
+        for (var prop in obj) {
+          if (prop !== "name" && obj[prop].length){
+            if (obj[prop].includes('http')){
+              writer.addQuad(
+                namedNode("urn:example:demo/" + node.properties.name),
+                namedNode("http://w3id.org/deer/" + prop),
+                namedNode(obj[prop])
+              );
+            }
+            else {
+              writer.addQuad(
+                namedNode("urn:example:demo/" + node.properties.name),
+                namedNode("http://w3id.org/deer/" + prop),
+                literal(obj[prop])
+              );
+            }
+          }
         }
       }
 
-      //NER Enrichment Operator
-      if (node.type === "Operator/NEREnrichmentOperator") {
-        if (
-          this.state.formProperties &&
-          this.state.formProperties.node.type ===
-            "Operator/NEREnrichmentOperator"
-        ) {
-          node.properties.name = this.state.properties.name;
-          node.properties.literalProperty = this.state.formProperties.literalProperty;
-          node.properties.importProperty = this.state.formProperties.importProperty;
-          node.properties.neType = this.state.formProperties.neType;
-          node.properties.foxUrl = this.state.formProperties.foxUrl;
-        }
 
-        writer.addQuad(
-          namedNode("urn:example:demo/" + node.properties.name),
-          namedNode("http://w3id.org/deer/" + "literalProperty"),
-          namedNode(node.properties.literalProperty)
-        );
-        writer.addQuad(
-          namedNode("urn:example:demo/" + node.properties.name),
-          namedNode("http://w3id.org/deer/" + "importProperty"),
-          namedNode(node.properties.distancePredimportPropertyicate)
-        );
-        writer.addQuad(
-          namedNode("urn:example:demo/" + node.properties.name),
-          namedNode("http://w3id.org/deer/" + "foxUrl"),
-          namedNode(node.properties.foxUrl)
-        );
-        writer.addQuad(
-          namedNode("urn:example:demo/" + node.properties.name),
-          namedNode("http://w3id.org/deer/" + "neType"),
-          literal(node.properties.neType)
-        );
-      }
-
-      //Sparql Update Enrichment Operator
-      if (node.type === "Operator/SparqlUpdateEnrichmentOperator") {
-        if (
-          this.state.formProperties &&
-          this.state.formProperties.node.type ===
-            "Operator/NEREnrichmentOperator"
-        ) {
-          node.properties.name = this.state.properties.name;
-          node.properties.sparqlUpdateQuery = this.state.formProperties.sparqlUpdateQuery;
-        }
-
-        writer.addQuad(
-          namedNode("urn:example:demo/" + node.properties.name),
-          namedNode("http://w3id.org/deer/" + "sparqlUpdateQuery"),
-          literal(node.properties.sparqlUpdateQuery)
-        );
-      }
     });
     writer.end((error, result) => {
       console.log(result);
@@ -890,6 +569,21 @@ class Dashboard extends React.Component {
       result = "";
     });
   };
+
+  addBlankNodes = (byPredicate, obj) => {
+    let blankNodes = [];
+    for (var prop in obj) {
+      if (prop !== "name" && prop !== byPredicate && obj[prop].length){
+        blankNodes.push({
+          predicate: namedNode(
+            "http://w3id.org/deer/"+prop
+          ),
+          object: namedNode(obj[prop])
+        });
+      }
+    }
+    return blankNodes;
+  }
 
   //Download the results
   downloadResults = (index) => {
