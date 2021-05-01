@@ -265,6 +265,8 @@ class Dashboard extends React.Component {
     let outputs = outputPorts.match(/\d+/)[0];
     let message = this.getMessage(node);
     let url = this.getUrlForTheNode(node);
+    let xoneProperties = null;
+    let that = this;
 
     let properties = {
       name: ""
@@ -282,6 +284,7 @@ class Dashboard extends React.Component {
     filteredProps = propsArrForNode.xone.map(filteredProp => {
       return this.getPropertyName(filteredProp);
     })
+    xoneProperties = filteredProps;
 
     filteredProps.forEach(pr => {
       properties[pr] = "";
@@ -302,6 +305,10 @@ class Dashboard extends React.Component {
           this.properties = Object.create(properties);
           this.message = message;
           this.linkName = url;
+
+          this.onPropertyChanged = (p) => {
+            that.showOrDisableXoneProperties(this.properties, p, xoneProperties);
+          }
         }
       };
       nodeClass.title = node;
@@ -321,6 +328,11 @@ class Dashboard extends React.Component {
           this.properties = Object.create(properties); 
           this.message = message;
           this.linkName = url;
+
+          this.onPropertyChanged = (p) => {
+            that.showOrDisableXoneProperties(this.properties, p, xoneProperties);
+          }
+
         }
       };
       nodeClass.title = node;
@@ -336,6 +348,10 @@ class Dashboard extends React.Component {
           this.properties = Object.create(properties);
           this.message = message;
           this.linkName = url;
+
+          this.onPropertyChanged = (p) => {
+            that.showOrDisableXoneProperties(this.properties, p, xoneProperties);
+          }
         }
       };
       nodeClass.title = node;
@@ -343,6 +359,27 @@ class Dashboard extends React.Component {
       nodeClass.color = "#223322";
       nodeClass.bgcolor = "#335533";
       litegraph.registerNodeType("Writer/"+node, nodeClass);
+    }
+  }
+
+  showOrDisableXoneProperties = (props, p, xoneProps) => {
+
+    console.log(xoneProps);
+    if(xoneProps.includes(p)){
+      let excludingPArray = xoneProps.filter(i => i !== p);
+
+      //enable all
+      xoneProps.forEach(i => {
+        document.querySelectorAll('[data-property='+i+']')[0].classList.remove('disabledDiv');
+      });
+
+
+      // when we change one prop then we disable and clear others (excludingPArray)
+      excludingPArray.forEach(i => {
+        document.querySelectorAll('[data-property='+i+']')[0].classList.add('disabledDiv');
+        document.querySelectorAll('[data-property='+i+']')[0].getElementsByClassName("property_value")[0].innerHTML="";
+        delete props[i];
+      });
     }
   }
 

@@ -80,3 +80,7 @@ h1 {
 .litegraph .dialog .property_value {
   text-align: left;
 }
+
+.disabledDiv {
+  opacity: 0.4;
+}
