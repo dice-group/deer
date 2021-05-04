@@ -1,33 +1,22 @@
 ########
 ## BUILD
 # build first using maven
-FROM maven:3.6.2-jdk-11 as builder
-# set workdir
+FROM maven:3.8-adoptopenjdk-16 as builder
 WORKDIR /deer
-# copy files
 ADD . /deer
 RUN mvn clean package shade:shade -Dmaven.test.skip=true
 WORKDIR /deer/deer-cli
-# do some magic to get the right jar file to copy
-RUN mvn com.smartcodeltd:release-candidate-maven-plugin:LATEST:version \
--DoutputTemplate="PROJECT_VERSION={{ version }}" \
--DoutputUri="file://\${project.basedir}/__version" && \
-cat __version | sed -e /^$/d -e /^#/d -e 's/^/export /' > _version && \
-. ./_version && \
-cp -p ./target/deer-cli-${PROJECT_VERSION}.jar /deer/deer.jar
+RUN PROJECT_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout) && \
+    cp -p ./target/deer-cli-${PROJECT_VERSION}.jar /deer/deer.jar
 ##########
 ## RELEASE
 # then run in a lighter jdk base
-FROM openjdk:11-jdk
-# set workdir
+FROM adoptopenjdk/openjdk16:jre
 WORKDIR /
-# plugin mount
 VOLUME /plugins
+VOLUME /data
 # copy jar from build step
 COPY --from=builder /deer/deer.jar deer.jar
-# set default java flags
 ENV JAVA_OPTS="-Xmx2G"
-# expose port
 EXPOSE 8080
-# assign start command
-CMD ["java", "-jar", "deer.jar", "-s"]
+ENTRYPOINT ["java", "-jar", "/deer.jar"]

@@ -1,219 +1,265 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-<modelVersion>4.0.0</modelVersion>
-<groupId>org.aksw.deer</groupId>
-<artifactId>deer-parent</artifactId>
-<version>2.3.1-SNAPSHOT</version>
-<name>DEER Parent POM</name>
-<description>DEER - RDF Dataset Enrichment Framework</description>
-<url>http://github.com/dice-group/DEER</url>
+<!--
 
-<scm>
-  <url>https://github.com/dice-group/deer</url>
-  <connection>scm:git:https://github.com/dice-group/deer.git</connection>
-  <tag>HEAD</tag>
-</scm>
+    DEER Parent POM - DEER - RDF Dataset Enrichment Framework
+    Copyright © 2013 Data Science Group (DICE) (kevin.dressler@uni-paderborn.de)
 
-<properties>
-  <maven.compiler.source>11</maven.compiler.source>
-  <maven.compiler.target>11</maven.compiler.target>
-  <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  <jena.version>3.9.0</jena.version>
-  <slf4j.version>1.7.25</slf4j.version>
-  <fcage.version>1.1.1</fcage.version>
-</properties>
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
-<packaging>pom</packaging>
-<modules>
-  <module>deer-core</module>
-  <module>deer-cli</module>
-</modules>
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
 
-<distributionManagement>
-  <repository>
-    <id>maven.aksw.internal</id>
-    <url>http://maven.aksw.org/archiva/repository/internal</url>
-  </repository>
-  <snapshotRepository>
-    <id>maven.aksw.snapshots</id>
-    <name>AKSW Snapshot Repository</name>
-    <url>http://maven.aksw.org/archiva/repository/snapshots</url>
-  </snapshotRepository>
-</distributionManagement>
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-<repositories>
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.aksw.deer</groupId>
+  <artifactId>deer-parent</artifactId>
+  <version>2.3.2-SNAPSHOT</version>
+  <name>DEER Parent POM</name>
+  <description>DEER - RDF Dataset Enrichment Framework</description>
+  <url>http://github.com/dice-group/DEER</url>
+  <inceptionYear>2013</inceptionYear>
+  <scm>
+    <url>https://github.com/dice-group/deer</url>
+    <connection>scm:git:https://github.com/dice-group/deer.git</connection>
+    <tag>HEAD</tag>
+  </scm>
 
-  <repository>
-    <id>sonatype-nexus-snapshots</id>
-    <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-    <releases>
-      <enabled>true</enabled>
-    </releases>
-    <snapshots>
-      <enabled>true</enabled>
-    </snapshots>
-  </repository>
+  <properties>
+    <maven.compiler.source>11</maven.compiler.source>
+    <maven.compiler.target>11</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <jena.version>3.9.0</jena.version>
+    <slf4j.version>1.7.25</slf4j.version>
+    <fcage.version>1.1.1</fcage.version>
+  </properties>
 
-  <repository>
-    <id>maven.aksw.internal</id>
-    <name>University Leipzig, AKSW Maven2 Internal Repository</name>
-    <url>https://maven.aksw.org/repository/internal/</url>
-  </repository>
+  <packaging>pom</packaging>
+  <modules>
+    <module>deer-core</module>
+    <module>deer-cli</module>
+  </modules>
 
-  <repository>
-    <id>maven.aksw.snapshots</id>
-    <name>University Leipzig, AKSW Maven2 Snapshot Repository</name>
-    <url>https://maven.aksw.org/repository/snapshots/</url>
-  </repository>
+  <distributionManagement>
+    <repository>
+      <id>maven.aksw.internal</id>
+      <url>http://maven.aksw.org/archiva/repository/internal</url>
+    </repository>
+    <snapshotRepository>
+      <id>maven.aksw.snapshots</id>
+      <name>AKSW Snapshot Repository</name>
+      <url>http://maven.aksw.org/archiva/repository/snapshots</url>
+    </snapshotRepository>
+  </distributionManagement>
 
-  <repository>
-    <id>maven2-repository.java.net</id>
-    <name>Java.net Repository for Maven</name>
-    <url>https://download.java.net/maven/2/</url>
-    <layout>default</layout>
-  </repository>
+  <repositories>
 
-  <repository>
-    <id>jcenter</id>
-    <url>https://jcenter.bintray.com</url>
-  </repository>
+    <repository>
+      <id>sonatype-nexus-snapshots</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
 
-  <repository>
-    <id>jitpack.io</id>
-    <url>https://jitpack.io</url>
-  </repository>
+    <repository>
+      <id>maven.aksw.internal</id>
+      <name>University Leipzig, AKSW Maven2 Internal Repository</name>
+      <url>https://maven.aksw.org/repository/internal/</url>
+    </repository>
 
-</repositories>
+    <repository>
+      <id>maven.aksw.snapshots</id>
+      <name>University Leipzig, AKSW Maven2 Snapshot Repository</name>
+      <url>https://maven.aksw.org/repository/snapshots/</url>
+    </repository>
 
-<build>
-  <plugins>
+    <repository>
+      <id>maven2-repository.java.net</id>
+      <name>Java.net Repository for Maven</name>
+      <url>https://download.java.net/maven/2/</url>
+      <layout>default</layout>
+    </repository>
 
-    <plugin>
-      <groupId>org.apache.maven.plugins</groupId>
-      <artifactId>maven-compiler-plugin</artifactId>
-      <version>3.8.1</version>
-      <configuration>
-        <release>${maven.compiler.source}</release>
-        <encoding>${project.build.sourceEncoding}</encoding>
-        <annotationProcessorPaths>
-          <annotationProcessorPath>
-            <groupId>org.pf4j</groupId>
-            <artifactId>pf4j</artifactId>
-            <version>3.0.1</version>
-          </annotationProcessorPath>
-        </annotationProcessorPaths>
-        <annotationProcessors>
-          <annotationProcessor>org.pf4j.processor.ExtensionAnnotationProcessor</annotationProcessor>
-        </annotationProcessors>
-      </configuration>
-      <dependencies>
-        <dependency>
-          <groupId>org.ow2.asm</groupId>
-          <artifactId>asm</artifactId>
-          <version>7.1</version>
-        </dependency>
-      </dependencies>
-    </plugin>
+    <repository>
+      <id>jcenter</id>
+      <url>https://jcenter.bintray.com</url>
+    </repository>
 
-    <plugin>
-      <groupId>org.apache.maven.plugins</groupId>
-      <artifactId>maven-release-plugin</artifactId>
-      <version>2.5.3</version>
-      <configuration>
-        <tagNameFormat>@{project.version}</tagNameFormat>
-        <autoVersionSubmodules>true</autoVersionSubmodules>
-        <arguments>-P!source-artifacts</arguments>
-        <useReleaseProfile>false</useReleaseProfile>
-        <goals>-Dmaven.test.skip=true deploy</goals>
-      </configuration>
-      <dependencies>
-        <dependency>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-scm-plugin</artifactId>
-          <version>1.9.4</version>
-        </dependency>
-      </dependencies>
-    </plugin>
+    <repository>
+      <id>jitpack.io</id>
+      <url>https://jitpack.io</url>
+    </repository>
 
-    <plugin>
-      <groupId>org.apache.maven.plugins</groupId>
-      <artifactId>maven-source-plugin</artifactId>
-      <version>3.0.1</version>
-      <executions>
-        <execution>
-          <id>attach-sources</id>
-          <phase>verify</phase>
-          <goals>
-            <goal>jar-no-fork</goal>
-          </goals>
-        </execution>
-      </executions>
-    </plugin>
+  </repositories>
 
+  <build>
+    <plugins>
 
-    <plugin>
-      <groupId>org.apache.maven.plugins</groupId>
-      <artifactId>maven-javadoc-plugin</artifactId>
-      <version>3.0.1</version>
-      <executions>
-        <execution>
-          <id>aggregate</id>
-          <phase>package</phase>
-          <goals>
-            <goal>aggregate-jar</goal>
-          </goals>
-        </execution>
-      </executions>
-      <configuration>
-        <!--          switch on dependency-driven aggregation-->
-        <includeDependencySources>true</includeDependencySources>
-        <dependencySourceIncludes>
-          <!-- include ONLY dependencies I control -->
-          <dependencySourceInclude>org.aksw.faraday_cage:*</dependencySourceInclude>
-        </dependencySourceIncludes>
-        <links>
-          <link>https://jena.apache.org/documentation/javadoc/jena</link>
-        </links>
-        <!--            <useStandardDocletOptions>false</useStandardDocletOptions>-->
-      </configuration>
-    </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.8.1</version>
+        <configuration>
+          <release>${maven.compiler.source}</release>
+          <encoding>${project.build.sourceEncoding}</encoding>
+          <annotationProcessorPaths>
+            <annotationProcessorPath>
+              <groupId>org.pf4j</groupId>
+              <artifactId>pf4j</artifactId>
+              <version>3.0.1</version>
+            </annotationProcessorPath>
+          </annotationProcessorPaths>
+          <annotationProcessors>
+            <annotationProcessor>org.pf4j.processor.ExtensionAnnotationProcessor
+            </annotationProcessor>
+          </annotationProcessors>
+        </configuration>
+        <dependencies>
+          <dependency>
+            <groupId>org.ow2.asm</groupId>
+            <artifactId>asm</artifactId>
+            <version>7.1</version>
+          </dependency>
+        </dependencies>
+      </plugin>
 
-    <plugin>
-      <groupId>org.apache.maven.plugins</groupId>
-      <artifactId>maven-surefire-plugin</artifactId>
-      <version>2.22.2</version>
-      <configuration>
-        <forkCount>0</forkCount>
-        <!--suppress UnresolvedMavenProperty -->
-        <argLine>-Xms256m -Xmx8G</argLine>
-        <testFailureIgnore>false</testFailureIgnore>
-        <skipTests>false</skipTests>
-        <useManifestOnlyJar>false</useManifestOnlyJar>
-      </configuration>
-    </plugin>
-  </plugins>
-</build>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <version>3.0.1</version>
+        <executions>
+          <execution>
+            <id>attach-sources</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>jar-no-fork</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
 
-<dependencies>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>3.0.1</version>
+        <executions>
+          <execution>
+            <id>aggregate</id>
+            <phase>package</phase>
+            <goals>
+              <goal>aggregate-jar</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>attach-javadocs</id>
+            <phase>deploy</phase>
+            <goals>
+              <goal>aggregate-jar</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <!--          switch on dependency-driven aggregation-->
+          <includeDependencySources>true</includeDependencySources>
+          <dependencySourceIncludes>
+            <!-- include ONLY dependencies I control -->
+            <dependencySourceInclude>org.aksw.faraday_cage:*</dependencySourceInclude>
+          </dependencySourceIncludes>
+          <links>
+            <link>https://jena.apache.org/documentation/javadoc/jena</link>
+          </links>
+        </configuration>
+      </plugin>
 
-  <dependency>
-    <groupId>junit</groupId>
-    <artifactId>junit</artifactId>
-    <version>4.11</version>
-    <scope>test</scope>
-  </dependency>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.22.2</version>
+        <configuration>
+          <forkCount>0</forkCount>
+          <!--suppress UnresolvedMavenProperty -->
+          <argLine>-Xms256m -Xmx8G</argLine>
+          <testFailureIgnore>false</testFailureIgnore>
+          <skipTests>false</skipTests>
+          <useManifestOnlyJar>false</useManifestOnlyJar>
+        </configuration>
+      </plugin>
 
-  <dependency>
-    <groupId>org.jetbrains</groupId>
-    <artifactId>annotations</artifactId>
-    <version>17.0.0</version>
-  </dependency>
+      <plugin>
+        <groupId>com.mycila</groupId>
+        <artifactId>license-maven-plugin</artifactId>
+        <version>4.0</version>
+        <configuration>
+          <aggregate>true</aggregate>
+          <header>com/mycila/maven/plugin/license/templates/AGPL-3.txt</header>
+          <properties>
+            <owner>Data Science Group (DICE)</owner>
+            <email>kevin.dressler@uni-paderborn.de</email>
+          </properties>
+          <excludes>
+            <exclude>**/README</exclude>
+            <exclude>**/LICENSE</exclude>
+            <exclude>**/Dockerfile</exclude>
+            <exclude>**/docs/**</exclude>
+            <exclude>**/manual/**</exclude>
+            <exclude>**/node_modules/**</exclude>
+            <exclude>examples/**</exclude>
+            <exclude>**/src/test/resources/**</exclude>
+            <exclude>**/src/main/resources/**</exclude>
+            <exclude>**/src/main/webapp/**</exclude>
+            <exclude>**/target/**</exclude>
+            <exclude>deer-web-ui/**</exclude>
+            <exclude>fcage/**</exclude>
+          </excludes>
+        </configuration>
+      </plugin>
 
-  <dependency>
-    <groupId>org.aksw.faraday_cage</groupId>
-    <artifactId>faraday-cage</artifactId>
-    <version>${fcage.version}</version>
-  </dependency>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-deploy-plugin</artifactId>
+        <version>3.0.0-M1</version>
+        <configuration>
+          <deployAtEnd>true</deployAtEnd>
+        </configuration>
+      </plugin>
 
-</dependencies>
+    </plugins>
+  </build>
+
+  <dependencies>
+
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.11</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.jetbrains</groupId>
+      <artifactId>annotations</artifactId>
+      <version>17.0.0</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.aksw.faraday_cage</groupId>
+      <artifactId>faraday-cage</artifactId>
+      <version>${fcage.version}</version>
+    </dependency>
+
+  </dependencies>
 
 </project>
