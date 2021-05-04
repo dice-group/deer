@@ -87,8 +87,8 @@ class Dashboard extends React.Component {
         example: "urn:example:demo/",
         foaf: "http://xmlns.com/foaf/0.1/",
         dbpedia: "http://dbpedia.org/resource/",
-        deer: "https://w3id.org/deer/",
-        fcage: "https://w3id.org/fcage/",
+        deer: "http://w3id.org/deer/",
+        fcage: "http://w3id.org/fcage/",
         geo: "http://www.w3.org/2003/01/geo/wgs84_pos#",
         owl: "http://www.w3.org/2002/07/owl#",
         rdf: "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
@@ -386,7 +386,7 @@ class Dashboard extends React.Component {
   showNode = (quadOb) => {
     // save possible node names in array
     if(quadOb.predicate.id.includes("targetClass")){
-      let node = quadOb.object.id.split("https://w3id.org/deer/")[1];
+      let node = quadOb.object.id.split("http://w3id.org/deer/")[1];
       let nodes = this.state.nodesArray;
       if(node){
         nodes.add(node);
@@ -495,7 +495,7 @@ class Dashboard extends React.Component {
       writer.addQuad(
         namedNode("urn:example:demo/" + node.properties.name),
         namedNode("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"), //predicate
-        namedNode("https://w3id.org/deer/" + node.type.split("/")[1]) //object
+        namedNode("http://w3id.org/deer/" + node.type.split("/")[1]) //object
       );
 
       //if it has an input link, check for them and add to an array
@@ -523,10 +523,10 @@ class Dashboard extends React.Component {
           //adding the quad for each inputLinks here
           let blankNodes = this.state.inputPorts.map((inputPort, key) => {
             return writer.blank([{
-              predicate: namedNode("https://w3id.org/fcage/" + "fromNode"),
+              predicate: namedNode("http://w3id.org/fcage/" + "fromNode"),
               object:    namedNode("urn:example:demo/" + inputPort.properties.name),
             },{
-              predicate: namedNode("https://w3id.org/fcage/" + "fromPort"),
+              predicate: namedNode("http://w3id.org/fcage/" + "fromPort"),
               object:    literal(key),
             }])
           })
@@ -534,7 +534,7 @@ class Dashboard extends React.Component {
           
           writer.addQuad(
             namedNode("urn:example:demo/" + node.properties.name),
-            namedNode("https://w3id.org/fcage/" + "hasInput"),
+            namedNode("http://w3id.org/fcage/" + "hasInput"),
             writer.list(blankNodes)        
           );
           
@@ -545,12 +545,12 @@ class Dashboard extends React.Component {
           })
           // writer.addQuad(
           //   namedNode("urn:example:demo/" + node.properties.name),
-          //   namedNode("https://w3id.org/fcage/" + "hasInput"),
+          //   namedNode("http://w3id.org/fcage/" + "hasInput"),
           //   writer.blank([{
           //     predicate: namedNode("urn:example:demo/" + "fromNode"),
-          //     object:    namedNode("https://w3id.org/fcage/" + originInputNode.properties.name),
+          //     object:    namedNode("http://w3id.org/fcage/" + originInputNode.properties.name),
           //   },{
-          //     predicate: namedNode("https://w3id.org/fcage/" + "fromPort"),
+          //     predicate: namedNode("http://w3id.org/fcage/" + "fromPort"),
           //     object:    literal(this.getInputLink(node)[1]),
           //   }])
            
@@ -566,14 +566,14 @@ class Dashboard extends React.Component {
         let blankNodes = this.addBlankNodes("operation", obj);
         writer.addQuad(
           namedNode("urn:example:demo/" + obj.name),
-          namedNode("https://w3id.org/deer/operation"),
+          namedNode("http://w3id.org/deer/operation"),
           writer.blank(blankNodes)
         );
       } else if ("selector" in obj){
         let blankNodes = this.addBlankNodes("selector", obj);
         writer.addQuad(
           namedNode("urn:example:demo/" + obj.name),
-          namedNode("https://w3id.org/deer/selector"),
+          namedNode("http://w3id.org/deer/selector"),
           writer.blank(blankNodes)
         );
       }
@@ -583,14 +583,14 @@ class Dashboard extends React.Component {
             if (obj[prop].includes('http')){
               writer.addQuad(
                 namedNode("urn:example:demo/" + node.properties.name),
-                namedNode("https://w3id.org/deer/" + prop),
+                namedNode("http://w3id.org/deer/" + prop),
                 namedNode(obj[prop])
               );
             }
             else {
               writer.addQuad(
                 namedNode("urn:example:demo/" + node.properties.name),
-                namedNode("https://w3id.org/deer/" + prop),
+                namedNode("http://w3id.org/deer/" + prop),
                 literal(obj[prop])
               );
             }
@@ -613,7 +613,7 @@ class Dashboard extends React.Component {
       if (prop !== "name" && prop !== byPredicate && obj[prop].length){
         blankNodes.push({
           predicate: namedNode(
-            "https://w3id.org/deer/"+prop
+            "http://w3id.org/deer/"+prop
           ),
           object: namedNode(obj[prop])
         });
