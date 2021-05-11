@@ -26,7 +26,7 @@
   <version>2.3.2-SNAPSHOT</version>
   <name>DEER Parent POM</name>
   <description>DEER - RDF Dataset Enrichment Framework</description>
-  <url>http://github.com/dice-group/DEER</url>
+  <url>https://github.com/dice-group/DEER</url>
   <inceptionYear>2013</inceptionYear>
   <scm>
     <url>https://github.com/dice-group/deer</url>
@@ -40,7 +40,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <jena.version>3.9.0</jena.version>
     <slf4j.version>1.7.25</slf4j.version>
-    <fcage.version>1.1.1</fcage.version>
+    <fcage.version>1.2.0</fcage.version>
   </properties>
 
   <packaging>pom</packaging>
@@ -52,12 +52,12 @@
   <distributionManagement>
     <repository>
       <id>maven.aksw.internal</id>
-      <url>http://maven.aksw.org/archiva/repository/internal</url>
+      <url>https://maven.aksw.org/archiva/repository/internal</url>
     </repository>
     <snapshotRepository>
       <id>maven.aksw.snapshots</id>
       <name>AKSW Snapshot Repository</name>
-      <url>http://maven.aksw.org/archiva/repository/snapshots</url>
+      <url>https://maven.aksw.org/archiva/repository/snapshots</url>
     </snapshotRepository>
   </distributionManagement>
 
