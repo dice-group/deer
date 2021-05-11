@@ -52,7 +52,7 @@
   <distributionManagement>
     <repository>
       <id>maven.aksw.internal</id>
-      <url>https://maven.aksw.org/archiva/repository/internal</url>
+      <url> https://maven.aksw.org/archiva/repository/internal</url>
     </repository>
     <snapshotRepository>
       <id>maven.aksw.snapshots</id>
