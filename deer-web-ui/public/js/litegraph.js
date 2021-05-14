@@ -10740,7 +10740,7 @@ LGraphNode.prototype.executeAction = function(action)
                     has_submenu: true,
                     callback: LGraphCanvas.onMenuAdd
                 },
-                { content: "Add Group", callback: LGraphCanvas.onGroupAdd }
+                // { content: "Add Group", callback: LGraphCanvas.onGroupAdd }
                 //{content:"Collapse All", callback: LGraphCanvas.onMenuCollapseAll }
             ];
 
