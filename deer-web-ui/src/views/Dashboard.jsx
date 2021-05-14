@@ -145,7 +145,7 @@ class Dashboard extends React.Component {
     graphCanvas.show_info = false;
 
     //returns the prefixes
-    fetch("https://prefix.cc/context")
+    fetch("http://prefix.cc/context")
       .then(function (response) {
         return response.json();
       })
