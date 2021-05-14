@@ -100,7 +100,8 @@ class Dashboard extends React.Component {
       tempXoneNodeParams: [],
       fullContent: null,
       inputPorts: [],
-      inputLinkId: ''
+      inputLinkId: '',
+      selectedFiles: [],
     };
   }
 
@@ -474,6 +475,8 @@ class Dashboard extends React.Component {
   };
 
   saveConfig = () => {
+    this.uploadFiles();
+
     var data = this.state.graph.serialize();
     //use N3
     const myQuad = DataFactory.quad(
@@ -760,7 +763,31 @@ class Dashboard extends React.Component {
     });
   };
 
-  uploadFiles = () => {};
+  uploadFiles = () => {
+    let files = this.state.selectedFiles;
+
+    const data = new FormData()
+    for(var x = 0; x < files.length; x++) {
+       data.append('file', files[x])
+    }
+
+    const options = {
+      method: 'POST',
+      body: data,
+    };
+
+    fetch(URI+'/upload', options)
+    .then((response) => response.json())      
+    .then((res) => {
+      console.log(res.statusText);
+    })
+  };
+
+  onSelectedFiles = (event) => {
+    this.setState({
+     selectedFiles: event.target.files,
+    })
+  };
 
   render() {
     const options = _.map(this.state.prefixOptions, (opt, index) => ({
@@ -904,7 +931,7 @@ class Dashboard extends React.Component {
           <Col lg="3" md="3" sm="3">
             <Card className="card-stats">
               <div className="numbers">
-                <CardTitle tag="p">Upload Files</CardTitle>
+                <CardTitle tag="p">Attach files</CardTitle>
               </div>
               <CardBody>
                 {/* <div class="form-group">
@@ -916,24 +943,7 @@ class Dashboard extends React.Component {
                 </div> */}
                 <Row>
                   <Col md="8">
-                    {" "}
-                    <input
-                      id="input-b2"
-                      name="input-b2"
-                      type="file"
-                      className="file inputFile"
-                      data-show-preview="false"
-                    ></input>
-                  </Col>
-                  <Col md="3">
-                    {" "}
-                    <Button
-                      className="btn-round uploadBtn"
-                      color="primary"
-                      onClick={this.uploadFiles}
-                    >
-                      Upload
-                    </Button>
+                    <Input className="file inputFile" multiple type="file" name="file" id="exampleFile" onChange={this.onSelectedFiles}/>
                   </Col>
                 </Row>
               </CardBody>
