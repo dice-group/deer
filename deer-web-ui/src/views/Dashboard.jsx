@@ -21,6 +21,7 @@ import React, { Fragment } from "react";
 import _ from "lodash";
 import "./Dashboard.css";
 import FactoryNode from "../components/FactoryNode";
+import Panel from "../components/Panel";
 
 // reactstrap components
 import {
@@ -102,6 +103,14 @@ class Dashboard extends React.Component {
       inputPorts: [],
       inputLinkId: '',
       selectedFiles: [],
+      panelData: [
+        // {
+        //   numNodeType: 0,
+        //   nodePath: "one/two",
+        //   properties: ["a", "b"],
+        //   showPanel: "false",
+        // }
+      ],
     };
   }
 
@@ -326,12 +335,56 @@ class Dashboard extends React.Component {
         constructor(props) {
           super(props);
           this.addOutput("output", "text");
-          this.properties = Object.create(properties); 
+          // this.properties = Object.create(properties); 
           this.message = message;
           this.linkName = url;
 
-          this.onPropertyChanged = (p) => {
-            that.showOrDisableXoneProperties(this.properties, p, xoneProperties);
+          // this.onPropertyChanged = (p) => {
+          //   that.showOrDisableXoneProperties(this.properties, p, xoneProperties);
+          // }
+          this.onDblClick = (e) => {
+            let propertiesCopy = Object.assign({}, properties);
+            console.log(e.target.data.current_node);
+            
+            // initialize panel data
+            let panelData = Object.assign([], that.state.panelData);
+            // hide all panels
+            panelData = panelData.map(p => {
+              let temp = Object.assign({}, p);
+              temp.showPanel = false;
+              return temp;
+            });
+
+            
+            // if this panel was just added
+            let exists = that.state.panelData.find(p => { return p.numNodeType === e.target.data.current_node.id});
+            if(!exists){
+              console.log(xoneProperties);
+
+              panelData.push({
+                  numNodeType: that.state.graph.last_node_id,
+                  nodePath: "Reader/"+node,
+                  properties: propertiesCopy,
+                  xoneProperties: xoneProperties,
+                  showPanel: true,
+              });
+              that.setState({
+                panelData: panelData,
+              });
+
+              console.log(that.state.panelData);
+            }  
+            else {
+
+              // show current one
+              let idForChange = that.state.panelData.findIndex(p => { return p.nodePath === "Reader/"+node && p.numNodeType === e.target.data.current_node.id});
+              console.log(idForChange);
+              panelData[idForChange].showPanel = true;
+              that.setState({
+                panelData: panelData,
+              });
+            }
+
           }
 
         }
@@ -1009,13 +1062,10 @@ class Dashboard extends React.Component {
             <ModalBody></ModalBody>
           </Modal> */}
 
-          {/*<Col md="3">
-            {this.state.componentArray.map((comp, key) => {
-              if (this.state.node.title === comp.title) {
-                return comp.form;
-              }
-            })}
-          </Col>*/}
+          <Col md="3">
+            {this.state.panelData.filter(p => p.showPanel === true).map((p) =>(
+            <Panel key={p.nodePath+p.numNodeType} panelData={p}/>))} 
+          </Col>
 
         </Row>
         {/* <Row>

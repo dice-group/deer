@@ -5426,7 +5426,7 @@ LGraphNode.prototype.executeAction = function(action)
                         if (node.onDblClick) {
                             node.onDblClick( e, pos, this );
                         }
-                        this.processNodeDblClicked(node);
+                        // this.processNodeDblClicked(node);
                         block_drag_node = true;
                     }
 
