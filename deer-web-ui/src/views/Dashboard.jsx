@@ -475,7 +475,6 @@ class Dashboard extends React.Component {
   };
 
   saveConfig = () => {
-    this.uploadFiles();
 
     var data = this.state.graph.serialize();
     //use N3
@@ -649,6 +648,7 @@ class Dashboard extends React.Component {
     var file = new File([data], "config.ttl");
 
     var formData = new FormData();
+    formData = this.uploadFiles();
     formData.append("config", file);
     fetch(URI + "/submit", {
       method: "POST",
@@ -771,16 +771,7 @@ class Dashboard extends React.Component {
        data.append('file', files[x])
     }
 
-    const options = {
-      method: 'POST',
-      body: data,
-    };
-
-    fetch(URI+'/upload', options)
-    .then((response) => response.json())      
-    .then((res) => {
-      console.log(res.statusText);
-    })
+    return data;
   };
 
   onSelectedFiles = (event) => {
