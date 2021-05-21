@@ -321,12 +321,11 @@ class Dashboard extends React.Component {
             this.addOutput("output", "text");
           }
           
-          this.properties = Object.create(properties);
           this.message = message;
           this.linkName = url;
 
-          this.onPropertyChanged = (p) => {
-            that.showOrDisableXoneProperties(this.properties, p, xoneProperties);
+          this.onDblClick = (e) => {
+            that.showProperies("Operator/", e, node, properties, xoneProperties);
           }
         }
       };
@@ -344,59 +343,11 @@ class Dashboard extends React.Component {
         constructor(props) {
           super(props);
           this.addOutput("output", "text");
-          // this.properties = Object.create(properties); 
           this.message = message;
           this.linkName = url;
 
-          // this.onPropertyChanged = (p) => {
-          //   that.showOrDisableXoneProperties(this.properties, p, xoneProperties);
-          // }
           this.onDblClick = (e) => {
-            let propertiesCopy = Object.assign({}, properties);
-            
-            // initialize panel data
-            let panelData = Object.assign([], that.state.panelData);
-            // hide all panels
-            panelData = panelData.map(p => {
-              let temp = Object.assign({}, p);
-              temp.showPanel = false;
-              return temp;
-            });
-
-            
-            // if this panel was just added
-            let exists = that.state.panelData.find(p => { return p.numNodeType === e.target.data.current_node.id});
-            if(!exists){
-
-              panelData.push({
-                  numNodeType: that.state.graph.last_node_id,
-                  nodePath: "Reader/"+node,
-                  properties: propertiesCopy,
-                  xoneProperties: xoneProperties,
-                  showPanel: true,
-              });
-              that.setState({
-                panelData: panelData,
-              });
-
-            }  
-            else {
-
-              // show current one
-              let idForChange = that.state.panelData.findIndex(p => { return p.nodePath === "Reader/"+node && p.numNodeType === e.target.data.current_node.id});
-              panelData[idForChange].showPanel = true;
-              that.setState({
-                panelData: panelData,
-              });
-            }
-            
-            //save props in properties
-            // if(that.state.panelData.length){
-            //   let id = that.state.panelData.findIndex(p => { return p.nodePath === "Reader/"+node && p.numNodeType === e.target.data.current_node.id});
-            //   console.log(that.state.panelData[id].properties);
-            //   this.properties = that.state.panelData[id].properties;
-            // }
-
+            that.showProperies("Reader/", e, node, properties, xoneProperties);
           }
 
         }
@@ -411,12 +362,11 @@ class Dashboard extends React.Component {
         constructor(props) {
           super(props);
           this.addInput("input", "text");
-          this.properties = Object.create(properties);
           this.message = message;
           this.linkName = url;
 
-          this.onPropertyChanged = (p) => {
-            that.showOrDisableXoneProperties(this.properties, p, xoneProperties);
+          this.onDblClick = (e) => {
+            that.showProperies("Writer/", e, node, properties, xoneProperties);
           }
         }
       };
@@ -425,6 +375,40 @@ class Dashboard extends React.Component {
       nodeClass.color = "#223322";
       nodeClass.bgcolor = "#335533";
       litegraph.registerNodeType("Writer/"+node, nodeClass);
+    }
+  }
+
+  showProperies = (nodeType, e, node, properties, xoneProperties) => {
+    let propertiesCopy = Object.assign({}, properties);
+    // initialize panel data
+    let panelData = Object.assign([], this.state.panelData);
+    // hide all panels
+    panelData = panelData.map(p => {
+      let temp = Object.assign({}, p);
+      temp.showPanel = false;
+      return temp;
+    });
+    // if this panel was just added
+    let exists = this.state.panelData.find(p => { return p.numNodeType === e.target.data.current_node.id && p.nodePath === nodeType+node});
+    if(!exists){
+      panelData.push({
+          numNodeType: e.target.data.current_node.id,
+          nodePath: nodeType+node,
+          properties: propertiesCopy,
+          xoneProperties: xoneProperties,
+          showPanel: true,
+      });
+      this.setState({
+        panelData: panelData,
+      });
+    }  
+    else {
+      // show current one
+      let idForChange = this.state.panelData.findIndex(p => { return p.nodePath === nodeType+node && p.numNodeType === e.target.data.current_node.id});
+      panelData[idForChange].showPanel = true;
+      this.setState({
+        panelData: panelData,
+      });
     }
   }
 
