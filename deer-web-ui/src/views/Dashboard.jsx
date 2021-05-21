@@ -114,13 +114,22 @@ class Dashboard extends React.Component {
     };
   }
 
+  updateParentPanelData = (temp, numNodeType) => {
+    var curPanelData = Object.assign([], this.state.panelData);
+    let id = curPanelData.findIndex(i => numNodeType === i.numNodeType);
+    curPanelData[id] = temp;
+    this.setState({
+      panelData: curPanelData
+    })
+  };
+
   getBaseUrl = () => {
     var re = new RegExp(/^.*\//);
     return re.exec(window.location.href);
   };
 
   callbackFunction = (properties) => {
-    console.log(properties);
+    // console.log(properties);
     this.setState({
       formProperties: properties,
     });
@@ -344,7 +353,6 @@ class Dashboard extends React.Component {
           // }
           this.onDblClick = (e) => {
             let propertiesCopy = Object.assign({}, properties);
-            console.log(e.target.data.current_node);
             
             // initialize panel data
             let panelData = Object.assign([], that.state.panelData);
@@ -359,7 +367,6 @@ class Dashboard extends React.Component {
             // if this panel was just added
             let exists = that.state.panelData.find(p => { return p.numNodeType === e.target.data.current_node.id});
             if(!exists){
-              console.log(xoneProperties);
 
               panelData.push({
                   numNodeType: that.state.graph.last_node_id,
@@ -372,18 +379,23 @@ class Dashboard extends React.Component {
                 panelData: panelData,
               });
 
-              console.log(that.state.panelData);
             }  
             else {
 
               // show current one
               let idForChange = that.state.panelData.findIndex(p => { return p.nodePath === "Reader/"+node && p.numNodeType === e.target.data.current_node.id});
-              console.log(idForChange);
               panelData[idForChange].showPanel = true;
               that.setState({
                 panelData: panelData,
               });
             }
+            
+            //save props in properties
+            // if(that.state.panelData.length){
+            //   let id = that.state.panelData.findIndex(p => { return p.nodePath === "Reader/"+node && p.numNodeType === e.target.data.current_node.id});
+            //   console.log(that.state.panelData[id].properties);
+            //   this.properties = that.state.panelData[id].properties;
+            // }
 
           }
 
@@ -441,6 +453,7 @@ class Dashboard extends React.Component {
     // save possible node names in array
     if(quadOb.predicate.id.includes("targetClass")){
       let node = quadOb.object.id.split("https://w3id.org/deer/")[1];
+      // console.log(quadOb.object.id);
       let nodes = this.state.nodesArray;
       if(node){
         nodes.add(node);
@@ -547,6 +560,9 @@ class Dashboard extends React.Component {
 
     var parser = new N3.Parser({ format: "N3", blankNodePrefix: "" });
     data.nodes.map((node, key) => {
+
+      node.properties = this.state.panelData.filter(i => i.numNodeType === node.id && i.nodePath === node.type)[0].properties;
+
       writer.addQuad(
         namedNode("urn:example:demo/" + node.properties.name),
         namedNode("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"), //predicate
@@ -1064,7 +1080,7 @@ class Dashboard extends React.Component {
 
           <Col md="3">
             {this.state.panelData.filter(p => p.showPanel === true).map((p) =>(
-            <Panel key={p.nodePath+p.numNodeType} panelData={p}/>))} 
+            <Panel key={p.nodePath+p.numNodeType} panelData={p} updateParentPanelData={this.updateParentPanelData} />))} 
           </Col>
 
         </Row>

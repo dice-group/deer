@@ -19,18 +19,42 @@ import {
 class Panel extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      panelData: [],
-      excludeProps: [],
-    };
+    // this.state = {
+    // };
   }
 
   changeInput = (e, p) => {
     var temp = Object.assign({}, this.props.panelData);
     temp.properties[p] = e.target.value;
-    this.setState({
-      panelData: temp,
+    this.props.updateParentPanelData(temp, this.props.panelData.numNodeType);
+  }
+
+  changeInputWithRadio = (e, p) => {
+    // change the edited input
+    this.changeInput(e, p);
+
+    var temp = Object.assign({}, this.props.panelData);
+    let updatedProperties = {};
+    let excludeProps = this.props.panelData.xoneProperties.filter(i => {return i !== undefined && i !== p});
+    // clear all optional except the current one
+    Object.keys(temp.properties).forEach(i => {
+      excludeProps.forEach(exp => {
+        if (exp === i){
+          updatedProperties[i] = "";
+        } else {
+          updatedProperties[i] = temp.properties[i];
+        }
+      })     
     });
+
+    temp.properties = updatedProperties;
+    this.props.updateParentPanelData(temp, this.props.panelData.numNodeType);
+  
+  }
+
+  changeRadio = (e, p) => {
+    e.target.value = "type here";
+    this.changeInputWithRadio(e, p);
   }
 
 
@@ -67,7 +91,7 @@ class Panel extends React.Component {
                       placeholder={pr}
                       type="text"
                       value={this.props.panelData.properties[pr]}
-                      onChange={(e) => this.changeInput(e,pr)}
+                      onChange={(e) => this.changeInputWithRadio(e,pr)}
                   ></Input>
                 </Label>
             </FormGroup>))}
