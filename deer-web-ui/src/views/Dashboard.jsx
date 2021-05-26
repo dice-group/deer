@@ -579,6 +579,7 @@ class Dashboard extends React.Component {
           console.log(this.state.inputPorts);
           //adding the quad for each inputLinks here
           let blankNodes = this.state.inputPorts.map((inputPort, key) => {
+            inputPort.properties = this.state.panelData.filter(i => i.numNodeType === inputPort.id && i.nodePath === inputPort.type)[0].properties;
             return writer.blank([{
               predicate: namedNode("https://w3id.org/fcage/" + "fromNode"),
               object:    namedNode("urn:example:demo/" + inputPort.properties.name),
@@ -738,6 +739,11 @@ class Dashboard extends React.Component {
             showConfigButton: true,
           });
           this.getResults();
+        } else if(content.status.code === 1){
+          clearInterval(this.interval);
+          this.setState({
+            visible: true,
+          });
         }
       });
   };
