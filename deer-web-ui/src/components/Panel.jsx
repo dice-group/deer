@@ -66,7 +66,7 @@ class Panel extends React.Component {
         <Card>
           <div className="numbers">
             <CardTitle tag="p">{this.props.panelData.nodePath.split('/')[1]}</CardTitle>
-            <h4>{this.props.panelData.nodePath}</h4>
+            <p>{this.props.panelData.nodePath}</p>
           </div> 
           <CardBody>
             <p>Properties</p>
