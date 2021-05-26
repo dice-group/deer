@@ -21,6 +21,7 @@ import React, { Fragment } from "react";
 import _ from "lodash";
 import "./Dashboard.css";
 import FactoryNode from "../components/FactoryNode";
+import Panel from "../components/Panel";
 
 // reactstrap components
 import {
@@ -102,8 +103,25 @@ class Dashboard extends React.Component {
       inputPorts: [],
       inputLinkId: '',
       selectedFiles: [],
+      panelData: [
+        // {
+        //   numNodeType: 0,
+        //   nodePath: "one/two",
+        //   properties: ["a", "b"],
+        //   showPanel: "false",
+        // }
+      ],
     };
   }
+
+  updateParentPanelData = (temp, numNodeType) => {
+    var curPanelData = Object.assign([], this.state.panelData);
+    let id = curPanelData.findIndex(i => numNodeType === i.numNodeType);
+    curPanelData[id] = temp;
+    this.setState({
+      panelData: curPanelData
+    })
+  };
 
   getBaseUrl = () => {
     var re = new RegExp(/^.*\//);
@@ -111,7 +129,7 @@ class Dashboard extends React.Component {
   };
 
   callbackFunction = (properties) => {
-    console.log(properties);
+    // console.log(properties);
     this.setState({
       formProperties: properties,
     });
@@ -281,7 +299,7 @@ class Dashboard extends React.Component {
       properties[pr] = "";
     });
 
-    // todo: now all fields from xone are added, show only one to the user (add radiobutton)
+    // now all fields from xone are added, show only one to the user (with radiobutton)
     filteredProps = propsArrForNode.xone.map(filteredProp => {
       return this.getPropertyName(filteredProp);
     })
@@ -290,6 +308,8 @@ class Dashboard extends React.Component {
     filteredProps.forEach(pr => {
       properties[pr] = "";
     });
+
+    delete properties.undefined;
   
     // add to graph
     if(node.includes("Operator") ){
@@ -303,12 +323,11 @@ class Dashboard extends React.Component {
             this.addOutput("output", "text");
           }
           
-          this.properties = Object.create(properties);
           this.message = message;
           this.linkName = url;
 
-          this.onPropertyChanged = (p) => {
-            that.showOrDisableXoneProperties(this.properties, p, xoneProperties);
+          this.onDblClick = (e) => {
+            that.showProperies("Operator/", e, node, properties, xoneProperties);
           }
         }
       };
@@ -326,12 +345,11 @@ class Dashboard extends React.Component {
         constructor(props) {
           super(props);
           this.addOutput("output", "text");
-          this.properties = Object.create(properties); 
           this.message = message;
           this.linkName = url;
 
-          this.onPropertyChanged = (p) => {
-            that.showOrDisableXoneProperties(this.properties, p, xoneProperties);
+          this.onDblClick = (e) => {
+            that.showProperies("Reader/", e, node, properties, xoneProperties);
           }
 
         }
@@ -346,12 +364,11 @@ class Dashboard extends React.Component {
         constructor(props) {
           super(props);
           this.addInput("input", "text");
-          this.properties = Object.create(properties);
           this.message = message;
           this.linkName = url;
 
-          this.onPropertyChanged = (p) => {
-            that.showOrDisableXoneProperties(this.properties, p, xoneProperties);
+          this.onDblClick = (e) => {
+            that.showProperies("Writer/", e, node, properties, xoneProperties);
           }
         }
       };
@@ -360,6 +377,40 @@ class Dashboard extends React.Component {
       nodeClass.color = "#223322";
       nodeClass.bgcolor = "#335533";
       litegraph.registerNodeType("Writer/"+node, nodeClass);
+    }
+  }
+
+  showProperies = (nodeType, e, node, properties, xoneProperties) => {
+    let propertiesCopy = Object.assign({}, properties);
+    // initialize panel data
+    let panelData = Object.assign([], this.state.panelData);
+    // hide all panels
+    panelData = panelData.map(p => {
+      let temp = Object.assign({}, p);
+      temp.showPanel = false;
+      return temp;
+    });
+    // if this panel was just added
+    let exists = this.state.panelData.find(p => { return p.numNodeType === e.target.data.current_node.id && p.nodePath === nodeType+node});
+    if(!exists){
+      panelData.push({
+          numNodeType: e.target.data.current_node.id,
+          nodePath: nodeType+node,
+          properties: propertiesCopy,
+          xoneProperties: xoneProperties,
+          showPanel: true,
+      });
+      this.setState({
+        panelData: panelData,
+      });
+    }  
+    else {
+      // show current one
+      let idForChange = this.state.panelData.findIndex(p => { return p.nodePath === nodeType+node && p.numNodeType === e.target.data.current_node.id});
+      panelData[idForChange].showPanel = true;
+      this.setState({
+        panelData: panelData,
+      });
     }
   }
 
@@ -388,6 +439,7 @@ class Dashboard extends React.Component {
     // save possible node names in array
     if(quadOb.predicate.id.includes("targetClass")){
       let node = quadOb.object.id.split("https://w3id.org/deer/")[1];
+      // console.log(quadOb.object.id);
       let nodes = this.state.nodesArray;
       if(node){
         nodes.add(node);
@@ -494,6 +546,9 @@ class Dashboard extends React.Component {
 
     var parser = new N3.Parser({ format: "N3", blankNodePrefix: "" });
     data.nodes.map((node, key) => {
+
+      node.properties = this.state.panelData.filter(i => i.numNodeType === node.id && i.nodePath === node.type)[0].properties;
+
       writer.addQuad(
         namedNode("urn:example:demo/" + node.properties.name),
         namedNode("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"), //predicate
@@ -1009,13 +1064,10 @@ class Dashboard extends React.Component {
             <ModalBody></ModalBody>
           </Modal> */}
 
-          {/*<Col md="3">
-            {this.state.componentArray.map((comp, key) => {
-              if (this.state.node.title === comp.title) {
-                return comp.form;
-              }
-            })}
-          </Col>*/}
+          <Col md="3">
+            {this.state.panelData.filter(p => p.showPanel === true).map((p) =>(
+            <Panel key={p.nodePath+p.numNodeType} panelData={p} updateParentPanelData={this.updateParentPanelData} />))} 
+          </Col>
 
         </Row>
         {/* <Row>
