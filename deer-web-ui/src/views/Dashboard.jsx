@@ -299,7 +299,7 @@ class Dashboard extends React.Component {
       properties[pr] = "";
     });
 
-    // todo: now all fields from xone are added, show only one to the user (add radiobutton)
+    // now all fields from xone are added, show only one to the user (with radiobutton)
     filteredProps = propsArrForNode.xone.map(filteredProp => {
       return this.getPropertyName(filteredProp);
     })
@@ -308,6 +308,8 @@ class Dashboard extends React.Component {
     filteredProps.forEach(pr => {
       properties[pr] = "";
     });
+
+    delete properties.undefined;
   
     // add to graph
     if(node.includes("Operator") ){
