@@ -1,7 +1,8 @@
 # DEER
 [![Build Status](https://github.com/dice-group/deer/actions/workflows/run-tests.yml/badge.svg?branch=master&event=push)](https://github.com/dice-group/deer/actions/workflows/run-tests.yml)
-[![GNU Affero General Public License v3.0](https://img.shields.io/badge/license-GNU_Affero_General_Public_License_v3.0-blue.svg)](./LICENSE)
-![Java 11+](https://img.shields.io/badge/java-11+-lightgray.svg)
+[![DockerHub](https://badgen.net/badge/dockerhub/dicegroup%2Fdeer/blue?icon=docker)](https://hub.docker.com/r/dicegroup/deer)
+[![GNU Affero General Public License v3.0](https://badgen.net/badge/license/GNU_Affero_General_Public_License_v3.0/orange)](./LICENSE)
+![Java 11+](https://badgen.net/badge/java/11+/gray?icon=maven)
 
 <div style="text-align: center;">
 
