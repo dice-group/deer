@@ -84,3 +84,12 @@ h1 {
 .disabledDiv {
   opacity: 0.4;
 }
+
+.nodePath {
+  font-size: 57%;
+}
+
+.nodeName {
+  font-size: 70%;
+  font-weight: bold;
+}
