@@ -93,3 +93,7 @@ h1 {
   font-size: 70%;
   font-weight: bold;
 }
+
+.plusButton {
+  margin: 0px 1px;
+}

@@ -232,6 +232,14 @@ class Dashboard extends React.Component {
     });
 
     let propsWithPropPredicate = this.state.fullContent.filter(quad => quad.subject.id.includes(node) && quad.predicate.id.includes("property")).map(i => i.object.id);
+    let propsUnderSelectorNode = this.state.fullContent.filter(quad => quad.subject.id.includes(node) && quad.predicate.id.includes("property") && quad.object.id.split("_").length-1 == 2).map(i => i.object.id);
+    let propsUnderSelectorNodeWithMaxCount = [];
+    propsUnderSelectorNode.forEach(nodeName => {
+      let num = this.state.fullContent.filter(quad => quad.subject.id.includes(nodeName) && quad.predicate.id.includes("maxCount")).map(i => i.object.id);
+      let maxCount = num[0].split("^^")[0].match(/\d+/g)[0];
+      let propName = this.getPropertyName(nodeName);
+      propsUnderSelectorNodeWithMaxCount.push({nodeSelectorProp: propName, maxCount: maxCount});
+    });
     let propsWithXonePredicate = this.state.fullContent.filter(quad => quad.subject.id.includes(node) && quad.predicate.id.includes("xone")); 
     
     let propsFromXone = [];
@@ -241,7 +249,7 @@ class Dashboard extends React.Component {
       propsFromXone = this.state.tempXoneNodeParams;
     });
 
-    let allNodeProps = {'basicProps': propsWithPropPredicate, 'xone': propsFromXone};
+    let allNodeProps = {'basicProps': propsWithPropPredicate, 'xone': propsFromXone, 'propsSelector': propsUnderSelectorNodeWithMaxCount};
     return allNodeProps;
   }
 
@@ -285,6 +293,7 @@ class Dashboard extends React.Component {
     let message = this.getMessage(node);
     let url = this.getUrlForTheNode(node);
     let xoneProperties = null;
+    let propsSelector = propsArrForNode.propsSelector;
     let that = this;
 
     let properties = {
@@ -327,7 +336,7 @@ class Dashboard extends React.Component {
           this.linkName = url;
 
           this.onDblClick = (e) => {
-            that.showProperies("Operator/", e, node, properties, xoneProperties);
+            that.showProperies("Operator/", e, node, properties, xoneProperties, propsSelector);
           }
         }
       };
@@ -349,7 +358,7 @@ class Dashboard extends React.Component {
           this.linkName = url;
 
           this.onDblClick = (e) => {
-            that.showProperies("Reader/", e, node, properties, xoneProperties);
+            that.showProperies("Reader/", e, node, properties, xoneProperties, propsSelector);
           }
 
         }
@@ -368,7 +377,7 @@ class Dashboard extends React.Component {
           this.linkName = url;
 
           this.onDblClick = (e) => {
-            that.showProperies("Writer/", e, node, properties, xoneProperties);
+            that.showProperies("Writer/", e, node, properties, xoneProperties, propsSelector);
           }
         }
       };
@@ -380,7 +389,7 @@ class Dashboard extends React.Component {
     }
   }
 
-  showProperies = (nodeType, e, node, properties, xoneProperties) => {
+  showProperies = (nodeType, e, node, properties, xoneProperties, propsSelector) => {
     let propertiesCopy = Object.assign({}, properties);
     // initialize panel data
     let panelData = Object.assign([], this.state.panelData);
@@ -399,6 +408,7 @@ class Dashboard extends React.Component {
           properties: propertiesCopy,
           xoneProperties: xoneProperties,
           showPanel: true,
+          propsSelector: propsSelector,
       });
       this.setState({
         panelData: panelData,

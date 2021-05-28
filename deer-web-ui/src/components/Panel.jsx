@@ -55,10 +55,16 @@ class Panel extends React.Component {
     this.changeInputWithRadio(e, p);
   }
 
+  addOneMoreProperty = (p) => {
+    // todo
+    // console.log(p);
+  }
+
 
   render() {
-    let excludeProps = this.props.panelData.xoneProperties.filter(i => {return i !== undefined});   
-    let otherProps = Object.keys(this.props.panelData.properties).filter(otherpr => !excludeProps.includes(otherpr));
+    let excludeProps = this.props.panelData.xoneProperties.filter(i => {return i !== undefined});
+    let propsSelector = this.props.panelData.propsSelector.map(i => i.nodeSelectorProp);
+    let otherProps = Object.keys(this.props.panelData.properties).filter(otherpr => !excludeProps.includes(otherpr) && !propsSelector.includes(otherpr));
     return (
       <div>
         <Card>
@@ -78,6 +84,26 @@ class Panel extends React.Component {
                     value={this.props.panelData.properties[p]}
                     onChange={(e) => this.changeInput(e,p)}
                   ></Input>
+                </FormGroup>
+              </Fragment>
+            ))}
+            {propsSelector.map((p) => (
+              <Fragment key={p}>
+                <FormGroup>
+                  <label>{p}</label>
+                  <div className="row">
+                    <div className="col-md-9">
+                      <Input
+                        placeholder={p}
+                        type="text"
+                        value={this.props.panelData.properties[p]}
+                        onChange={(e) => this.changeInput(e,p)}
+                      ></Input>
+                    </div>
+                    <div className="col-md-3">
+                      <Button className="plusButton" onClick={() => this.addOneMoreProperty(p)} color="primary">+</Button>
+                    </div>
+                  </div>
                 </FormGroup>
               </Fragment>
             ))}
