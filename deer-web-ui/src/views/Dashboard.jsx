@@ -424,27 +424,6 @@ class Dashboard extends React.Component {
     }
   }
 
-  showOrDisableXoneProperties = (props, p, xoneProps) => {
-
-    console.log(xoneProps);
-    if(xoneProps.includes(p)){
-      let excludingPArray = xoneProps.filter(i => i !== p);
-
-      //enable all
-      xoneProps.forEach(i => {
-        document.querySelectorAll('[data-property='+i+']')[0].classList.remove('disabledDiv');
-      });
-
-
-      // when we change one prop then we disable and clear others (excludingPArray)
-      excludingPArray.forEach(i => {
-        document.querySelectorAll('[data-property='+i+']')[0].classList.add('disabledDiv');
-        document.querySelectorAll('[data-property='+i+']')[0].getElementsByClassName("property_value")[0].innerHTML="";
-        delete props[i];
-      });
-    }
-  }
-
   showNode = (quadOb) => {
     // save possible node names in array
     if(quadOb.predicate.id.includes("targetClass")){
@@ -586,7 +565,7 @@ class Dashboard extends React.Component {
              }
          }
          }
-          console.log(this.state.inputPorts);
+          // console.log(this.state.inputPorts);
           //adding the quad for each inputLinks here
           let blankNodes = this.state.inputPorts.map((inputPort, key) => {
             inputPort.properties = this.state.panelData.filter(i => i.numNodeType === inputPort.id && i.nodePath === inputPort.type)[0].properties;
@@ -626,7 +605,7 @@ class Dashboard extends React.Component {
         // }
       }
 
-      console.log(node);
+      // console.log(node);
 
       let obj = node.properties;
       // quads with blank nodes
