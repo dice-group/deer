@@ -61,7 +61,23 @@ class Panel extends React.Component {
       this.setState({
         showSelectorProps: false
       })
-      // todo: clear property inputs when another radio button was checked
+      // clear property inputs when another radio button was checked
+      let temp = Object.assign({}, this.props.panelData);
+      let updatedProperties = temp.properties;
+      let excludeProps = this.props.panelData.xoneProperties.filter(i => {return i !== undefined && i !== p});
+      // clear selectorProps if there is selector in xone and it is not chosen
+      if(excludeProps.includes("selector")){
+        let propsSelector = this.props.panelData.propsSelector.map(i => i.nodeSelectorProp);
+        Object.keys(temp.properties).forEach(i => {
+          propsSelector.forEach(exp => {
+            if (exp === i){
+              updatedProperties[i] = "";
+            } 
+          })     
+        });
+      }
+      temp.properties = updatedProperties;
+      this.props.updateParentPanelData(temp, this.props.panelData.numNodeType);
     }
   }
 
