@@ -97,3 +97,14 @@ h1 {
 .plusButton {
   margin: 0px 1px;
 }
+
+.panelSelectorRow {
+  margin: 2px;
+  border: 1px solid #DDDDDD;
+  border-radius: 4px;
+  padding: 10px;
+}
+
+.shiftCheckbox {
+  height: 15px;
+}
