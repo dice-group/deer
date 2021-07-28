@@ -89,7 +89,7 @@ class Panel extends React.Component {
       p = p.replace(/\d+/g, '');
       let propsSelector = this.props.panelData.propsSelector;
       let temp = Object.assign({}, this.props.panelData);
-      maxCount = 3;//propsSelector.filter(i => i.nodeSelectorProp === p)[0].maxCount;
+      maxCount = propsSelector.filter(i => i.nodeSelectorProp === p)[0].maxCount;
       let preNums = propsSelector.filter(i => i.nodeSelectorProp.includes(p) && i.nodeSelectorProp.match(/\d+/g));
       let nums = preNums.map(i => i.nodeSelectorProp.match(/\d+/g)[0]);
       let lastNum = Math.max(...nums) + 1;

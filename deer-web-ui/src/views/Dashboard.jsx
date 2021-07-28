@@ -309,7 +309,7 @@ class Dashboard extends React.Component {
     });
 
     // now all fields from xone are added, show only one to the user (with radiobutton)
-    filteredProps = propsArrForNode.xone.map(filteredProp => {
+    filteredProps = propsArrForNode.xone.filter(x => x.includes(node)).map(filteredProp => {
       return this.getPropertyName(filteredProp);
     })
     xoneProperties = filteredProps;
