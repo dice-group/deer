@@ -150,7 +150,6 @@ class Panel extends React.Component {
                 <FormGroup>
                   <label>{p}</label>
                   <Input
-                    placeholder={p}
                     type="text"
                     value={this.props.panelData.properties[p]}
                     onChange={(e) => this.changeInput(e,p)}
@@ -163,7 +162,6 @@ class Panel extends React.Component {
                 <Label check>
                   <Input type="radio" checked={this.props.panelData.properties[pr].length !== 0} onChange={(e) => this.changeRadio(e,pr)} name="radio1" />
                   {pr !== "selector" ? <Input
-                      placeholder={pr}
                       type="text"
                       value={this.props.panelData.properties[pr]}
                       onChange={(e) => this.changeInputWithRadio(e,pr)}
@@ -178,7 +176,6 @@ class Panel extends React.Component {
                       <FormGroup>
                         <label>{p}</label>                     
                         <Input
-                          placeholder={p}
                           type="text"
                           value={this.props.panelData.properties[p]}
                           onChange={(e) => this.changeInput(e,p)}
