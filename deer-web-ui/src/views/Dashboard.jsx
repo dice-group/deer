@@ -317,8 +317,6 @@ class Dashboard extends React.Component {
     filteredProps.forEach(pr => {
       properties[pr] = "";
     });
-
-    delete properties.undefined;
   
     // add to graph
     if(node.includes("Operator") ){
@@ -465,56 +463,6 @@ class Dashboard extends React.Component {
   //   }
   // };
 
-  getInputLink = (node) => {
-    // if (node.type === "Operator/LinkingEnrichmentOperator") {
-    //   var inputLinkInGraph1 = this.state.graph.links[node.inputs[0].link];
-    //   var inputLinkInGraph2 = this.state.graph.links[node.inputs[1].link];
-    //   if (inputLinkInGraph1) {
-    //     var inputOriginNode1 = this.state.graph.getNodeById(
-    //       inputLinkInGraph1.origin_id
-    //     ).properties.name;
-    //   }
-    //   if (inputLinkInGraph2) {
-    //     var inputOriginNode2 = this.state.graph.getNodeById(
-    //       inputLinkInGraph2.origin_id
-    //     ).properties.name;
-    //   }
-    //   console.log(inputOriginNode1);
-
-    //   return {
-    //     first: inputOriginNode1,
-    //     second: inputOriginNode2,
-    //   };
-    // } else {
-      for (var i=0; i < node.inputs.length; i++) {
-         console.log("i = "+i);
-
-        // console.log(node.inputs[i]);
-        // console.log(node.inputs[i].link);
-        // if (node.inputs[i].link) {
-           var inputLinkId = node.inputs[i].link;
-           console.log(inputLinkId);
-           var inputLinkInGraph = this.state.graph.links[inputLinkId];
-          if (inputLinkInGraph) {
-            var inputOriginNode = this.state.graph.getNodeById(
-              inputLinkInGraph.origin_id
-            );
-            let inputPortsList = this.state.inputPorts;
-              inputPortsList.push(inputOriginNode);
-              this.setState({
-                inputPorts: inputPortsList
-              })
-           
-          }
-      // }
-       // return [inputOriginNode, inputLinkId];
-      }
-      
-      //return this.state.inputPorts;
-
-    // }
-  };
-
   saveConfig = () => {
 
     var data = this.state.graph.serialize();
@@ -535,6 +483,8 @@ class Dashboard extends React.Component {
 
     var parser = new N3.Parser({ format: "N3", blankNodePrefix: "" });
     data.nodes.map((node, key) => {
+      let inputPorts = [];
+      let curInputLinkId = '';
 
       node.properties = this.state.panelData.filter(i => i.numNodeType === node.id && i.nodePath === node.type)[0].properties;
 
@@ -549,7 +499,6 @@ class Dashboard extends React.Component {
           for (var i=0; i < node.inputs.length; i++) {
             if (node.inputs[i].link) {
               var inputLinkId = node.inputs[i].link;
-              console.log(inputLinkId);
               var inputLinkInGraph = this.state.graph.links[inputLinkId];
              if (inputLinkInGraph) {
                var inputOriginNode = this.state.graph.getNodeById(
@@ -557,17 +506,15 @@ class Dashboard extends React.Component {
                );
                let inputPortsList = this.state.inputPorts;
                  inputPortsList.push(inputOriginNode);
-                 this.setState({
-                   inputPorts: inputPortsList,
-                   inputLinkId: inputLinkId
-                 })
+                 inputPorts = inputPortsList;
+                 curInputLinkId = inputLinkId
               
              }
          }
          }
           // console.log(this.state.inputPorts);
           //adding the quad for each inputLinks here
-          let blankNodes = this.state.inputPorts.map((inputPort, key) => {
+          let blankNodes = inputPorts.map((inputPort, key) => {
             inputPort.properties = this.state.panelData.filter(i => i.numNodeType === inputPort.id && i.nodePath === inputPort.type)[0].properties;
             return writer.blank([{
               predicate: namedNode("https://w3id.org/fcage/" + "fromNode"),
@@ -585,24 +532,9 @@ class Dashboard extends React.Component {
             writer.list(blankNodes)        
           );
           
+          inputPorts.length = 0;
+          curInputLinkId = '';
 
-          this.setState({
-            inputPorts: [],
-            inputLinkId: ''
-          })
-          // writer.addQuad(
-          //   namedNode("urn:example:demo/" + node.properties.name),
-          //   namedNode("https://w3id.org/fcage/" + "hasInput"),
-          //   writer.blank([{
-          //     predicate: namedNode("urn:example:demo/" + "fromNode"),
-          //     object:    namedNode("https://w3id.org/fcage/" + originInputNode.properties.name),
-          //   },{
-          //     predicate: namedNode("https://w3id.org/fcage/" + "fromPort"),
-          //     object:    literal(this.getInputLink(node)[1]),
-          //   }])
-           
-          // ); 
-        // }
       }
 
       // console.log(node);
