@@ -96,6 +96,7 @@ h1 {
 
 .plusButton {
   margin: 0px 1px;
+  margin-right: 18px;
 }
 
 .panelSelectorRow {
@@ -107,4 +108,8 @@ h1 {
 
 .shiftCheckbox {
   height: 15px;
+}
+
+.plusButtonFixed {
+  width: 100%;
 }

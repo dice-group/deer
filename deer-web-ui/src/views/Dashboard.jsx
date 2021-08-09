@@ -233,6 +233,13 @@ class Dashboard extends React.Component {
 
     let propsWithPropPredicate = this.state.fullContent.filter(quad => quad.subject.id.includes(node) && quad.predicate.id.includes("property")).map(i => i.object.id);
     let propsUnderSelectorNode = this.state.fullContent.filter(quad => quad.subject.id.includes(node) && quad.predicate.id.includes("property") && quad.object.id.split("_").length-1 == 2).map(i => i.object.id);
+    let selectorNodeMinCount = this.state.fullContent.filter(quad => quad.subject.id.includes(node) && (quad.subject.id.includes("selector") || quad.subject.id.includes("operation")) && quad.predicate.id.includes("minCount")).map(i => i.object.id);
+    let minCount = -1;
+    if(selectorNodeMinCount.length){
+      minCount = selectorNodeMinCount[0].split("^^")[0].match(/\d+/g)[0];
+      console.log(node, minCount);
+    }
+
     let propsUnderSelectorNodeWithMaxCount = [];
     propsUnderSelectorNode.forEach(nodeName => {
       let num = this.state.fullContent.filter(quad => quad.subject.id.includes(nodeName) && quad.predicate.id.includes("maxCount")).map(i => i.object.id);
@@ -249,7 +256,7 @@ class Dashboard extends React.Component {
       propsFromXone = this.state.tempXoneNodeParams;
     });
 
-    let allNodeProps = {'basicProps': propsWithPropPredicate, 'xone': propsFromXone, 'propsSelector': propsUnderSelectorNodeWithMaxCount};
+    let allNodeProps = {'basicProps': propsWithPropPredicate, 'xone': propsFromXone, 'propsSelector': {selectorMinCount: minCount, propsMaxCount: propsUnderSelectorNodeWithMaxCount}};
     return allNodeProps;
   }
 

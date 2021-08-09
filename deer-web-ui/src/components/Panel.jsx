@@ -81,7 +81,7 @@ class Panel extends React.Component {
       let excludeProps = this.props.panelData.xoneProperties.filter(i => {return i !== undefined && i !== p});
       // clear selectorProps if there is selector in xone and it is not chosen
       if(excludeProps.includes("selector")){
-        let propsSelector = this.props.panelData.propsSelector.map(i => i.nodeSelectorProp);
+        let propsSelector = this.props.panelData.propsSelector.propsMaxCount.map(i => i.nodeSelectorProp);
         Object.keys(temp.properties).forEach(i => {
           propsSelector.forEach(exp => {
             if (exp === i){
@@ -95,13 +95,35 @@ class Panel extends React.Component {
     }
   }
 
+  addOneMoreProperty = (p) => {
+    p = p.replace(/\d+/g, '');
+    let propsSelector = this.props.panelData.propsSelector.propsMaxCount;
+    let temp = Object.assign({}, this.props.panelData);
+    let maxCount = propsSelector.filter(i => i.nodeSelectorProp === p)[0].maxCount;
+    let preNums = propsSelector.filter(i => i.nodeSelectorProp.includes(p) && i.nodeSelectorProp.match(/\d+/g));
+    let nums = preNums.map(i => i.nodeSelectorProp.match(/\d+/g)[0]);
+    let lastNum = Math.max(...nums) + 1;
+    if (nums.length === 0){
+      lastNum = "2";
+    }
+    //check max count and add additionalProp
+    if(maxCount >= lastNum){
+      temp.propsSelector.propsMaxCount.push({nodeSelectorProp: p+lastNum, maxCount: maxCount});
+      temp.properties[p+lastNum] = "";
+      this.props.updateParentPanelData(temp, this.props.panelData.numNodeType);
+    } else {
+      alert("maxCount: " + maxCount);
+    }
+  }
+
   addOneMorePropertyBundle = (pArr) => {
+    pArr = pArr[0];
     let isMaxCount = false;
     let maxCount = -1;
     for (let i = 0; i < pArr.length; i++) {
       let p = pArr[i];
       p = p.replace(/\d+/g, '');
-      let propsSelector = this.props.panelData.propsSelector;
+      let propsSelector = this.props.panelData.propsSelector.propsMaxCount;
       let temp = Object.assign({}, this.props.panelData);
       maxCount = propsSelector.filter(i => i.nodeSelectorProp === p)[0].maxCount;
       let preNums = propsSelector.filter(i => i.nodeSelectorProp.includes(p) && i.nodeSelectorProp.match(/\d+/g));
@@ -110,24 +132,18 @@ class Panel extends React.Component {
       if (nums.length === 0){
         lastNum = "2";
       }
-      //check max count and add additionalProp
-      if(maxCount >= lastNum){
-        temp.propsSelector.push({nodeSelectorProp: p+lastNum, maxCount: maxCount});
-        temp.properties[p+lastNum] = "";
-        this.props.updateParentPanelData(temp, this.props.panelData.numNodeType);
-      } else {
-        isMaxCount = true;
-      }
-    }
-    if(isMaxCount){
-      alert("maxCount: " + maxCount);
+
+      temp.propsSelector.propsMaxCount.push({nodeSelectorProp: p+lastNum, maxCount: maxCount});
+      temp.properties[p+lastNum] = "";
+      this.props.updateParentPanelData(temp, this.props.panelData.numNodeType);
     }
   }
 
 
   render() {
     let excludeProps = this.props.panelData.xoneProperties.filter(i => {return i !== undefined});
-    let propsSelector = this.props.panelData.propsSelector.map(i => i.nodeSelectorProp);
+    let propsSelectorWithMaxCount = this.props.panelData.propsSelector.propsMaxCount;
+    let propsSelector = propsSelectorWithMaxCount.map(i => i.nodeSelectorProp);
     let otherProps = Object.keys(this.props.panelData.properties)
                     .filter(otherpr => !excludeProps.includes(otherpr) 
                       && !propsSelector.includes(otherpr) && otherpr !== "operation" && otherpr != "name");
@@ -186,26 +202,27 @@ class Panel extends React.Component {
                 </Label>
             </FormGroup>))}
             {propsSelector.map((s, index) => (
-              <div className="row panelSelectorRow" key={index}>
-                <div className="col-md-9">
+              <div className="panelSelectorRow" key={index}>
                   {s.map((p) => (
                     <Fragment key={p}>
                       <FormGroup>
-                        <label>{p}</label>                     
-                        <Input
-                          type="text"
-                          value={this.props.panelData.properties[p]}
-                          onChange={(e) => this.changeInput(e,p)}
-                        ></Input>
+                        <label>{p}</label>
+                        <div className="row">
+                          <div className="col">                   
+                            <Input
+                              type="text"
+                              value={this.props.panelData.properties[p]}
+                              onChange={(e) => this.changeInput(e,p)}
+                            ></Input>
+                          </div>
+                          {propsSelectorWithMaxCount.filter(i => i.nodeSelectorProp === p)[0].maxCount > 1 ? <Button className="plusButton" onClick={() => this.addOneMoreProperty(p)} color="primary">+</Button> : null}
+                        </div>
                       </FormGroup>
                     </Fragment>
                   ))}
-                </div>
-                <div className="col-md-3">
-                  <Button className="plusButton" onClick={() => this.addOneMorePropertyBundle(s)} color="primary">+</Button>
-                </div>
               </div>
             ))}
+            {((this.props.panelData.properties.selector && this.props.panelData.properties.selector.length) || "operation" in this.props.panelData.properties) ? <Button className="plusButtonFixed" onClick={() => this.addOneMorePropertyBundle(propsSelector)} color="primary">Add one more selector</Button>: null}
           </CardBody>
         </Card>
       </div>
