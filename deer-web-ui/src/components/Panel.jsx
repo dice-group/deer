@@ -1,5 +1,6 @@
 import React, { Fragment } from "react";
 import { Link } from "react-router-dom";
+import { v4 as uuidv4 } from 'uuid';
 import {
   Collapse,
   Navbar,
@@ -21,7 +22,20 @@ class Panel extends React.Component {
     super(props);
     this.state = {
       showSelectorProps: false,
+      name: "",
     };
+  }
+
+  componentDidMount() {
+    if(this.props.panelData.properties.name === ''){
+      let name = uuidv4();
+      var temp = Object.assign({}, this.props.panelData);
+      temp.properties.name = name;
+      this.props.updateParentPanelData(temp, this.props.panelData.numNodeType);
+      this.setState({name: name});
+    } else {
+      this.setState({name: this.props.panelData.properties.name});
+    }
   }
 
   changeInput = (e, p) => {
@@ -114,7 +128,9 @@ class Panel extends React.Component {
   render() {
     let excludeProps = this.props.panelData.xoneProperties.filter(i => {return i !== undefined});
     let propsSelector = this.props.panelData.propsSelector.map(i => i.nodeSelectorProp);
-    let otherProps = Object.keys(this.props.panelData.properties).filter(otherpr => !excludeProps.includes(otherpr) && !propsSelector.includes(otherpr) && otherpr !== "operation");
+    let otherProps = Object.keys(this.props.panelData.properties)
+                    .filter(otherpr => !excludeProps.includes(otherpr) 
+                      && !propsSelector.includes(otherpr) && otherpr !== "operation" && otherpr != "name");
     if(excludeProps.includes("selector") && this.state.showSelectorProps === false && this.props.panelData.properties["selector"].length == 0){
       propsSelector = [];
     }
@@ -145,6 +161,7 @@ class Panel extends React.Component {
           </div> 
           <CardBody>
             <p>Properties</p>
+            <div>name: {this.state.name}</div>
             {otherProps.map((p) => (
               <Fragment key={p}>
                 <FormGroup>

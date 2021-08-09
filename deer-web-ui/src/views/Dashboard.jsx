@@ -548,7 +548,7 @@ class Dashboard extends React.Component {
           namedNode("https://w3id.org/deer/operation"),
           writer.blank(blankNodes)
         );
-      } else if ("selector" in obj){
+      } else if ("selector" in obj && obj.selector !== ""){
         let blankNodes = this.addBlankNodes("selector", obj);
         writer.addQuad(
           namedNode("urn:example:demo/" + obj.name),
