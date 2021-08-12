@@ -96,20 +96,22 @@ class Panel extends React.Component {
   }
 
   addOneMoreProperty = (p) => {
-    p = p.replace(/\d+/g, '');
+    let curProp = p;
+    p = p.replace(/\d+/g, '').replace("_extra_", "");
     let propsSelector = this.props.panelData.propsSelector.propsMaxCount;
     let temp = Object.assign({}, this.props.panelData);
     let maxCount = propsSelector.filter(i => i.nodeSelectorProp === p)[0].maxCount;
-    let preNums = propsSelector.filter(i => i.nodeSelectorProp.includes(p) && i.nodeSelectorProp.match(/\d+/g));
-    let nums = preNums.map(i => i.nodeSelectorProp.match(/\d+/g)[0]);
+    let preNums = propsSelector.filter(i => i.nodeSelectorProp.includes(p));
+    let nums = preNums.filter(i => i.nodeSelectorProp.includes("_extra_") 
+      && i.nodeSelectorProp.split("_extra_")[0] === curProp).map(i => i.nodeSelectorProp.split("_extra_")[1]);
     let lastNum = Math.max(...nums) + 1;
     if (nums.length === 0){
-      lastNum = "2";
+      lastNum = "1";
     }
     //check max count and add additionalProp
-    if(maxCount >= lastNum){
-      temp.propsSelector.propsMaxCount.push({nodeSelectorProp: p+lastNum, maxCount: maxCount});
-      temp.properties[p+lastNum] = "";
+    if(parseInt(maxCount) >= parseInt(lastNum)+1){
+      temp.propsSelector.propsMaxCount.push({nodeSelectorProp: curProp+"_extra_"+lastNum, maxCount: maxCount});
+      temp.properties[curProp+"_extra_"+lastNum] = "";
       this.props.updateParentPanelData(temp, this.props.panelData.numNodeType);
     } else {
       alert("maxCount: " + maxCount);
@@ -122,20 +124,22 @@ class Panel extends React.Component {
     let maxCount = -1;
     for (let i = 0; i < pArr.length; i++) {
       let p = pArr[i];
-      p = p.replace(/\d+/g, '');
-      let propsSelector = this.props.panelData.propsSelector.propsMaxCount;
-      let temp = Object.assign({}, this.props.panelData);
-      maxCount = propsSelector.filter(i => i.nodeSelectorProp === p)[0].maxCount;
-      let preNums = propsSelector.filter(i => i.nodeSelectorProp.includes(p) && i.nodeSelectorProp.match(/\d+/g));
-      let nums = preNums.map(i => i.nodeSelectorProp.match(/\d+/g)[0]);
-      let lastNum = Math.max(...nums) + 1;
-      if (nums.length === 0){
-        lastNum = "2";
-      }
+      if(!p.includes("_extra_")){
+        p = p.replace(/\d+/g, '');
+        let propsSelector = this.props.panelData.propsSelector.propsMaxCount;
+        let temp = Object.assign({}, this.props.panelData);
+        maxCount = propsSelector.filter(i => i.nodeSelectorProp === p)[0].maxCount;
+        let preNums = propsSelector.filter(i => i.nodeSelectorProp.includes(p) && i.nodeSelectorProp.match(/\d+/g));
+        let nums = preNums.map(i => i.nodeSelectorProp.match(/\d+/g)[0]);
+        let lastNum = Math.max(...nums) + 1;
+        if (nums.length === 0){
+          lastNum = "2";
+        }
 
-      temp.propsSelector.propsMaxCount.push({nodeSelectorProp: p+lastNum, maxCount: maxCount});
-      temp.properties[p+lastNum] = "";
-      this.props.updateParentPanelData(temp, this.props.panelData.numNodeType);
+        temp.propsSelector.propsMaxCount.push({nodeSelectorProp: p+lastNum, maxCount: maxCount});
+        temp.properties[p+lastNum] = "";
+        this.props.updateParentPanelData(temp, this.props.panelData.numNodeType);
+      }
     }
   }
 
