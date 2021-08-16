@@ -242,10 +242,16 @@ class Dashboard extends React.Component {
 
     let propsUnderSelectorNodeWithMaxCount = [];
     propsUnderSelectorNode.forEach(nodeName => {
-      let num = this.state.fullContent.filter(quad => quad.subject.id.includes(nodeName) && quad.predicate.id.includes("maxCount")).map(i => i.object.id);
-      let maxCount = num[0].split("^^")[0].match(/\d+/g)[0];
-      let propName = this.getPropertyName(nodeName);
-      propsUnderSelectorNodeWithMaxCount.push({nodeSelectorProp: propName, maxCount: maxCount});
+      for(let c = 0; c < minCount; c++){
+        let num = this.state.fullContent.filter(quad => quad.subject.id.includes(nodeName) && quad.predicate.id.includes("maxCount")).map(i => i.object.id);
+        let maxCount = num[0].split("^^")[0].match(/\d+/g)[0];
+        let propName = this.getPropertyName(nodeName);
+        if(c === 0){
+          propsUnderSelectorNodeWithMaxCount.push({nodeSelectorProp: propName, maxCount: maxCount}); 
+        } else {
+          propsUnderSelectorNodeWithMaxCount.push({nodeSelectorProp: propName+c, maxCount: maxCount}); 
+        }
+      }
     });
     let propsWithXonePredicate = this.state.fullContent.filter(quad => quad.subject.id.includes(node) && quad.predicate.id.includes("xone")); 
     
@@ -324,6 +330,10 @@ class Dashboard extends React.Component {
     filteredProps.forEach(pr => {
       properties[pr] = "";
     });
+
+    propsSelector.propsMaxCount.forEach(pr => {
+      properties[pr.nodeSelectorProp] = "";
+    })
   
     // add to graph
     if(node.includes("Operator") ){
