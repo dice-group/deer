@@ -192,7 +192,6 @@ class Panel extends React.Component {
           </div> 
           <CardBody>
             <p>Properties</p>
-            <div>name: {this.state.name}</div>
             {otherProps.map((p) => (
               <Fragment key={p}>
                 <FormGroup>
