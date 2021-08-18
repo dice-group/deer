@@ -13,8 +13,8 @@ deer:GeoFusionEnrichmentOperatorShape
 	sh:property deer:GeoFusionEnrichmentOperatorShape_fusionAction ;
 	sh:property deer:GeoFusionEnrichmentOperatorShape_mergeOtherStatements ;
 	sh:message "GeoFusionEnrichmentOperator must declare exactly one deer:fusionAction and at most one deer:mergeOtherStatements" ;
-	fcage:minInPorts 1 ;
-	fcage:maxInPorts 1 ;
+	fcage:minInPorts 2 ;
+	fcage:maxInPorts 2 ;
 	fcage:minOutPorts 1 ;
 	fcage:maxOutPorts 1 ;
 .
