@@ -40,7 +40,11 @@ class Panel extends React.Component {
 
   changeInput = (e, p) => {
     var temp = Object.assign({}, this.props.panelData);
-    temp.properties[p] = e.target.value;
+    let curVal = e.target.value;
+    if(e.target.value.length > 1){
+      curVal = e.target.value.trim();
+    }
+    temp.properties[p] = curVal;
     this.props.updateParentPanelData(temp, this.props.panelData.numNodeType);
   }
 
@@ -65,7 +69,7 @@ class Panel extends React.Component {
   }
 
   changeRadio = (e, p) => {
-    e.target.value = "type here";
+    e.target.value = " ";
     this.changeInputWithRadio(e, p);
     if(p === "selector"){
       this.setState({
