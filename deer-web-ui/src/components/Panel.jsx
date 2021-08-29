@@ -160,31 +160,7 @@ class Panel extends React.Component {
     }
 
     if(propsSelector.length){
-      const propsSelectorSorted = [];
-      let predPropPair = [];
-      propsSelector.forEach(i => {
-        let num;
-        if(!i.match(/_extra_\d+/g))
-          num = i.match(/\d+/g) || 1;
-        else
-          num = i.split("_extra_")[0].match(/\d+/g);
-        let matchedProps;  
-        if(num === 1 || num === null){
-          matchedProps = propsSelector.filter(p => p.match(/\d+/g) === null || (p.match(/_extra_\d+/g) && !p.split("_extra_")[0].match(/\d+/g)));
-        } else {
-          matchedProps = propsSelector.filter(p => (p.includes(num) && !p.match(/_extra_\d+/g)) || (p.match(/_extra_\d+/g) && p.split("_extra_")[0].match(/\d+/g) && parseInt(p.split("_extra_")[0].match(/\d+/g)[0]) === parseInt(num)));
-        }
-
-        let exists = propsSelectorSorted.map(i => !i.every(elem => matchedProps.includes(elem)));
-        let containsFalse = exists.includes(false)
-
-        if(matchedProps.length && !containsFalse){
-          propsSelectorSorted.push(matchedProps);
-        }
-
-        predPropPair = matchedProps;
-      })
-      propsSelector = propsSelectorSorted;
+      propsSelector = this.props.sortBySelectorValue(propsSelector);
     }
 
     return (
@@ -240,7 +216,7 @@ class Panel extends React.Component {
                   ))}
               </div>
             ))}
-            {((this.props.panelData.properties.selector && this.props.panelData.properties.selector.length) || "operation" in this.props.panelData.properties) ? <Button className="plusButtonFixed" onClick={() => this.addOneMorePropertyBundle(propsSelector)} color="primary">Add one more selector</Button>: null}
+            {((this.props.panelData.properties.selector && this.props.panelData.properties.selector.length) || "operation" in this.props.panelData.properties) ? <Button className="plusButtonFixed" onClick={() => this.addOneMorePropertyBundle(propsSelector)} color="primary">+</Button>: null}
           </CardBody>
         </Card>
       </div>

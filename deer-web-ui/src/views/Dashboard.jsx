@@ -560,18 +560,22 @@ class Dashboard extends React.Component {
       // quads with blank nodes
       if ("operation" in obj){
         let blankNodes = this.addBlankNodes("operation", obj);
-        writer.addQuad(
-          namedNode("urn:example:demo/" + obj.name),
-          namedNode("https://w3id.org/deer/operation"),
-          writer.blank(blankNodes)
-        );
+        blankNodes.forEach(i => {
+          writer.addQuad(
+            namedNode("urn:example:demo/" + obj.name),
+            namedNode("https://w3id.org/deer/operation"),
+            writer.blank(i)
+          );
+        })
       } else if ("selector" in obj && obj.selector !== ""){
         let blankNodes = this.addBlankNodes("selector", obj);
-        writer.addQuad(
-          namedNode("urn:example:demo/" + obj.name),
-          namedNode("https://w3id.org/deer/selector"),
-          writer.blank(blankNodes)
-        );
+        blankNodes.forEach(i => {
+          writer.addQuad(
+            namedNode("urn:example:demo/" + obj.name),
+            namedNode("https://w3id.org/deer/selector"),
+            writer.blank(i)
+          );
+        })
       }
       else{ // simple quads
         for (var prop in obj) {
@@ -603,18 +607,60 @@ class Dashboard extends React.Component {
     });
   };
 
-  addBlankNodes = (byPredicate, obj) => {
-    let blankNodes = [];
-    for (var prop in obj) {
-      if (prop !== "name" && prop !== byPredicate && obj[prop].length){
-        blankNodes.push({
-          predicate: namedNode(
-            "https://w3id.org/deer/"+prop
-          ),
-          object: namedNode(obj[prop])
-        });
+  sortBySelectorValue = (propsSelector) => {
+    const propsSelectorSorted = [];
+    let predPropPair = [];
+    propsSelector.forEach(i => {
+      let num;
+      if(!i.match(/_extra_\d+/g))
+        num = i.match(/\d+/g) || 1;
+      else
+        num = i.split("_extra_")[0].match(/\d+/g);
+      let matchedProps;  
+      if(num === 1 || num === null){
+        matchedProps = propsSelector.filter(p => p.match(/\d+/g) === null || (p.match(/_extra_\d+/g) && !p.split("_extra_")[0].match(/\d+/g)));
+      } else {
+        matchedProps = propsSelector.filter(p => (p.includes(num) && !p.match(/_extra_\d+/g)) || (p.match(/_extra_\d+/g) && p.split("_extra_")[0].match(/\d+/g) && parseInt(p.split("_extra_")[0].match(/\d+/g)[0]) === parseInt(num)));
       }
-    }
+
+      let exists = propsSelectorSorted.map(i => !i.every(elem => matchedProps.includes(elem)));
+      let containsFalse = exists.includes(false)
+
+      if(matchedProps.length && !containsFalse){
+        propsSelectorSorted.push(matchedProps);
+      }
+
+      predPropPair = matchedProps;
+    })
+    propsSelector = propsSelectorSorted;
+    return propsSelector;
+  }
+
+  to2dArray = (obj) => {
+    let propsSelector = Object.keys(obj);
+    propsSelector = propsSelector.filter(e => { return e !== 'name' })
+    propsSelector = this.sortBySelectorValue(propsSelector);
+    return propsSelector;
+  }
+
+  addBlankNodes = (byPredicate, obj) => {
+    let arr2D = this.to2dArray(obj);
+    let blankNodes = [];
+
+    arr2D.forEach(i => {
+      let subBlankNodes = [];
+      i.forEach(j => {
+        if (j !== "name" && j !== byPredicate && obj[j].length){
+          subBlankNodes.push({
+            predicate: namedNode(
+              "https://w3id.org/deer/"+j.replace(/\d+/g, '').replace("_extra_", "")
+            ),
+            object: namedNode(obj[j])
+          });
+        }
+      })
+      blankNodes.push(subBlankNodes);
+    })
     return blankNodes;
   }
 
@@ -1010,7 +1056,7 @@ class Dashboard extends React.Component {
 
           <Col md="3">
             {this.state.panelData.filter(p => p.showPanel === true).map((p) =>(
-            <Panel key={p.nodePath+p.numNodeType} panelData={p} updateParentPanelData={this.updateParentPanelData} />))} 
+            <Panel key={p.nodePath+p.numNodeType} panelData={p} updateParentPanelData={this.updateParentPanelData} sortBySelectorValue={this.sortBySelectorValue} />))} 
           </Col>
 
         </Row>
