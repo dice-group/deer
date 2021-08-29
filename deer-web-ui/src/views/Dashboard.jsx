@@ -600,6 +600,25 @@ class Dashboard extends React.Component {
 
 
     });
+    return writer;
+  }
+
+  downloadTtl = () => {
+    let writer = this.saveConfig();
+    writer.end((error, result) => {
+      console.log(result);
+      let blob = new Blob([result], { type: "text/ttl" });
+      let url = window.URL.createObjectURL(blob);
+      let a = document.createElement("a");
+      a.href = url;
+      a.download = "config.ttl";
+      a.click();
+      result = "";
+    });
+  }
+
+  runConfig = () => {
+    let writer = this.saveConfig();
     writer.end((error, result) => {
       console.log(result);
       this.submitConfig(result);
@@ -1008,7 +1027,7 @@ class Dashboard extends React.Component {
                     //style={{ display: "none" }}
                     ref="file"
                   > */}
-                  <Button onClick={this.saveConfig}>
+                  <Button onClick={this.runConfig}>
                     <i className="fa fa-cog" style={{ color: `white` }} /> Run
                     Configuration
                   </Button>
@@ -1045,6 +1064,10 @@ class Dashboard extends React.Component {
                   ) : (
                     ""
                   )}
+                  <Button onClick={this.downloadTtl} style={{ marginLeft: `10px` }}>
+                    <i className="fa fa-download" style={{ color: `white` }} /> Export
+                    Configuration
+                  </Button>
                 </div>
               </CardFooter>
             </Card>
