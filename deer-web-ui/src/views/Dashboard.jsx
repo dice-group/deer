@@ -110,8 +110,9 @@ class Dashboard extends React.Component {
         //   properties: ["a", "b"],
         //   showPanel: "false",
         // }
-      ],
+      ]
     };
+    this.hiddenFileInput = React.createRef();
   }
 
   updateParentPanelData = (temp, numNodeType) => {
@@ -844,6 +845,71 @@ class Dashboard extends React.Component {
     })
   };
 
+  onSelectedFile = (event) => {
+    let file = event.target.files[0];
+
+    let fileReader = new FileReader();
+    fileReader.onload = (fileLoadedEvent) => {
+        let textFromFileLoaded = fileLoadedEvent.target.result;
+        this.ttlToUI(textFromFileLoaded);
+    };
+
+    fileReader.readAsText(file, "UTF-8");
+  }
+
+  uploadTtl = (event) => {
+    this.hiddenFileInput.current.click();
+  }
+
+  ttlToUI = (textFromFileLoaded) => {
+    const parser = new N3.Parser();
+    let fullFileContent = parser.parse(textFromFileLoaded);
+    let nodesInstances = [];
+    parser.parse(textFromFileLoaded, (error, quad, prefixes) => {
+      if(quad){
+        // console.log(quad);
+        // add nodes to canvas
+        if(quad.predicate.id.includes("http://www.w3.org/1999/02/22-rdf-syntax-ns#type")){
+          let node = quad.object.id.split("https://w3id.org/deer/")[1];//"SparqlModelReader";
+          // console.log(node);
+          let mainPath;
+          if(node.includes("Reader")){
+            mainPath = "Reader";
+          }
+          if(node.includes("Writer")){
+            mainPath = "Writer";
+          }
+          if(node.includes("Operator")){
+            mainPath = "Operator";
+          }
+          let nodeWithSpecificType = litegraph.createNode(mainPath+"/"+node);
+          nodesInstances.push({name: quad.subject.id, instance: nodeWithSpecificType});
+          // nodeReader.pos = [100,400];
+          this.state.graph.add(nodeWithSpecificType);
+          // connecting nodes
+          // console.log(fullFileContent);
+          let inputPorts = fullFileContent.filter(q => quad.subject.id === q.subject.id && q.predicate.id.includes("hasInput")).map(i => i.object.id);
+          if(inputPorts.length){
+            // handling blank nodes like: inputPorts[0] = ':n3-109'
+            if(inputPorts[inputPorts.length-1].includes("_:")){
+              while(!inputPorts.includes("http://www.w3.org/1999/02/22-rdf-syntax-ns#nil")){
+                let realName = fullFileContent.filter(q => q.subject.id === inputPorts[inputPorts.length-1]).map(i => i.object.id);
+                inputPorts = realName;
+              } 
+            }
+            // console.log(nodesInstances, inputPorts);
+            let connectedNode = nodesInstances.filter(i => i.name === inputPorts[0]);
+            // console.log(connectedNode);
+            if(connectedNode.length){
+              connectedNode[0].instance.connect(0, nodeWithSpecificType, 0);
+            }
+          }
+          // todo: add their properties
+        }
+      }
+    });
+  }
+
   render() {
     const options = _.map(this.state.prefixOptions, (opt, index) => ({
       key: opt,
@@ -1009,10 +1075,17 @@ class Dashboard extends React.Component {
         </Row>
         <Row>
           <Col md="9">
-            <Card>     
-              <div className="numbers">
-                <CardTitle tag="p">Graph</CardTitle>
-              </div> 
+            <Card> 
+              <div style={{ marginLeft: `10px` }}>    
+                <div className="numbers" style={{ float: 'left' }}>
+                  <CardTitle tag="p">Graph</CardTitle>
+                </div>
+                <input style={{display:'none'}} ref={this.hiddenFileInput} type="file" onChange={this.onSelectedFile}/>
+                <Button onClick={this.uploadTtl} style={{ marginRight: `10px`, float: 'right', marginBottom: '0px' }}>
+                      <i className="fa fa-upload" style={{ color: `white` }} /> Import
+                      Configuration
+                </Button>
+              </div>
               <CardBody>
                 <div id="parentCanvas" className="litegraph litegraph-editor">
                   <canvas id="mycanvas" height="600" width="1000"></canvas>{" "}
