@@ -147,6 +147,18 @@ class Panel extends React.Component {
     }
   }
 
+  removeSelector = (s) => {
+    let temp = Object.assign({}, this.props.panelData);
+    // .properties -> remove property from object
+    for (let i=0; i<s.length; i++){
+      const {[s[i]]: foo, ...newObj} = temp.properties;
+      temp.properties = newObj;
+    }
+    // .propsSelector.propsMaxCount -> remove object from array with 'nodeSelectorProp' property
+    temp.propsSelector.propsMaxCount = temp.propsSelector.propsMaxCount.filter(i => s.every(elem => i.nodeSelectorProp !== elem));
+    this.props.updateParentPanelData(temp, this.props.panelData.numNodeType);
+  }
+
 
   render() {
     let excludeProps = this.props.panelData.xoneProperties.filter(i => {return i !== undefined});
@@ -197,6 +209,9 @@ class Panel extends React.Component {
             </FormGroup>))}
             {propsSelector.map((s, index) => (
               <div className="panelSelectorRow" key={index}>
+                {index !== 0 ? <Button outline color="primary" size="sm" onClick={() => this.removeSelector(s)} className="delButton">
+                  <i className="fa fa-times-circle" aria-hidden="true"></i>
+                </Button> : ''}
                   {s.map((p) => (
                     <Fragment key={p}>
                       <FormGroup>

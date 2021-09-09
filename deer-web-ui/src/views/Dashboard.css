@@ -113,3 +113,11 @@ h1 {
 .plusButtonFixed {
   width: 100%;
 }
+
+.delButton {
+  margin-top: -7px;
+  margin-bottom: 0px;
+  float: right;
+  z-index: 100;
+  position: relative;
+}
