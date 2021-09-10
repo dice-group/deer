@@ -84,3 +84,40 @@ h1 {
 .disabledDiv {
   opacity: 0.4;
 }
+
+.nodePath {
+  font-size: 57%;
+}
+
+.nodeName {
+  font-size: 70%;
+  font-weight: bold;
+}
+
+.plusButton {
+  margin: 0px 1px;
+  margin-right: 18px;
+}
+
+.panelSelectorRow {
+  margin: 2px;
+  border: 1px solid #DDDDDD;
+  border-radius: 4px;
+  padding: 10px;
+}
+
+.shiftCheckbox {
+  height: 15px;
+}
+
+.plusButtonFixed {
+  width: 100%;
+}
+
+.delButton {
+  margin-top: -7px;
+  margin-bottom: 0px;
+  float: right;
+  z-index: 100;
+  position: relative;
+}

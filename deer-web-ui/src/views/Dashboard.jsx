@@ -21,6 +21,7 @@ import React, { Fragment } from "react";
 import _ from "lodash";
 import "./Dashboard.css";
 import FactoryNode from "../components/FactoryNode";
+import Panel from "../components/Panel";
 
 // reactstrap components
 import {
@@ -100,9 +101,28 @@ class Dashboard extends React.Component {
       tempXoneNodeParams: [],
       fullContent: null,
       inputPorts: [],
-      inputLinkId: ''
+      inputLinkId: '',
+      selectedFiles: [],
+      panelData: [
+        // {
+        //   numNodeType: 0,
+        //   nodePath: "one/two",
+        //   properties: ["a", "b"],
+        //   showPanel: "false",
+        // }
+      ]
     };
+    this.hiddenFileInput = React.createRef();
   }
+
+  updateParentPanelData = (temp, numNodeType) => {
+    var curPanelData = Object.assign([], this.state.panelData);
+    let id = curPanelData.findIndex(i => numNodeType === i.numNodeType);
+    curPanelData[id] = temp;
+    this.setState({
+      panelData: curPanelData
+    })
+  };
 
   getBaseUrl = () => {
     var re = new RegExp(/^.*\//);
@@ -110,7 +130,7 @@ class Dashboard extends React.Component {
   };
 
   callbackFunction = (properties) => {
-    console.log(properties);
+    // console.log(properties);
     this.setState({
       formProperties: properties,
     });
@@ -145,7 +165,7 @@ class Dashboard extends React.Component {
     graphCanvas.show_info = false;
 
     //returns the prefixes
-    fetch("https://prefix.cc/context")
+    fetch("http://prefix.cc/context")
       .then(function (response) {
         return response.json();
       })
@@ -213,6 +233,27 @@ class Dashboard extends React.Component {
     });
 
     let propsWithPropPredicate = this.state.fullContent.filter(quad => quad.subject.id.includes(node) && quad.predicate.id.includes("property")).map(i => i.object.id);
+    let propsUnderSelectorNode = this.state.fullContent.filter(quad => quad.subject.id.includes(node) && quad.predicate.id.includes("property") && quad.object.id.split("_").length-1 == 2).map(i => i.object.id);
+    let selectorNodeMinCount = this.state.fullContent.filter(quad => quad.subject.id.includes(node) && (quad.subject.id.includes("selector") || quad.subject.id.includes("operation")) && quad.predicate.id.includes("minCount")).map(i => i.object.id);
+    let minCount = -1;
+    if(selectorNodeMinCount.length){
+      minCount = selectorNodeMinCount[0].split("^^")[0].match(/\d+/g)[0];
+      console.log(node, minCount);
+    }
+
+    let propsUnderSelectorNodeWithMaxCount = [];
+    propsUnderSelectorNode.forEach(nodeName => {
+      for(let c = 0; c < minCount; c++){
+        let num = this.state.fullContent.filter(quad => quad.subject.id.includes(nodeName) && quad.predicate.id.includes("maxCount")).map(i => i.object.id);
+        let maxCount = num[0].split("^^")[0].match(/\d+/g)[0];
+        let propName = this.getPropertyName(nodeName);
+        if(c === 0){
+          propsUnderSelectorNodeWithMaxCount.push({nodeSelectorProp: propName, maxCount: maxCount}); 
+        } else {
+          propsUnderSelectorNodeWithMaxCount.push({nodeSelectorProp: propName+c, maxCount: maxCount}); 
+        }
+      }
+    });
     let propsWithXonePredicate = this.state.fullContent.filter(quad => quad.subject.id.includes(node) && quad.predicate.id.includes("xone")); 
     
     let propsFromXone = [];
@@ -222,7 +263,7 @@ class Dashboard extends React.Component {
       propsFromXone = this.state.tempXoneNodeParams;
     });
 
-    let allNodeProps = {'basicProps': propsWithPropPredicate, 'xone': propsFromXone};
+    let allNodeProps = {'basicProps': propsWithPropPredicate, 'xone': propsFromXone, 'propsSelector': {selectorMinCount: minCount, propsMaxCount: propsUnderSelectorNodeWithMaxCount}};
     return allNodeProps;
   }
 
@@ -266,6 +307,7 @@ class Dashboard extends React.Component {
     let message = this.getMessage(node);
     let url = this.getUrlForTheNode(node);
     let xoneProperties = null;
+    let propsSelector = propsArrForNode.propsSelector;
     let that = this;
 
     let properties = {
@@ -280,8 +322,8 @@ class Dashboard extends React.Component {
       properties[pr] = "";
     });
 
-    // todo: now all fields from xone are added, show only one to the user (add radiobutton)
-    filteredProps = propsArrForNode.xone.map(filteredProp => {
+    // now all fields from xone are added, show only one to the user (with radiobutton)
+    filteredProps = propsArrForNode.xone.filter(x => x.includes(node)).map(filteredProp => {
       return this.getPropertyName(filteredProp);
     })
     xoneProperties = filteredProps;
@@ -289,6 +331,10 @@ class Dashboard extends React.Component {
     filteredProps.forEach(pr => {
       properties[pr] = "";
     });
+
+    propsSelector.propsMaxCount.forEach(pr => {
+      properties[pr.nodeSelectorProp] = "";
+    })
   
     // add to graph
     if(node.includes("Operator") ){
@@ -302,12 +348,11 @@ class Dashboard extends React.Component {
             this.addOutput("output", "text");
           }
           
-          this.properties = Object.create(properties);
           this.message = message;
           this.linkName = url;
 
-          this.onPropertyChanged = (p) => {
-            that.showOrDisableXoneProperties(this.properties, p, xoneProperties);
+          this.onDblClick = (e) => {
+            that.showProperies("Operator/", e, node, properties, xoneProperties, propsSelector);
           }
         }
       };
@@ -325,12 +370,11 @@ class Dashboard extends React.Component {
         constructor(props) {
           super(props);
           this.addOutput("output", "text");
-          this.properties = Object.create(properties); 
           this.message = message;
           this.linkName = url;
 
-          this.onPropertyChanged = (p) => {
-            that.showOrDisableXoneProperties(this.properties, p, xoneProperties);
+          this.onDblClick = (e) => {
+            that.showProperies("Reader/", e, node, properties, xoneProperties, propsSelector);
           }
 
         }
@@ -345,12 +389,11 @@ class Dashboard extends React.Component {
         constructor(props) {
           super(props);
           this.addInput("input", "text");
-          this.properties = Object.create(properties);
           this.message = message;
           this.linkName = url;
 
-          this.onPropertyChanged = (p) => {
-            that.showOrDisableXoneProperties(this.properties, p, xoneProperties);
+          this.onDblClick = (e) => {
+            that.showProperies("Writer/", e, node, properties, xoneProperties, propsSelector);
           }
         }
       };
@@ -362,23 +405,37 @@ class Dashboard extends React.Component {
     }
   }
 
-  showOrDisableXoneProperties = (props, p, xoneProps) => {
-
-    console.log(xoneProps);
-    if(xoneProps.includes(p)){
-      let excludingPArray = xoneProps.filter(i => i !== p);
-
-      //enable all
-      xoneProps.forEach(i => {
-        document.querySelectorAll('[data-property='+i+']')[0].classList.remove('disabledDiv');
+  showProperies = (nodeType, e, node, properties, xoneProperties, propsSelector) => {
+    let propertiesCopy = Object.assign({}, properties);
+    // initialize panel data
+    let panelData = Object.assign([], this.state.panelData);
+    // hide all panels
+    panelData = panelData.map(p => {
+      let temp = Object.assign({}, p);
+      temp.showPanel = false;
+      return temp;
+    });
+    // if this panel was just added
+    let exists = this.state.panelData.find(p => { return p.numNodeType === e.target.data.current_node.id && p.nodePath === nodeType+node});
+    if(!exists){
+      panelData.push({
+          numNodeType: e.target.data.current_node.id,
+          nodePath: nodeType+node,
+          properties: propertiesCopy,
+          xoneProperties: xoneProperties,
+          showPanel: true,
+          propsSelector: propsSelector,
       });
-
-
-      // when we change one prop then we disable and clear others (excludingPArray)
-      excludingPArray.forEach(i => {
-        document.querySelectorAll('[data-property='+i+']')[0].classList.add('disabledDiv');
-        document.querySelectorAll('[data-property='+i+']')[0].getElementsByClassName("property_value")[0].innerHTML="";
-        delete props[i];
+      this.setState({
+        panelData: panelData,
+      });
+    }  
+    else {
+      // show current one
+      let idForChange = this.state.panelData.findIndex(p => { return p.nodePath === nodeType+node && p.numNodeType === e.target.data.current_node.id});
+      panelData[idForChange].showPanel = true;
+      this.setState({
+        panelData: panelData,
       });
     }
   }
@@ -387,6 +444,7 @@ class Dashboard extends React.Component {
     // save possible node names in array
     if(quadOb.predicate.id.includes("targetClass")){
       let node = quadOb.object.id.split("https://w3id.org/deer/")[1];
+      // console.log(quadOb.object.id);
       let nodes = this.state.nodesArray;
       if(node){
         nodes.add(node);
@@ -423,57 +481,8 @@ class Dashboard extends React.Component {
   //   }
   // };
 
-  getInputLink = (node) => {
-    // if (node.type === "Operator/LinkingEnrichmentOperator") {
-    //   var inputLinkInGraph1 = this.state.graph.links[node.inputs[0].link];
-    //   var inputLinkInGraph2 = this.state.graph.links[node.inputs[1].link];
-    //   if (inputLinkInGraph1) {
-    //     var inputOriginNode1 = this.state.graph.getNodeById(
-    //       inputLinkInGraph1.origin_id
-    //     ).properties.name;
-    //   }
-    //   if (inputLinkInGraph2) {
-    //     var inputOriginNode2 = this.state.graph.getNodeById(
-    //       inputLinkInGraph2.origin_id
-    //     ).properties.name;
-    //   }
-    //   console.log(inputOriginNode1);
-
-    //   return {
-    //     first: inputOriginNode1,
-    //     second: inputOriginNode2,
-    //   };
-    // } else {
-      for (var i=0; i < node.inputs.length; i++) {
-         console.log("i = "+i);
-
-        // console.log(node.inputs[i]);
-        // console.log(node.inputs[i].link);
-        // if (node.inputs[i].link) {
-           var inputLinkId = node.inputs[i].link;
-           console.log(inputLinkId);
-           var inputLinkInGraph = this.state.graph.links[inputLinkId];
-          if (inputLinkInGraph) {
-            var inputOriginNode = this.state.graph.getNodeById(
-              inputLinkInGraph.origin_id
-            );
-            let inputPortsList = this.state.inputPorts;
-              inputPortsList.push(inputOriginNode);
-              this.setState({
-                inputPorts: inputPortsList
-              })
-           
-          }
-      // }
-       // return [inputOriginNode, inputLinkId];
-      }
-      
-      //return this.state.inputPorts;
-
-    // }
-  };
-
   saveConfig = () => {
+
     var data = this.state.graph.serialize();
     //use N3
     const myQuad = DataFactory.quad(
@@ -492,6 +501,11 @@ class Dashboard extends React.Component {
 
     var parser = new N3.Parser({ format: "N3", blankNodePrefix: "" });
     data.nodes.map((node, key) => {
+      let inputPorts = [];
+      let curInputLinkId = '';
+
+      node.properties = this.state.panelData.filter(i => i.numNodeType === node.id && i.nodePath === node.type)[0].properties;
+
       writer.addQuad(
         namedNode("urn:example:demo/" + node.properties.name),
         namedNode("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"), //predicate
@@ -503,7 +517,6 @@ class Dashboard extends React.Component {
           for (var i=0; i < node.inputs.length; i++) {
             if (node.inputs[i].link) {
               var inputLinkId = node.inputs[i].link;
-              console.log(inputLinkId);
               var inputLinkInGraph = this.state.graph.links[inputLinkId];
              if (inputLinkInGraph) {
                var inputOriginNode = this.state.graph.getNodeById(
@@ -511,17 +524,16 @@ class Dashboard extends React.Component {
                );
                let inputPortsList = this.state.inputPorts;
                  inputPortsList.push(inputOriginNode);
-                 this.setState({
-                   inputPorts: inputPortsList,
-                   inputLinkId: inputLinkId
-                 })
+                 inputPorts = inputPortsList;
+                 curInputLinkId = inputLinkId
               
              }
          }
          }
-          console.log(this.state.inputPorts);
+          // console.log(this.state.inputPorts);
           //adding the quad for each inputLinks here
-          let blankNodes = this.state.inputPorts.map((inputPort, key) => {
+          let blankNodes = inputPorts.map((inputPort, key) => {
+            inputPort.properties = this.state.panelData.filter(i => i.numNodeType === inputPort.id && i.nodePath === inputPort.type)[0].properties;
             return writer.blank([{
               predicate: namedNode("https://w3id.org/fcage/" + "fromNode"),
               object:    namedNode("urn:example:demo/" + inputPort.properties.name),
@@ -538,44 +550,33 @@ class Dashboard extends React.Component {
             writer.list(blankNodes)        
           );
           
+          inputPorts.length = 0;
+          curInputLinkId = '';
 
-          this.setState({
-            inputPorts: [],
-            inputLinkId: ''
-          })
-          // writer.addQuad(
-          //   namedNode("urn:example:demo/" + node.properties.name),
-          //   namedNode("https://w3id.org/fcage/" + "hasInput"),
-          //   writer.blank([{
-          //     predicate: namedNode("urn:example:demo/" + "fromNode"),
-          //     object:    namedNode("https://w3id.org/fcage/" + originInputNode.properties.name),
-          //   },{
-          //     predicate: namedNode("https://w3id.org/fcage/" + "fromPort"),
-          //     object:    literal(this.getInputLink(node)[1]),
-          //   }])
-           
-          // ); 
-        // }
       }
 
-      console.log(node);
+      // console.log(node);
 
       let obj = node.properties;
       // quads with blank nodes
       if ("operation" in obj){
         let blankNodes = this.addBlankNodes("operation", obj);
-        writer.addQuad(
-          namedNode("urn:example:demo/" + obj.name),
-          namedNode("https://w3id.org/deer/operation"),
-          writer.blank(blankNodes)
-        );
-      } else if ("selector" in obj){
+        blankNodes.forEach(i => {
+          writer.addQuad(
+            namedNode("urn:example:demo/" + obj.name),
+            namedNode("https://w3id.org/deer/operation"),
+            writer.blank(i)
+          );
+        })
+      } else if ("selector" in obj && obj.selector !== ""){
         let blankNodes = this.addBlankNodes("selector", obj);
-        writer.addQuad(
-          namedNode("urn:example:demo/" + obj.name),
-          namedNode("https://w3id.org/deer/selector"),
-          writer.blank(blankNodes)
-        );
+        blankNodes.forEach(i => {
+          writer.addQuad(
+            namedNode("urn:example:demo/" + obj.name),
+            namedNode("https://w3id.org/deer/selector"),
+            writer.blank(i)
+          );
+        })
       }
       else{ // simple quads
         for (var prop in obj) {
@@ -600,6 +601,25 @@ class Dashboard extends React.Component {
 
 
     });
+    return writer;
+  }
+
+  downloadTtl = () => {
+    let writer = this.saveConfig();
+    writer.end((error, result) => {
+      console.log(result);
+      let blob = new Blob([result], { type: "text/ttl" });
+      let url = window.URL.createObjectURL(blob);
+      let a = document.createElement("a");
+      a.href = url;
+      a.download = "config.ttl";
+      a.click();
+      result = "";
+    });
+  }
+
+  runConfig = () => {
+    let writer = this.saveConfig();
     writer.end((error, result) => {
       console.log(result);
       this.submitConfig(result);
@@ -607,18 +627,60 @@ class Dashboard extends React.Component {
     });
   };
 
-  addBlankNodes = (byPredicate, obj) => {
-    let blankNodes = [];
-    for (var prop in obj) {
-      if (prop !== "name" && prop !== byPredicate && obj[prop].length){
-        blankNodes.push({
-          predicate: namedNode(
-            "https://w3id.org/deer/"+prop
-          ),
-          object: namedNode(obj[prop])
-        });
+  sortBySelectorValue = (propsSelector) => {
+    const propsSelectorSorted = [];
+    let predPropPair = [];
+    propsSelector.forEach(i => {
+      let num;
+      if(!i.match(/_extra_\d+/g))
+        num = i.match(/\d+/g) || 1;
+      else
+        num = i.split("_extra_")[0].match(/\d+/g);
+      let matchedProps;  
+      if(num === 1 || num === null){
+        matchedProps = propsSelector.filter(p => p.match(/\d+/g) === null || (p.match(/_extra_\d+/g) && !p.split("_extra_")[0].match(/\d+/g)));
+      } else {
+        matchedProps = propsSelector.filter(p => (p.includes(num) && !p.match(/_extra_\d+/g)) || (p.match(/_extra_\d+/g) && p.split("_extra_")[0].match(/\d+/g) && parseInt(p.split("_extra_")[0].match(/\d+/g)[0]) === parseInt(num)));
       }
-    }
+
+      let exists = propsSelectorSorted.map(i => !i.every(elem => matchedProps.includes(elem)));
+      let containsFalse = exists.includes(false)
+
+      if(matchedProps.length && !containsFalse){
+        propsSelectorSorted.push(matchedProps);
+      }
+
+      predPropPair = matchedProps;
+    })
+    propsSelector = propsSelectorSorted;
+    return propsSelector;
+  }
+
+  to2dArray = (obj) => {
+    let propsSelector = Object.keys(obj);
+    propsSelector = propsSelector.filter(e => { return e !== 'name' })
+    propsSelector = this.sortBySelectorValue(propsSelector);
+    return propsSelector;
+  }
+
+  addBlankNodes = (byPredicate, obj) => {
+    let arr2D = this.to2dArray(obj);
+    let blankNodes = [];
+
+    arr2D.forEach(i => {
+      let subBlankNodes = [];
+      i.forEach(j => {
+        if (j !== "name" && j !== byPredicate && obj[j].length){
+          subBlankNodes.push({
+            predicate: namedNode(
+              "https://w3id.org/deer/"+j.replace(/\d+/g, '').replace("_extra_", "")
+            ),
+            object: namedNode(obj[j])
+          });
+        }
+      })
+      blankNodes.push(subBlankNodes);
+    })
     return blankNodes;
   }
 
@@ -646,6 +708,7 @@ class Dashboard extends React.Component {
     var file = new File([data], "config.ttl");
 
     var formData = new FormData();
+    formData = this.uploadFiles();
     formData.append("config", file);
     fetch(URI + "/submit", {
       method: "POST",
@@ -680,6 +743,11 @@ class Dashboard extends React.Component {
             showConfigButton: true,
           });
           this.getResults();
+        } else if(content.status.code === 1){
+          clearInterval(this.interval);
+          this.setState({
+            visible: true,
+          });
         }
       });
   };
@@ -760,7 +828,87 @@ class Dashboard extends React.Component {
     });
   };
 
-  uploadFiles = () => {};
+  uploadFiles = () => {
+    let files = this.state.selectedFiles;
+
+    const data = new FormData()
+    for(var x = 0; x < files.length; x++) {
+       data.append('file', files[x])
+    }
+
+    return data;
+  };
+
+  onSelectedFiles = (event) => {
+    this.setState({
+     selectedFiles: event.target.files,
+    })
+  };
+
+  onSelectedFile = (event) => {
+    let file = event.target.files[0];
+
+    let fileReader = new FileReader();
+    fileReader.onload = (fileLoadedEvent) => {
+        let textFromFileLoaded = fileLoadedEvent.target.result;
+        this.ttlToUI(textFromFileLoaded);
+    };
+
+    fileReader.readAsText(file, "UTF-8");
+  }
+
+  uploadTtl = (event) => {
+    this.hiddenFileInput.current.click();
+  }
+
+  ttlToUI = (textFromFileLoaded) => {
+    const parser = new N3.Parser();
+    let fullFileContent = parser.parse(textFromFileLoaded);
+    let nodesInstances = [];
+    parser.parse(textFromFileLoaded, (error, quad, prefixes) => {
+      if(quad){
+        // console.log(quad);
+        // add nodes to canvas
+        if(quad.predicate.id.includes("http://www.w3.org/1999/02/22-rdf-syntax-ns#type")){
+          let node = quad.object.id.split("https://w3id.org/deer/")[1];//"SparqlModelReader";
+          // console.log(node);
+          let mainPath;
+          if(node.includes("Reader")){
+            mainPath = "Reader";
+          }
+          if(node.includes("Writer")){
+            mainPath = "Writer";
+          }
+          if(node.includes("Operator")){
+            mainPath = "Operator";
+          }
+          let nodeWithSpecificType = litegraph.createNode(mainPath+"/"+node);
+          nodesInstances.push({name: quad.subject.id, instance: nodeWithSpecificType});
+          // nodeReader.pos = [100,400];
+          this.state.graph.add(nodeWithSpecificType);
+          // connecting nodes
+          // console.log(fullFileContent);
+          let inputPorts = fullFileContent.filter(q => quad.subject.id === q.subject.id && q.predicate.id.includes("hasInput")).map(i => i.object.id);
+          if(inputPorts.length){
+            // handling blank nodes like: inputPorts[0] = ':n3-109'
+            if(inputPorts[inputPorts.length-1].includes("_:")){
+              while(!inputPorts.includes("http://www.w3.org/1999/02/22-rdf-syntax-ns#nil")){
+                let realName = fullFileContent.filter(q => q.subject.id === inputPorts[inputPorts.length-1]).map(i => i.object.id);
+                inputPorts = realName;
+              } 
+            }
+            // console.log(nodesInstances, inputPorts);
+            let connectedNode = nodesInstances.filter(i => i.name === inputPorts[0]);
+            // console.log(connectedNode);
+            if(connectedNode.length){
+              connectedNode[0].instance.connect(0, nodeWithSpecificType, 0);
+            }
+          }
+          // todo: add their properties
+        }
+      }
+    });
+  }
 
   render() {
     const options = _.map(this.state.prefixOptions, (opt, index) => ({
@@ -904,7 +1052,7 @@ class Dashboard extends React.Component {
           <Col lg="3" md="3" sm="3">
             <Card className="card-stats">
               <div className="numbers">
-                <CardTitle tag="p">Upload Files</CardTitle>
+                <CardTitle tag="p">Attach files</CardTitle>
               </div>
               <CardBody>
                 {/* <div class="form-group">
@@ -916,24 +1064,7 @@ class Dashboard extends React.Component {
                 </div> */}
                 <Row>
                   <Col md="8">
-                    {" "}
-                    <input
-                      id="input-b2"
-                      name="input-b2"
-                      type="file"
-                      className="file inputFile"
-                      data-show-preview="false"
-                    ></input>
-                  </Col>
-                  <Col md="3">
-                    {" "}
-                    <Button
-                      className="btn-round uploadBtn"
-                      color="primary"
-                      onClick={this.uploadFiles}
-                    >
-                      Upload
-                    </Button>
+                    <Input className="file inputFile" multiple type="file" name="file" id="exampleFile" onChange={this.onSelectedFiles}/>
                   </Col>
                 </Row>
               </CardBody>
@@ -944,10 +1075,17 @@ class Dashboard extends React.Component {
         </Row>
         <Row>
           <Col md="9">
-            <Card>     
-              <div className="numbers">
-                <CardTitle tag="p">Graph</CardTitle>
-              </div> 
+            <Card> 
+              <div style={{ marginLeft: `10px` }}>    
+                <div className="numbers" style={{ float: 'left' }}>
+                  <CardTitle tag="p">Graph</CardTitle>
+                </div>
+                <input style={{display:'none'}} ref={this.hiddenFileInput} type="file" onChange={this.onSelectedFile}/>
+                <Button onClick={this.uploadTtl} style={{ marginRight: `10px`, float: 'right', marginBottom: '0px' }}>
+                      <i className="fa fa-upload" style={{ color: `white` }} /> Import
+                      Configuration
+                </Button>
+              </div>
               <CardBody>
                 <div id="parentCanvas" className="litegraph litegraph-editor">
                   <canvas id="mycanvas" height="600" width="1000"></canvas>{" "}
@@ -962,7 +1100,7 @@ class Dashboard extends React.Component {
                     //style={{ display: "none" }}
                     ref="file"
                   > */}
-                  <Button onClick={this.saveConfig}>
+                  <Button onClick={this.runConfig}>
                     <i className="fa fa-cog" style={{ color: `white` }} /> Run
                     Configuration
                   </Button>
@@ -999,6 +1137,10 @@ class Dashboard extends React.Component {
                   ) : (
                     ""
                   )}
+                  <Button onClick={this.downloadTtl} style={{ marginLeft: `10px` }}>
+                    <i className="fa fa-download" style={{ color: `white` }} /> Export
+                    Configuration
+                  </Button>
                 </div>
               </CardFooter>
             </Card>
@@ -1008,13 +1150,10 @@ class Dashboard extends React.Component {
             <ModalBody></ModalBody>
           </Modal> */}
 
-          {/*<Col md="3">
-            {this.state.componentArray.map((comp, key) => {
-              if (this.state.node.title === comp.title) {
-                return comp.form;
-              }
-            })}
-          </Col>*/}
+          <Col md="3">
+            {this.state.panelData.filter(p => p.showPanel === true).map((p) =>(
+            <Panel key={p.nodePath+p.numNodeType} panelData={p} updateParentPanelData={this.updateParentPanelData} sortBySelectorValue={this.sortBySelectorValue} />))} 
+          </Col>
 
         </Row>
         {/* <Row>

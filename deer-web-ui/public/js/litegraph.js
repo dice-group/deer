@@ -5426,7 +5426,7 @@ LGraphNode.prototype.executeAction = function(action)
                         if (node.onDblClick) {
                             node.onDblClick( e, pos, this );
                         }
-                        this.processNodeDblClicked(node);
+                        // this.processNodeDblClicked(node);
                         block_drag_node = true;
                     }
 
@@ -10740,7 +10740,7 @@ LGraphNode.prototype.executeAction = function(action)
                     has_submenu: true,
                     callback: LGraphCanvas.onMenuAdd
                 },
-                { content: "Add Group", callback: LGraphCanvas.onGroupAdd }
+                // { content: "Add Group", callback: LGraphCanvas.onGroupAdd }
                 //{content:"Collapse All", callback: LGraphCanvas.onMenuCollapseAll }
             ];
 
