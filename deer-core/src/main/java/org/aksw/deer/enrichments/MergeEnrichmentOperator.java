@@ -48,12 +48,12 @@ public class MergeEnrichmentOperator extends AbstractEnrichmentOperator implemen
 
   @Override
   public double predictApplicability(List<Model> inputs, Model target) {
-    Model sI = inputs.get(0);
-    Model tI = inputs.get(1);
     // input has size 1 -> 0.05
     if (inputs.size() == 1) {
       return 0;
     }
+    Model sI = inputs.get(0);
+    Model tI = inputs.get(1);
     double[] score = new double[2];
     int size = target.listStatements()
       .filterDrop(stmt -> stmt.getObject().isAnon() && stmt.getSubject().isAnon())

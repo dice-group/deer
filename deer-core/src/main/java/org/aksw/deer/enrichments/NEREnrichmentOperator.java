@@ -66,7 +66,9 @@ public class NEREnrichmentOperator extends AbstractParameterizedEnrichmentOperat
 
   public static final Property PARALLELISM = DEER.property("parallelism");
 
-  private static final String DEFAULT_FOX_URL = "http://localhost:4444/fox";
+//  private static final String DEFAULT_FOX_URL = "http://localhost:4444/fox";
+  private static final String DEFAULT_FOX_URL = "https://fox.demos.dice-research.org/fox";
+
 
   private static final Property DEFAULT_IMPORT_PROPERTY
     = ResourceFactory.createProperty("http://geoknow.org/ontology/relatedTo");
@@ -317,7 +319,7 @@ public class NEREnrichmentOperator extends AbstractParameterizedEnrichmentOperat
       .add(NEREnrichmentOperator.LITERAL_PROPERTY, RDFS.comment)
       .add(NEREnrichmentOperator.IMPORT_PROPERTY, FOXO.RELATED_TO)
       .add(NEREnrichmentOperator.NE_TYPE, ResourceFactory.createStringLiteral("all"))
-      .add(NEREnrichmentOperator.FOX_URL, ResourceFactory.createResource("http://localhost:4444/fox"))
+      .add(NEREnrichmentOperator.FOX_URL, ResourceFactory.createResource(DEFAULT_FOX_URL))
       .add(NEREnrichmentOperator.PARALLELISM, ResourceFactory.createTypedLiteral(1))
       .init();
   }

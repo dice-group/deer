@@ -10,9 +10,5 @@
 deer:MergeEnrichmentOperatorShape
 	a sh:NodeShape ;
 	sh:targetClass deer:MergeEnrichmentOperator ;
-  fcage:minInPorts 2 ;
-  fcage:maxInPorts 10 ;
-  fcage:minOutPorts 1 ;
-  fcage:maxOutPorts 1 ;
 .
 

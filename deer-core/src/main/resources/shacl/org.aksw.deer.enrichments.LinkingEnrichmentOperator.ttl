@@ -20,10 +20,6 @@ deer:LinkingEnrichmentOperatorShape
     [ sh:property deer:LinkingEnrichmentOperatorShape_useML ; ]
 	) ;
 	sh:message "LinkingEnrichmentOperator must declare exactly one of {deer:specFile, deer:linkSpecification}" ;
-		fcage:minInPorts 1 ;
-  	fcage:maxInPorts 2 ;
-  	fcage:minOutPorts 1 ;
-  	fcage:maxOutPorts 3 ;
 .
 
 deer:LinkingEnrichmentOperatorShape_linkingPredicate

@@ -13,10 +13,6 @@ deer:GeoDistanceEnrichmentOperatorShape
 	sh:property deer:GeoDistanceEnrichmentOperatorShape_selectPredicate ,
 	            deer:GeoDistanceEnrichmentOperatorShape_distancePredicate ;
 	sh:message "GeoDistanceEnrichmentOperator must declare exactly one of each: deer:selectPredicate, deer:distancePredicate" ;
-	fcage:minInPorts 1 ;
-	fcage:maxInPorts 1 ;
-	fcage:minOutPorts 1 ;
-	fcage:maxOutPorts 1 ;
 .
 
 deer:GeoDistanceEnrichmentOperatorShape_selectPredicate

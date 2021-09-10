@@ -63,7 +63,7 @@ public class Server {
   private static final Gson GSON = new GsonBuilder().create();
   private static Server instance = null;
 
-  private static Model SHAPES_MODEL = DeerController.getShapes();
+  private static final Model SHAPES_MODEL = DeerController.getShapes();
 
   private final ConcurrentMap<String, CompletableFuture<Void>> requests = new ConcurrentHashMap<>();
   private final File uploadDir = new File(STORAGE_DIR_PATH);

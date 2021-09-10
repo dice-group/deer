@@ -22,10 +22,7 @@ import org.aksw.deer.io.ModelReader;
 import org.aksw.deer.io.ModelWriter;
 import org.aksw.deer.server.Server;
 import org.aksw.deer.vocabulary.DEER;
-import org.aksw.faraday_cage.engine.CompiledExecutionGraph;
-import org.aksw.faraday_cage.engine.FaradayCageContext;
-import org.aksw.faraday_cage.engine.Plugin;
-import org.aksw.faraday_cage.engine.PluginFactory;
+import org.aksw.faraday_cage.engine.*;
 import org.aksw.faraday_cage.vocabulary.FCAGE;
 import org.apache.commons.cli.*;
 import org.apache.jena.atlas.web.HttpException;
@@ -108,6 +105,23 @@ public class DeerController {
       DeerPlugin instance = (DeerPlugin) uPluginFactory.getImplementationOf(r);
       r.getModel().add(r, RDFS.comment, instance.getDescription());
       r.getModel().add(r, RDFS.seeAlso, ResourceFactory.createResource(instance.getDocumentationURL()));
+      if (instance instanceof DeerExecutionNode) {
+        ExecutionNode.DegreeBounds degreeBounds = ((DeerExecutionNode) instance).getDegreeBounds();
+        r.getModel().add(r, FCAGE.minInPorts,  ResourceFactory.createTypedLiteral(degreeBounds.minIn()));
+        // @todo remove this hack once frontend implements it right
+        int maxIn = degreeBounds.maxIn();
+        if (maxIn > 10) {
+          maxIn = 10;
+        }
+        r.getModel().add(r, FCAGE.maxInPorts,  ResourceFactory.createTypedLiteral(maxIn));
+        r.getModel().add(r, FCAGE.minOutPorts, ResourceFactory.createTypedLiteral(degreeBounds.minOut()));
+        // @todo remove this hack once frontend implements it right
+        int maxOut = degreeBounds.maxIn();
+        if (maxOut > 10) {
+          maxOut = 10;
+        }
+        r.getModel().add(r, FCAGE.maxOutPorts, ResourceFactory.createTypedLiteral(maxOut));
+      }
     }
     Model res = (list.size() == 0) ? ModelFactory.createDefaultModel() : list.get(0).getModel();
     res.add(type, RDFS.subClassOf, FCAGE.ExecutionNode);

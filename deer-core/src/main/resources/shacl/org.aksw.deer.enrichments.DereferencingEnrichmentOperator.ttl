@@ -1,0 +1,67 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix sh: <http://www.w3.org/ns/shacl#>.
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix deer: <https://w3id.org/deer/> .
+@prefix fcage: <https://w3id.org/fcage/> .
+
+# Node DereferencingEnrichmentOperator
+
+deer:DereferencingEnrichmentOperatorShape
+  a sh:NodeShape ;
+  sh:targetClass deer:DereferencingEnrichmentOperator ;
+  sh:closed true ;
+  sh:ignoredProperties ( rdf:type fcage:hasInput ) ;
+  sh:property deer:DereferencingEnrichmentOperatorShape_useSparqlEndpoint ,
+              deer:DereferencingEnrichmentOperatorShape_operation ;
+  sh:message "DereferencingEnrichmentOperator must declare exactly one endpoint and at least one operation" ;
+.
+
+deer:DereferencingEnrichmentOperatorShape_useSparqlEndpoint
+  sh:path deer:useSparqlEndpoint ;
+  sh:minCount 1 ;
+  sh:maxCount 1 ;
+  sh:nodeKind sh:IRI ;
+.
+
+deer:DereferencingEnrichmentOperatorShape_operation
+  sh:path deer:operation ;
+  sh:minCount 1 ;
+  sh:node deer:DereferencingEnrichmentOperatorShape_operationNode;
+.
+
+deer:DereferencingEnrichmentOperatorShape_operationNode
+  a sh:NodeShape ;
+  sh:property deer:DereferencingEnrichmentOperatorShape_operationNode_lookUpPrefix ,
+              deer:DereferencingEnrichmentOperatorShape_operationNode_lookUpProperty ,
+              deer:DereferencingEnrichmentOperatorShape_operationNode_dereferencingProperty ,
+              deer:DereferencingEnrichmentOperatorShape_operationNode_importProperty ;
+.
+
+deer:DereferencingEnrichmentOperatorShape_operationNode_lookUpPrefix
+  sh:path deer:sourceAuthority ;
+  sh:minCount 1 ;
+  sh:maxCount 1 ;
+  sh:datatype xsd:string ;
+.
+
+deer:DereferencingEnrichmentOperatorShape_operationNode_lookUpProperty
+  sh:path deer:targetAuthority ;
+  sh:minCount 1 ;
+  sh:maxCount 1 ;
+  sh:nodeKind sh:IRI ;
+.
+
+deer:DereferencingEnrichmentOperatorShape_operationNode_dereferencingProperty
+  sh:path deer:targetAuthority ;
+  sh:minCount 1 ;
+  sh:maxCount 1 ;
+  sh:nodeKind sh:IRI ;
+.
+
+deer:DereferencingEnrichmentOperatorShape_operationNode_importProperty
+  sh:path deer:targetAuthority ;
+  sh:minCount 1 ;
+  sh:maxCount 1 ;
+  sh:nodeKind sh:IRI ;
+.

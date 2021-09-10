@@ -15,10 +15,6 @@ deer:SparqlModelWriterShape
 	            deer:SparqlModelWriterShape_writeOp ,
 	            deer:SparqlModelWriterShape_graphName ,
 	            deer:SparqlModelWriterShape_credFile ;
-	fcage:minInPorts 1 ;
-  fcage:maxInPorts 1 ;
-  fcage:minOutPorts 0 ;
-  fcage:maxOutPorts 0 ;
 .
 
 deer:FileModelReaderShape_fromUri
