@@ -133,7 +133,7 @@ class Panel extends React.Component {
         let propsSelector = this.props.panelData.propsSelector.propsMaxCount;
         let temp = Object.assign({}, this.props.panelData);
         maxCount = propsSelector.filter(i => i.nodeSelectorProp === p)[0].maxCount;
-        let preNums = propsSelector.filter(i => i.nodeSelectorProp.includes(p) && i.nodeSelectorProp.match(/\d+/g));
+        let preNums = propsSelector.filter(i => i.nodeSelectorProp.includes(p) && i.nodeSelectorProp.match(/\d+/g) && !i.nodeSelectorProp.includes("_extra_"));
         let nums = preNums.map(i => i.nodeSelectorProp.match(/\d+/g)[0]);
         let lastNum = Math.max(...nums) + 1;
         if (nums.length === 0){

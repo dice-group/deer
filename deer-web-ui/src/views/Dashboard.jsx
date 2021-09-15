@@ -238,7 +238,6 @@ class Dashboard extends React.Component {
     let minCount = -1;
     if(selectorNodeMinCount.length){
       minCount = selectorNodeMinCount[0].split("^^")[0].match(/\d+/g)[0];
-      console.log(node, minCount);
     }
 
     let propsUnderSelectorNodeWithMaxCount = [];
@@ -298,7 +297,7 @@ class Dashboard extends React.Component {
     return message;
   }
 
-  initializeNode = (node) => {   
+  initializeNode = (node) => {
     let propsArrForNode = this.getPropertiesForNode(node);
     let inputPorts = this.getInputPorts(node)[0];
     let outputPorts = this.getOutputPorts(node)[0];
@@ -415,11 +414,12 @@ class Dashboard extends React.Component {
       temp.showPanel = false;
       return temp;
     });
+    let nodeId = (e.target && e.target.data.current_node.id) || e;
     // if this panel was just added
-    let exists = this.state.panelData.find(p => { return p.numNodeType === e.target.data.current_node.id && p.nodePath === nodeType+node});
+    let exists = this.state.panelData.find(p => { return p.numNodeType === nodeId && p.nodePath === nodeType+node});
     if(!exists){
       panelData.push({
-          numNodeType: e.target.data.current_node.id,
+          numNodeType: nodeId,
           nodePath: nodeType+node,
           properties: propertiesCopy,
           xoneProperties: xoneProperties,
@@ -432,7 +432,7 @@ class Dashboard extends React.Component {
     }  
     else {
       // show current one
-      let idForChange = this.state.panelData.findIndex(p => { return p.nodePath === nodeType+node && p.numNodeType === e.target.data.current_node.id});
+      let idForChange = this.state.panelData.findIndex(p => { return p.nodePath === nodeType+node && p.numNodeType === nodeId});
       panelData[idForChange].showPanel = true;
       this.setState({
         panelData: panelData,
@@ -503,8 +503,10 @@ class Dashboard extends React.Component {
     data.nodes.map((node, key) => {
       let inputPorts = [];
       let curInputLinkId = '';
-
-      node.properties = this.state.panelData.filter(i => i.numNodeType === node.id && i.nodePath === node.type)[0].properties;
+      let panelDataPr = this.state.panelData.filter(i => i.numNodeType === node.id && i.nodePath === node.type);
+      if(panelDataPr.length){
+        node.properties = panelDataPr[0].properties;
+      }
 
       writer.addQuad(
         namedNode("urn:example:demo/" + node.properties.name),
@@ -533,7 +535,11 @@ class Dashboard extends React.Component {
           // console.log(this.state.inputPorts);
           //adding the quad for each inputLinks here
           let blankNodes = inputPorts.map((inputPort, key) => {
-            inputPort.properties = this.state.panelData.filter(i => i.numNodeType === inputPort.id && i.nodePath === inputPort.type)[0].properties;
+            let panelDataIntupPort = this.state.panelData.filter(i => i.numNodeType === inputPort.id && i.nodePath === inputPort.type)
+            if(panelDataIntupPort.length) { 
+              inputPort.properties = panelDataIntupPort[0].properties;
+            }
+            
             return writer.blank([{
               predicate: namedNode("https://w3id.org/fcage/" + "fromNode"),
               object:    namedNode("urn:example:demo/" + inputPort.properties.name),
@@ -862,16 +868,16 @@ class Dashboard extends React.Component {
   }
 
   ttlToUI = (textFromFileLoaded) => {
+    // todo: clear the graph and prompt the user if it should be overwritten
+
     const parser = new N3.Parser();
     let fullFileContent = parser.parse(textFromFileLoaded);
     let nodesInstances = [];
     parser.parse(textFromFileLoaded, (error, quad, prefixes) => {
       if(quad){
-        // console.log(quad);
         // add nodes to canvas
         if(quad.predicate.id.includes("http://www.w3.org/1999/02/22-rdf-syntax-ns#type")){
           let node = quad.object.id.split("https://w3id.org/deer/")[1];//"SparqlModelReader";
-          // console.log(node);
           let mainPath;
           if(node.includes("Reader")){
             mainPath = "Reader";
@@ -887,7 +893,6 @@ class Dashboard extends React.Component {
           // nodeReader.pos = [100,400];
           this.state.graph.add(nodeWithSpecificType);
           // connecting nodes
-          // console.log(fullFileContent);
           let inputPorts = fullFileContent.filter(q => quad.subject.id === q.subject.id && q.predicate.id.includes("hasInput")).map(i => i.object.id);
           if(inputPorts.length){
             // handling blank nodes like: inputPorts[0] = ':n3-109'
@@ -897,14 +902,59 @@ class Dashboard extends React.Component {
                 inputPorts = realName;
               } 
             }
-            // console.log(nodesInstances, inputPorts);
             let connectedNode = nodesInstances.filter(i => i.name === inputPorts[0]);
-            // console.log(connectedNode);
             if(connectedNode.length){
               connectedNode[0].instance.connect(0, nodeWithSpecificType, 0);
             }
           }
-          // todo: add their properties
+          // add their properties
+          nodeWithSpecificType.onDblClick(nodeWithSpecificType.id);
+
+          let temp = Object.assign({}, this.state.panelData[this.state.panelData.length-1]);
+          // get props from quads
+          let properties = {};
+          fullFileContent.filter(q => quad.subject.id === q.subject.id && q.predicate.id.includes("https://w3id.org/deer/")).forEach(i => {
+            let predicate = i.predicate.id.split("https://w3id.org/deer/")[1];
+            let objectId = i.object.id;
+            properties[predicate] = objectId;
+            // handling blank nodes like: objectId = ':n3-109'
+            if(objectId.includes("_:")){
+              // while(objectId !== "http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"){
+                let selectorProps = {};
+                fullFileContent.filter(q1 => q1.subject.id === objectId)
+                  .forEach(i1 => {
+                    let pref = i1.predicate.id.split("https://w3id.org/deer/")[1];
+                    let maxCount = temp.propsSelector.propsMaxCount.filter(i => i.nodeSelectorProp === pref)[0].maxCount;
+
+                    let nums = Object.keys(properties).filter(sp => sp.includes("_extra_") 
+                      && sp.split("_extra_")[0] === pref).map(spe => spe.split("_extra_")[1]);
+                    let lastNum = Math.max(...nums) + 1;
+                    if (nums.length === 0){
+                      lastNum = "1";
+                    }
+                    if(parseInt(maxCount) >= parseInt(lastNum)+1){
+                      if(properties.hasOwnProperty(pref)){
+                        pref = pref+"_extra_"+lastNum;
+                        temp.propsSelector.propsMaxCount.push({nodeSelectorProp: pref, maxCount: maxCount});
+                      }
+                    } else {
+                      if(properties.hasOwnProperty(pref)){
+                        alert("According to the SHACL scheme for the node: "+node+", prefix: "+pref+", maxCount = " + maxCount+", value from TTL file: "+i1.object.id+". Therefore, only the allowed amount will be added.");
+                      }
+                    }
+                    selectorProps[pref] = i1.object.id;
+                  });
+                objectId = selectorProps;
+              // } 
+              properties = {...properties, ...objectId};
+            }
+
+          });
+
+          for (const [key, value] of Object.entries(properties)) {
+            temp.properties[key] = value.replace(/"/g,"");
+          }
+          this.updateParentPanelData(temp, nodeWithSpecificType.id);
         }
       }
     });
