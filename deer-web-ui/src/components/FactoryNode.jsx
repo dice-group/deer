@@ -30,6 +30,7 @@ class FactoryNode extends React.Component {
     );
     this.widgets_start_y = 70;
     this.widgets_up = false;
+    this.getMenuOptions = () => [null];
 
     this.onDrawForeground = (ctx, graphcanvas) =>
     {
