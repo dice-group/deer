@@ -1165,11 +1165,11 @@ class Dashboard extends React.Component {
                 <div className="numbers" style={{ float: 'left' }}>
                   <CardTitle tag="p">Graph</CardTitle>
                 </div>
-                {/*<input style={{display:'none'}} ref={this.hiddenFileInput} type="file" onChange={this.onSelectedFile}/>
+                <input style={{display:'none'}} ref={this.hiddenFileInput} type="file" onChange={this.onSelectedFile}/>
                 <Button onClick={this.uploadTtl} style={{ marginRight: `10px`, float: 'right', marginBottom: '0px' }}>
                       <i className="fa fa-upload" style={{ color: `white` }} /> Import
                       Configuration
-                </Button>*/}
+                </Button>
               </div>
               <CardBody>
                 <div id="parentCanvas" className="litegraph litegraph-editor">
