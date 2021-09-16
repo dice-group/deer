@@ -110,7 +110,9 @@ class Dashboard extends React.Component {
         //   properties: ["a", "b"],
         //   showPanel: "false",
         // }
-      ]
+      ],
+      errorMessage: "No errors",
+      errorMessages: [],
     };
     this.hiddenFileInput = React.createRef();
     this.hiddenFilesInput = React.createRef();
@@ -722,13 +724,18 @@ class Dashboard extends React.Component {
       .then((response) => response.json())
       .then((res) => {
         if (res.error && res.error.code === -1) {
+          let errors = this.state.errorMessages;
+          errors.push({run: errors.length, message: res.error.message});
           this.setState({
             visible: true,
+            errorMessage: res.error.message,
+            errorMessages: errors
           });
         } else if (res.requestId) {
           this.setState({
             requestID: res.requestId,
             showLogButton: true,
+            errorMessage: "No errors",
           });
           this.interval = setInterval(this.getStatusForRequest, 1000);
         }
@@ -763,7 +770,6 @@ class Dashboard extends React.Component {
         return response.json();
       })
       .then((content) => {
-        console.log(content.availableFiles);
         this.setState({
           availableFiles: content.availableFiles,
         });
@@ -971,7 +977,7 @@ class Dashboard extends React.Component {
     });
   }
 
-  toggle = (index) => {
+  toggleTooltip = (index) => {
     let t = this.state.addNewPrefixes;
     t[index].show = !t[index].show;
     this.setState({addNewPrefixes: t});
@@ -1112,7 +1118,7 @@ class Dashboard extends React.Component {
                 <div className="stats">
                   {this.state.addNewPrefixes.map((addPrefix, index) => (
                     <Badge variant="light" id={"Tooltip-"+index} key={"Tooltip-"+index}> {addPrefix.prefix}
-                     <Tooltip placement="right" isOpen={addPrefix.show} target={"Tooltip-"+index} toggle={() => this.toggle(index)}> {addPrefix.link}</Tooltip>
+                     <Tooltip placement="right" isOpen={addPrefix.show} target={"Tooltip-"+index} toggle={() => this.toggleTooltip(index)}> {addPrefix.link}</Tooltip>
                     </Badge>
                   ))}
                 </div>
@@ -1183,39 +1189,7 @@ class Dashboard extends React.Component {
                     <i className="fa fa-cog" style={{ color: `white` }} /> Run
                     Configuration
                   </Button>
-                  {/* </a> */}
-                  {this.state.showConfigButton ? (
-                    <Button
-                      onClick={this.saveResults}
-                      style={{ marginLeft: `10px` }}
-                    >
-                      <i
-                        className="fa fa-sticky-note"
-                        style={{ color: `white` }}
-                      />{" "}
-                      Show results
-                    </Button>
-                  ) : (
-                    ""
-                  )}
-                  {this.state.showLogButton ? (
-                    <a
-                      target="_blank"
-                      id="downloadlink"
-                      //style={{ display: "none" }}
-                      ref="file"
-                    >
-                      <Button
-                        onClick={this.showLogs}
-                        style={{ marginLeft: `10px` }}
-                      >
-                        <i className="fa fa-cog" style={{ color: `white` }} />{" "}
-                        Logs
-                      </Button>
-                    </a>
-                  ) : (
-                    ""
-                  )}
+                  {/* </a> */}             
                   <Button onClick={this.downloadTtl} style={{ marginLeft: `10px` }}>
                     <i className="fa fa-download" style={{ color: `white` }} /> Export
                     Configuration
@@ -1235,6 +1209,56 @@ class Dashboard extends React.Component {
           </Col>
 
         </Row>
+        
+        <Card className="resultsSection">
+          <div className="numbers">
+            <CardTitle tag="p">Results</CardTitle>
+          </div> 
+          <CardBody>
+            <p className="errorMessage new-line">{this.state.errorMessage}</p>
+            {/*{this.state.errorMessages.map(r => (
+              <div>
+                <p>Run{r.run}:</p>
+                <p>{r.message}</p>
+              </div>
+            ))}*/}
+          </CardBody>
+          <CardFooter>
+            <hr />
+            {this.state.showLogButton ? (
+              <a
+                target="_blank"
+                id="downloadlink"
+                //style={{ display: "none" }}
+                ref="file"
+              >
+                <Button
+                  onClick={this.showLogs}
+                >
+                  <i className="fa fa-cog" style={{ color: `white` }} />{" "}
+                  Logs
+                </Button>
+              </a>
+            ) : (
+              ""
+            )}
+            {this.state.showConfigButton ? (
+              <Button
+                onClick={this.saveResults}
+                style={{ marginLeft: `10px` }}
+              >
+                <i
+                  className="fa fa-sticky-note"
+                  style={{ color: `white` }}
+                />{" "}
+                Show results
+              </Button>
+            ) : (
+              ""
+            )}
+          </CardFooter>
+        </Card>
+      
         {/* <Row>
             <Col md="4">
               <Card>

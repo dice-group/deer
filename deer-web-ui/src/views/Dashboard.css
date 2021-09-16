@@ -149,3 +149,19 @@ h1 {
 .stats {
   padding-bottom: 6px;
 }
+
+.propertiesSection {
+  position: absolute;
+  background-color: white;
+  overflow-y: scroll;
+  max-height: 98%;
+  width: 93%;
+}
+
+.errorMessage {
+  margin-left: 2px;
+}
+
+.new-line {
+  white-space: pre-line;
+}

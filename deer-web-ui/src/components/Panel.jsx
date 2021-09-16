@@ -170,7 +170,7 @@ class Panel extends React.Component {
 
     return (
       <div>
-        <Card>
+        <Card className="propertiesSection">
           <div className="numbers">
             <CardTitle tag="p">Properties</CardTitle>
             <p className="nodePath">{this.props.panelData.nodePath.split('/')[1]}</p>
