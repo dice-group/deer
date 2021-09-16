@@ -42,6 +42,7 @@ import {
   DropdownItem,
   Badge,
   Table,
+  Tooltip,
 } from "reactstrap";
 
 const N3 = require("n3");
