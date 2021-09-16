@@ -121,3 +121,31 @@ h1 {
   z-index: 100;
   position: relative;
 }
+
+.dropdown-content {
+  overflow-y: scroll;
+  max-height: 200px;
+  position: absolute;
+  background-color: white;
+  width: 100%;
+  z-index: 1;
+}
+
+.dropdown-item {
+  padding: 3px 8px;
+}
+
+.badge {
+  margin: 4px;
+}
+
+.selectedFiles {
+  overflow-y: scroll;
+  max-height: 40px;
+  margin-bottom: 0;
+  width: 100%;
+}
+
+.stats {
+  padding-bottom: 6px;
+}

@@ -1,12 +1,6 @@
 import React, { Fragment } from "react";
-import { Link } from "react-router-dom";
 import { v4 as uuidv4 } from 'uuid';
 import {
-  Collapse,
-  Navbar,
-  NavbarToggler,
-  NavbarBrand,
-  Container,
   Button,
   Card,
   CardTitle,
@@ -124,7 +118,6 @@ class Panel extends React.Component {
 
   addOneMorePropertyBundle = (pArr) => {
     pArr = pArr[0];
-    let isMaxCount = false;
     let maxCount = -1;
     for (let i = 0; i < pArr.length; i++) {
       let p = pArr[i];
@@ -166,8 +159,8 @@ class Panel extends React.Component {
     let propsSelector = propsSelectorWithMaxCount.map(i => i.nodeSelectorProp);
     let otherProps = Object.keys(this.props.panelData.properties)
                     .filter(otherpr => !excludeProps.includes(otherpr) 
-                      && !propsSelector.includes(otherpr) && otherpr !== "operation" && otherpr != "name");
-    if(excludeProps.includes("selector") && this.state.showSelectorProps === false && this.props.panelData.properties["selector"].length == 0){
+                      && !propsSelector.includes(otherpr) && otherpr !== "operation" && otherpr !== "name");
+    if(excludeProps.includes("selector") && this.state.showSelectorProps === false && this.props.panelData.properties["selector"].length === 0){
       propsSelector = [];
     }
 
@@ -179,11 +172,10 @@ class Panel extends React.Component {
       <div>
         <Card>
           <div className="numbers">
-            <CardTitle tag="p" className="nodeName">{this.props.panelData.nodePath.split('/')[1]}</CardTitle>
-            <p className="nodePath">{this.props.panelData.nodePath}</p>
+            <CardTitle tag="p">Properties</CardTitle>
+            <p className="nodePath">{this.props.panelData.nodePath.split('/')[1]}</p>
           </div> 
           <CardBody>
-            <p>Properties</p>
             {otherProps.map((p) => (
               <Fragment key={p}>
                 <FormGroup>

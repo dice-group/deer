@@ -26,7 +26,6 @@ import Panel from "../components/Panel";
 // reactstrap components
 import {
   Card,
-  CardHeader,
   CardBody,
   CardFooter,
   CardTitle,
@@ -103,6 +102,7 @@ class Dashboard extends React.Component {
       inputPorts: [],
       inputLinkId: '',
       selectedFiles: [],
+      selectedFileNames: [],
       panelData: [
         // {
         //   numNodeType: 0,
@@ -113,6 +113,7 @@ class Dashboard extends React.Component {
       ]
     };
     this.hiddenFileInput = React.createRef();
+    this.hiddenFilesInput = React.createRef();
   }
 
   updateParentPanelData = (temp, numNodeType) => {
@@ -226,8 +227,6 @@ class Dashboard extends React.Component {
   }
 
   getPropertiesForNode = (node) => {
-    let arr = [];
-
     this.setState({
       tempXoneNodeParams: [],
     });
@@ -810,10 +809,15 @@ class Dashboard extends React.Component {
   };
 
   addNewPrefixes = (e) => {
+    let prefixes = {prefix: this.state.userInput, link: this.state.namespace, show: false};
+    let t = this.state.addNewPrefixes;
+    t.push(prefixes);
+    let pr = this.state.prefixes;
+    pr[this.state.userInput] = this.state.namespace;
     this.setState({
-      addNewPrefixes: this.state.addNewPrefixes.concat(this.state.userInput),
+      addNewPrefixes: t,
+      prefixes: pr
     });
-    this.state.prefixes[this.state.userInput] = this.state.namespace;
   };
 
   saveResults = () => {
@@ -846,8 +850,11 @@ class Dashboard extends React.Component {
   };
 
   onSelectedFiles = (event) => {
+    let files = [...event.target.files];
+    files = files.map(i => i.name);
     this.setState({
      selectedFiles: event.target.files,
+     selectedFileNames: files
     })
   };
 
@@ -865,6 +872,10 @@ class Dashboard extends React.Component {
 
   uploadTtl = (event) => {
     this.hiddenFileInput.current.click();
+  }
+
+  selectFiles = (event) => {
+    this.hiddenFilesInput.current.click();
   }
 
   ttlToUI = (textFromFileLoaded) => {
@@ -960,6 +971,12 @@ class Dashboard extends React.Component {
     });
   }
 
+  toggle = (index) => {
+    let t = this.state.addNewPrefixes;
+    t[index].show = !t[index].show;
+    this.setState({addNewPrefixes: t});
+  }
+
   render() {
     const options = _.map(this.state.prefixOptions, (opt, index) => ({
       key: opt,
@@ -1051,6 +1068,7 @@ class Dashboard extends React.Component {
                                 {this.state.afterFilteredSuggestions.map(
                                   (suggestions, key) => (
                                     <DropdownItem
+                                      key={key}
                                       className="dropdown-item"
                                       value={suggestions}
                                       onClick={this.selectedPrefix}
@@ -1092,8 +1110,10 @@ class Dashboard extends React.Component {
               <CardFooter>
                 <hr />
                 <div className="stats">
-                  {this.state.addNewPrefixes.map((addPrefix) => (
-                    <Badge variant="light"> {addPrefix}</Badge>
+                  {this.state.addNewPrefixes.map((addPrefix, index) => (
+                    <Badge variant="light" id={"Tooltip-"+index} key={"Tooltip-"+index}> {addPrefix.prefix}
+                     <Tooltip placement="right" isOpen={addPrefix.show} target={"Tooltip-"+index} toggle={() => this.toggle(index)}> {addPrefix.link}</Tooltip>
+                    </Badge>
                   ))}
                 </div>
               </CardFooter>
@@ -1113,13 +1133,22 @@ class Dashboard extends React.Component {
                   ></input>
                 </div> */}
                 <Row>
-                  <Col md="8">
-                    <Input className="file inputFile" multiple type="file" name="file" id="exampleFile" onChange={this.onSelectedFiles}/>
-                  </Col>
+                  <ul className="selectedFiles">
+                    {this.state.selectedFileNames.map((f, i) => (
+                      <li key={f+i}>{f}</li>
+                    )
+                    )}
+                  </ul>
                 </Row>
               </CardBody>
               <hr />
-              <CardFooter></CardFooter>
+              <CardFooter>
+                <input style={{display:'none'}} ref={this.hiddenFilesInput} multiple type="file" onChange={this.onSelectedFiles}/>
+                <Button onClick={this.selectFiles}>
+                  <i className="fa fa-upload" style={{ color: `white` }} /> Select
+                  Files
+                </Button>
+              </CardFooter>
             </Card>
           </Col>
         </Row>

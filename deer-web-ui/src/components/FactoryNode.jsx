@@ -1,18 +1,4 @@
-import React, { Fragment } from "react";
-// reactstrap components
-import {
-  Row,
-  Col,
-  Button,
-  Form,
-  FormGroup,
-  Input,
-  Label,
-  CardBody,
-  Card,
-  CardTitle,
-  CardFooter,
-} from "reactstrap";
+import React from "react";
 
 class FactoryNode extends React.Component {
   constructor(props) {
