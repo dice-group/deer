@@ -1101,7 +1101,7 @@ class Dashboard extends React.Component {
                         <Col md="4">
                           <Button
                             disabled={this.state.isDisabled}
-                            className="btn-round prefixBtn"
+                            className="prefixBtn"
                             color="primary"
                             onClick={this.addNewPrefixes}
                           >
