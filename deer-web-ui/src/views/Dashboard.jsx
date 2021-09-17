@@ -74,10 +74,8 @@ class Dashboard extends React.Component {
       isDisabled: false,
       nodeArr: [],
       file: "",
-      visible: false,
       requestID: "",
       showResultModal: false,
-      requestCompleteModal: false,
       showConfigButton: false,
       availableFiles: [],
       showLogButton: false,
@@ -112,7 +110,7 @@ class Dashboard extends React.Component {
         //   showPanel: "false",
         // }
       ],
-      errorMessage: "No errors",
+      errorMessage: "",
       errorMessages: [],
     };
     this.hiddenFileInput = React.createRef();
@@ -728,7 +726,6 @@ class Dashboard extends React.Component {
           let errors = this.state.errorMessages;
           errors.push({run: errors.length, message: res.error.message});
           this.setState({
-            visible: true,
             errorMessage: res.error.message,
             errorMessages: errors
           });
@@ -736,7 +733,7 @@ class Dashboard extends React.Component {
           this.setState({
             requestID: res.requestId,
             showLogButton: true,
-            errorMessage: "No errors",
+            errorMessage: "",
           });
           this.interval = setInterval(this.getStatusForRequest, 1000);
         }
@@ -752,14 +749,14 @@ class Dashboard extends React.Component {
         if (content.status.code === 2) {
           clearInterval(this.interval);
           this.setState({
-            requestCompleteModal: true,
             showConfigButton: true,
+            errorMessage: "",
           });
           this.getResults();
         } else if(content.status.code === 1){
           clearInterval(this.interval);
           this.setState({
-            visible: true,
+            errorMessage: content.status.description,
           });
         }
       });
@@ -782,11 +779,6 @@ class Dashboard extends React.Component {
       let a = document.getElementById("downloadlink");
       a.href = response.url;
       a.click();
-    });
-  };
-  toggle = () => {
-    this.setState({
-      visible: !this.state.visible,
     });
   };
 
@@ -836,12 +828,6 @@ class Dashboard extends React.Component {
   toggleResultModal = () => {
     this.setState({
       showResultModal: !this.state.showResultModal,
-    });
-  };
-
-  toggleRequestCompleteModal = () => {
-    this.setState({
-      requestCompleteModal: !this.state.requestCompleteModal,
     });
   };
 
@@ -993,28 +979,6 @@ class Dashboard extends React.Component {
 
     return (
       <div className="content">
-        <Modal isOpen={this.state.visible} toggle={this.toggle}>
-          <ModalHeader toggle={this.toggle}>
-            Incorrect Configuration
-          </ModalHeader>
-          <ModalBody>
-            Please input all the required fields and connections.
-          </ModalBody>
-        </Modal>
-
-        <Modal
-          isOpen={this.state.requestCompleteModal}
-          toggle={this.toggleRequestCompleteModal}
-        >
-          <ModalHeader toggle={this.toggleRequestCompleteModal}>
-            Status
-          </ModalHeader>
-          <ModalBody>
-            The results are ready. You can download them by clicking 'Show
-            Results'.
-          </ModalBody>
-        </Modal>
-
         <Modal
           isOpen={this.state.showResultModal}
           toggle={this.toggleResultModal}
@@ -1199,11 +1163,6 @@ class Dashboard extends React.Component {
               </CardFooter>
             </Card>
           </Col>
-          {/* <Modal isOpen={this.state.isModalOpen} toggle={this.toggle}>
-            <ModalHeader toggle={this.toggle}>Display Config</ModalHeader>
-            <ModalBody></ModalBody>
-          </Modal> */}
-
           <Col md="3">
             {this.state.panelData.filter(p => p.showPanel === true).map((p) =>(
             <Panel key={p.nodePath+p.numNodeType} panelData={p} updateParentPanelData={this.updateParentPanelData} sortBySelectorValue={this.sortBySelectorValue} />))} 

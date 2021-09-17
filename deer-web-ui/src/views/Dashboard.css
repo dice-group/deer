@@ -160,6 +160,7 @@ h1 {
 
 .errorMessage {
   margin-left: 2px;
+  color: red;
 }
 
 .new-line {
