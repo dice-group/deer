@@ -9347,6 +9347,7 @@ LGraphNode.prototype.executeAction = function(action)
                         var node = LiteGraph.createNode(value.value);
                         if (node) {
                             node.pos = canvas.convertEventToCanvasOffset(first_event);
+                            canvas.deselectAllNodes();
                             canvas.graph.add(node);
                         }
                         if(callback)

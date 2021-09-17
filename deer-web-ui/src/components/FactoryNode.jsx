@@ -32,6 +32,15 @@ class FactoryNode extends React.Component {
     this.widgets_up = false;
     this.getMenuOptions = () => [null];
 
+    this.onAdded = () => {
+      this.onDblClick(this.id);
+      this.is_selected = true;
+    }
+
+    this.onSelected = () => {
+      this.onDblClick(this.id);
+    }
+
     this.onDrawForeground = (ctx, graphcanvas) =>
     {
       if(this.flags.collapsed)
