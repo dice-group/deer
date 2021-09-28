@@ -43,6 +43,7 @@ import {
   Badge,
   Table,
   Tooltip,
+  ModalFooter,
 } from "reactstrap";
 
 const N3 = require("n3");
@@ -114,6 +115,10 @@ class Dashboard extends React.Component {
       ],
       errorMessage: "No errors",
       errorMessages: [],
+      importErrorModal: false,
+      importErrorModalText: "",
+      importModalPrompt: false,
+      textFromImportFileLoaded: "",
     };
     this.hiddenFileInput = React.createRef();
     this.hiddenFilesInput = React.createRef();
@@ -465,6 +470,18 @@ class Dashboard extends React.Component {
       show: !this.state.show,
     });
   };
+
+  toggleImportErrorModal = () => {
+    this.setState({
+      importErrorModal: !this.state.importErrorModal,
+    });
+  }
+
+  toggleimportModalPrompt = () => {
+    this.setState({
+      importModalPrompt: !this.state.importModalPrompt,
+    });
+  }
 
   // getOutputLinks = (node) => {
   //   for (let link in node.outputs) {
@@ -871,7 +888,15 @@ class Dashboard extends React.Component {
     let fileReader = new FileReader();
     fileReader.onload = (fileLoadedEvent) => {
         let textFromFileLoaded = fileLoadedEvent.target.result;
-        this.ttlToUI(textFromFileLoaded);
+        if(this.state.graph._nodes.length !== 0){
+          this.setState({
+            importModalPrompt: true, 
+            textFromImportFileLoaded: textFromFileLoaded,
+            panelData: []
+          })
+        } else {
+          this.ttlToUI(textFromFileLoaded);
+        }
     };
 
     fileReader.readAsText(file, "UTF-8");
@@ -886,7 +911,8 @@ class Dashboard extends React.Component {
   }
 
   ttlToUI = (textFromFileLoaded) => {
-    // todo: clear the graph and prompt the user if it should be overwritten
+    // clear graph
+    this.state.graph.clear();
 
     const parser = new N3.Parser();
     let fullFileContent = parser.parse(textFromFileLoaded);
@@ -957,7 +983,11 @@ class Dashboard extends React.Component {
                       }
                     } else {
                       if(properties.hasOwnProperty(pref)){
-                        alert("According to the SHACL scheme for the node: "+node+", prefix: "+pref+", maxCount = " + maxCount+", value from TTL file: "+i1.object.id+". Therefore, only the allowed amount will be added.");
+                        this.setState({
+                          importErrorModal: true,
+                          importErrorModalText: "According to the SHACL scheme for the node: "+node+", prefix: "+pref+", maxCount = " + maxCount+", value from TTL file: "+i1.object.id+". Therefore, only the allowed amount will be added.",
+                        })
+                        // alert("According to the SHACL scheme for the node: "+node+", prefix: "+pref+", maxCount = " + maxCount+", value from TTL file: "+i1.object.id+". Therefore, only the allowed amount will be added.");
                       }
                     }
                     selectorProps[pref] = i1.object.id;
@@ -984,6 +1014,19 @@ class Dashboard extends React.Component {
     this.setState({addNewPrefixes: t});
   }
 
+  overwriteGraph = () => {
+    this.setState({
+      importModalPrompt: false,
+    })
+    this.ttlToUI(this.state.textFromImportFileLoaded);
+  }
+
+  notOverwriteGraph = () => {
+    this.setState({
+      importModalPrompt: false
+    })
+  }
+
   render() {
     const options = _.map(this.state.prefixOptions, (opt, index) => ({
       key: opt,
@@ -993,6 +1036,26 @@ class Dashboard extends React.Component {
 
     return (
       <div className="content">
+        <Modal isOpen={this.state.importModalPrompt} toggle={this.toggleImportModalPrompt}>
+          <ModalHeader toggle={this.toggleImportModalPrompt}>Import graph</ModalHeader>
+          <ModalBody>
+            The graph will be overwritten! Click "Yes" if you agree or "No" if not. 
+          </ModalBody>
+          <ModalFooter>
+            <Button color="primary" onClick={this.overwriteGraph}>Yes</Button>{' '}
+            <Button color="secondary" onClick={this.notOverwriteGraph}>No</Button>
+          </ModalFooter>
+        </Modal>
+
+        <Modal isOpen={this.state.importErrorModal} toggle={this.toggleImportErrorModal}>
+          <ModalHeader toggle={this.toggleImportErrorModal}>
+            Import error
+          </ModalHeader>
+          <ModalBody>
+            {this.state.importErrorModalText}
+          </ModalBody>
+        </Modal>
+
         <Modal isOpen={this.state.visible} toggle={this.toggle}>
           <ModalHeader toggle={this.toggle}>
             Incorrect Configuration
