@@ -499,6 +499,7 @@ class Dashboard extends React.Component {
       { format: "N-Triples" }
     );
 
+    let keys = [];
     var parser = new N3.Parser({ format: "N3", blankNodePrefix: "" });
     data.nodes.map((node, key) => {
       let inputPorts = [];
@@ -524,20 +525,26 @@ class Dashboard extends React.Component {
                var inputOriginNode = this.state.graph.getNodeById(
                  inputLinkInGraph.origin_id
                );
-               let inputPortsList = this.state.inputPorts;
-                 inputPortsList.push(inputOriginNode);
-                 inputPorts = inputPortsList;
-                 curInputLinkId = inputLinkId
+                inputPorts.push(inputOriginNode);
+                curInputLinkId = inputLinkId
               
              }
          }
          }
-          // console.log(this.state.inputPorts);
           //adding the quad for each inputLinks here
+          if(keys.length === 0 && inputPorts.length){
+             keys = inputPorts[0].outputs.map((out,index) => {if(out.links !== null && out.links.length !== 0) return index}).filter(i => i !== undefined);
+          }
+         
           let blankNodes = inputPorts.map((inputPort, key) => {
             let panelDataIntupPort = this.state.panelData.filter(i => i.numNodeType === inputPort.id && i.nodePath === inputPort.type)
             if(panelDataIntupPort.length) { 
               inputPort.properties = panelDataIntupPort[0].properties;
+            }
+
+            key = keys.shift();
+            if(!key){
+              key = 0;
             }
             
             return writer.blank([{
