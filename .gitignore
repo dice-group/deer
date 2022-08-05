@@ -9,6 +9,12 @@ target/
 out/
 nbactions.xml
 
+# Local Configuration #
+.classpath
+.factorypath
+.project
+.settings/
+
 # IntelliJ IDEA #
 *.iml
 .idea/
