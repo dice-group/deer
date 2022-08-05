@@ -48,6 +48,7 @@ public class DereferencingEnrichmentOperatorTest {
 
   @Before
   public void setUp() {
+    // FIXME: this does not reserve the port and can fail, for example in parallel test runs
     PORT = WebLib.choosePort();
     EX = "http://localhost:" + PORT + "/";
     DereferencingEnrichmentOperator.setDefaultLookupPrefix(EX);
