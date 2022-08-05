@@ -89,7 +89,9 @@ public class DereferencingEnrichmentOperatorTest {
 
   @After
   public void tearDown() {
-    fusekiServer.stop();
+    if (fusekiServer != null) {
+      fusekiServer.stop();
+    }
   }
 
   @Test
