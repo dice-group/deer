@@ -1,0 +1,3 @@
+@prefix ex: <http://example.org/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+ex:subject rdfs:comment "The University of Leipzig has been founded in 1409."

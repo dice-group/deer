@@ -1,0 +1,3 @@
+@prefix ex: <http://example.org/> .
+@prefix foxo:  <http://ns.aksw.org/fox/ontology#> .
+ex:subject foxo:relatedTo <http://dbpedia.org/resource/Leipzig> .

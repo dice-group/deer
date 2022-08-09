@@ -1,0 +1,40 @@
+@prefix dbo:   <http://dbpedia.org/ontology/> .
+@prefix foxo:  <http://ns.aksw.org/fox/ontology#> .
+@prefix schema: <http://schema.org/> .
+@prefix oa:    <http://www.w3.org/ns/oa#> .
+@prefix foxr:  <http://ns.aksw.org/fox/resource#> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix dbr:   <http://dbpedia.org/resource/> .
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix its:   <http://www.w3.org/2005/11/its/rdf#> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix nif:   <http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#> .
+@prefix prov:  <http://www.w3.org/ns/prov#> .
+@prefix foaf:  <http://xmlns.com/foaf/0.1/> .
+
+<http://ns.aksw.org/fox/demo/document-1#char0,51>
+        a               nif:CString , nif:Context ;
+        nif:beginIndex  "0"^^xsd:nonNegativeInteger ;
+        nif:endIndex    "51"^^xsd:nonNegativeInteger ;
+        nif:isString    "The University of Leipzig has been founded in 1409." .
+
+[ a                   foxo:NamedEntityRecognition , prov:Activity ;
+  prov:endedAtTime    "2022-01-01T00:00:00.000Z"^^xsd:dateTime ;
+  prov:generated      <http://ns.aksw.org/fox/demo/document-1#char18,25> ;
+  prov:startedAtTime  "2022-01-01T00:00:00.000Z"^^xsd:dateTime ;
+  prov:used           foxr:org.aksw.fox.tools.ner.en.BalieEN
+] .
+
+foxr:org.aksw.fox.tools.ner.en.BalieEN
+        a                       schema:SoftwareApplication , prov:SoftwareAgent ;
+        schema:softwareVersion  "1.81" ;
+        foaf:name               "org.aksw.fox.tools.ner.en.BalieEN" .
+
+<http://ns.aksw.org/fox/demo/document-1#char18,25>
+        a                     nif:Phrase ;
+        nif:anchorOf          "Leipzig" ;
+        nif:beginIndex        "18"^^xsd:nonNegativeInteger ;
+        nif:endIndex          "25"^^xsd:nonNegativeInteger ;
+        nif:referenceContext  <http://ns.aksw.org/fox/demo/document-1#char0,51> ;
+        its:taClassRef        <http://www.ontologydesignpatterns.org/ont/d0.owl#Location> , schema:Place , dbo:Place , foxo:LOCATION , schema:Location ;
+        its:taIdentRef        dbr:Leipzig .
